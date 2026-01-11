@@ -1,380 +1,293 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useEffect, useRef } from "react";
 import type { StackBlueprint } from "@layered/types";
 import { resolveStack } from "@layered/engine";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 
-export default function Home() {
-  const [intent, setIntent] = useState<"saas" | "api">("saas");
-  const [frontend, setFrontend] = useState(false);
-  const [backend, setBackend] = useState<"node" | "fastapi" | null>(null);
-  const [database, setDatabase] = useState(false);
-  const [auth, setAuth] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+interface Message {
+  role: "user" | "assistant";
+  content: string;
+}
 
-  // Live preview
-  const resolvedStack = useMemo(() => {
-    const blueprint: StackBlueprint = {
-      intent,
-      ...(frontend && { frontend: "nextjs" }),
-      ...(backend && { backend }),
-      ...(database && { database: "postgres" }),
-      ...(auth && { auth: "authjs" }),
-    };
-    return resolveStack(blueprint);
-  }, [intent, frontend, backend, database, auth]);
+export default function Home() {
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [input, setInput] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [stack, setStack] = useState<StackBlueprint>({ intent: "saas" });
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const resolvedStack = resolveStack(stack);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
-    setError(null);
-    setSuccess(false);
+    if (!input.trim() || loading) return;
 
-    const blueprint: StackBlueprint = {
-      intent,
-      ...(frontend && { frontend: "nextjs" }),
-      ...(backend && { backend }),
-      ...(database && { database: "postgres" }),
-      ...(auth && { auth: "authjs" }),
-    };
+    const userMessage = input.trim();
+    setInput("");
+    setMessages((prev) => [...prev, { role: "user", content: userMessage }]);
+    setLoading(true);
 
     try {
-      const response = await fetch("/api/generate", {
+      const response = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(blueprint),
+        body: JSON.stringify({ message: userMessage, currentStack: stack }),
       });
 
-      if (!response.ok) {
-        throw new Error("Failed to generate stack");
+      const data = await response.json();
+
+      // Add AI response
+      setMessages((prev) => [
+        ...prev,
+        { role: "assistant", content: data.message },
+      ]);
+
+      // Handle actions
+      if (data.action === "modify" && data.changes) {
+        setStack((prev) => {
+          const updated = { ...prev };
+          Object.entries(data.changes).forEach(([key, value]) => {
+            if (value === null) {
+              delete updated[key as keyof StackBlueprint];
+            } else if (value !== undefined) {
+              (updated as any)[key] = value;
+            }
+          });
+          return updated;
+        });
+      } else if (data.action === "download") {
+        // Generate and download
+        const genResponse = await fetch("/api/generate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(resolvedStack),
+        });
+
+        if (genResponse.ok) {
+          const blob = await genResponse.blob();
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = "layered-stack.zip";
+          document.body.appendChild(a);
+          a.click();
+          window.URL.revokeObjectURL(url);
+          document.body.removeChild(a);
+
+          setMessages((prev) => [
+            ...prev,
+            {
+              role: "assistant",
+              content: "✓ Stack downloaded as layered-stack.zip",
+            },
+          ]);
+        }
       }
-
-      // Download the file
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "layered-stack.zip";
-      document.body.appendChild(a);
-      a.click();
-      window.URL.revokeObjectURL(url);
-      document.body.removeChild(a);
-
-      setSuccess(true);
-      setTimeout(() => setSuccess(false), 3000);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Unknown error");
+    } catch (error) {
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: "assistant",
+          content: "Sorry, I encountered an error. Please try again.",
+        },
+      ]);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleReset = () => {
-    setIntent("saas");
-    setFrontend(false);
-    setBackend(null);
-    setDatabase(false);
-    setAuth(false);
-    setError(null);
-    setSuccess(false);
+  const handleNewChat = () => {
+    setMessages([]);
+    setStack({ intent: "saas" });
   };
 
   return (
-    <div className="min-h-screen bg-black text-zinc-50 flex flex-col">
-      {/* Minimal Header */}
-      <header className="px-8 pt-20 pb-16">
-        <div className="max-w-4xl mx-auto">
-          <div className="inline-block">
-            <h1 className="text-[3.5rem] font-light tracking-tight leading-none mb-3">
-              layered
-            </h1>
-            <div className="h-px bg-gradient-to-r from-zinc-800 to-transparent" />
-          </div>
-          <p className="text-zinc-500 text-lg mt-6 max-w-md font-light">
-            Stack generation from intent
-          </p>
+    <div className="h-screen bg-[#1a1a1a] text-zinc-50 flex">
+      {/* Sidebar */}
+      <div className="w-48 bg-[#111] border-r border-zinc-800 flex flex-col">
+        <div className="p-4">
+          <Button
+            onClick={handleNewChat}
+            className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white"
+          >
+            New Chat
+          </Button>
         </div>
-      </header>
+      </div>
 
-      {/* Main Content */}
-      <main className="flex-1 px-8 pb-24">
-        <div className="max-w-4xl mx-auto">
-          <form onSubmit={handleSubmit} className="space-y-12">
-            {/* Intent Selection - Minimal Segmented Control */}
-            <div className="space-y-4">
-              <div className="text-[0.6875rem] uppercase tracking-[0.15em] text-zinc-600 font-medium">
-                Intent
-              </div>
-              <div className="inline-flex border border-zinc-800 rounded-md overflow-hidden">
-                <button
-                  type="button"
-                  onClick={() => setIntent("saas")}
-                  className={`px-8 py-3 text-sm font-medium transition-all ${
-                    intent === "saas"
-                      ? "bg-zinc-900 text-zinc-50"
-                      : "bg-transparent text-zinc-500 hover:text-zinc-300"
-                  }`}
-                >
-                  SaaS
-                </button>
-                <div className="w-px bg-zinc-800" />
-                <button
-                  type="button"
-                  onClick={() => setIntent("api")}
-                  className={`px-8 py-3 text-sm font-medium transition-all ${
-                    intent === "api"
-                      ? "bg-zinc-900 text-zinc-50"
-                      : "bg-transparent text-zinc-500 hover:text-zinc-300"
-                  }`}
-                >
-                  API
-                </button>
-              </div>
-            </div>
-
-            <Separator className="bg-zinc-900" />
-
-            {/* Stack Options - Ultra Minimal Grid */}
-            <div className="grid grid-cols-2 gap-x-16 gap-y-8">
-              {/* Frontend */}
-              <button
-                type="button"
-                onClick={() => setFrontend(!frontend)}
-                className="group text-left"
-              >
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm text-zinc-400 group-hover:text-zinc-300 transition-colors">
-                    Frontend
-                  </span>
-                  <div
-                    className={`w-8 h-[1px] transition-all ${
-                      frontend ? "bg-zinc-50" : "bg-zinc-800"
-                    }`}
-                  />
-                </div>
-                <div
-                  className={`text-base font-light transition-colors ${
-                    frontend ? "text-zinc-50" : "text-zinc-600"
-                  }`}
-                >
-                  {frontend ? "Next.js" : "None"}
-                </div>
-              </button>
-
-              {/* Backend */}
-              <button
-                type="button"
-                onClick={() => setBackend(backend === "node" ? null : "node")}
-                className="group text-left"
-              >
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm text-zinc-400 group-hover:text-zinc-300 transition-colors">
-                    Backend
-                  </span>
-                  <div
-                    className={`w-8 h-[1px] transition-all ${
-                      backend ? "bg-zinc-50" : "bg-zinc-800"
-                    }`}
-                  />
-                </div>
-                <div
-                  className={`text-base font-light transition-colors ${
-                    backend ? "text-zinc-50" : "text-zinc-600"
-                  }`}
-                >
-                  {backend === "node"
-                    ? "Node.js"
-                    : backend === "fastapi"
-                    ? "FastAPI"
-                    : "None"}
-                </div>
-              </button>
-
-              {/* Database */}
-              <button
-                type="button"
-                onClick={() => setDatabase(!database)}
-                className="group text-left"
-              >
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm text-zinc-400 group-hover:text-zinc-300 transition-colors">
-                    Database
-                  </span>
-                  <div
-                    className={`w-8 h-[1px] transition-all ${
-                      database ? "bg-zinc-50" : "bg-zinc-800"
-                    }`}
-                  />
-                </div>
-                <div
-                  className={`text-base font-light transition-colors ${
-                    database ? "text-zinc-50" : "text-zinc-600"
-                  }`}
-                >
-                  {database ? "PostgreSQL" : "None"}
-                </div>
-              </button>
-
-              {/* Auth */}
-              <button
-                type="button"
-                onClick={() => setAuth(!auth)}
-                className="group text-left"
-              >
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm text-zinc-400 group-hover:text-zinc-300 transition-colors">
-                    Auth
-                  </span>
-                  <div
-                    className={`w-8 h-[1px] transition-all ${
-                      auth ? "bg-zinc-50" : "bg-zinc-800"
-                    }`}
-                  />
-                </div>
-                <div
-                  className={`text-base font-light transition-colors ${
-                    auth ? "text-zinc-50" : "text-zinc-600"
-                  }`}
-                >
-                  {auth ? "Auth.js" : "None"}
-                </div>
-              </button>
-            </div>
-
-            <Separator className="bg-zinc-900" />
-
-            {/* Resolved Stack Preview */}
-            <div className="space-y-4">
-              <div className="text-[0.6875rem] uppercase tracking-[0.15em] text-zinc-600 font-medium">
-                Stack
-              </div>
-              <div className="font-mono text-[0.8125rem] space-y-2">
-                <div className="flex items-center gap-3">
-                  <span className="text-zinc-600 w-20">intent</span>
-                  <span className="text-zinc-500">→</span>
-                  <span className="text-zinc-300">{resolvedStack.intent}</span>
-                </div>
-                {resolvedStack.frontend && (
-                  <div className="flex items-center gap-3">
-                    <span className="text-zinc-600 w-20">frontend</span>
-                    <span className="text-zinc-500">→</span>
-                    <span className="text-zinc-300">
-                      {resolvedStack.frontend}
-                    </span>
-                    {frontend && !backend && (
-                      <Badge
-                        variant="outline"
-                        className="text-[0.625rem] font-normal border-zinc-800 text-zinc-500"
-                      >
-                        +backend
-                      </Badge>
-                    )}
-                  </div>
-                )}
-                {resolvedStack.backend && (
-                  <div className="flex items-center gap-3">
-                    <span className="text-zinc-600 w-20">backend</span>
-                    <span className="text-zinc-500">→</span>
-                    <span className="text-zinc-300">
-                      {resolvedStack.backend}
-                    </span>
-                  </div>
-                )}
-                {resolvedStack.database && (
-                  <div className="flex items-center gap-3">
-                    <span className="text-zinc-600 w-20">database</span>
-                    <span className="text-zinc-500">→</span>
-                    <span className="text-zinc-300">
-                      {resolvedStack.database}
-                    </span>
-                    {auth && !database && (
-                      <Badge
-                        variant="outline"
-                        className="text-[0.625rem] font-normal border-zinc-800 text-zinc-500"
-                      >
-                        auto
-                      </Badge>
-                    )}
-                  </div>
-                )}
-                {resolvedStack.auth && (
-                  <div className="flex items-center gap-3">
-                    <span className="text-zinc-600 w-20">auth</span>
-                    <span className="text-zinc-500">→</span>
-                    <span className="text-zinc-300">{resolvedStack.auth}</span>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Error State */}
-            {error && (
-              <div className="border border-red-900/50 bg-red-950/20 px-6 py-4 rounded text-sm text-red-300">
-                {error}
-              </div>
-            )}
-
-            {/* Success State */}
-            {success && (
-              <div className="border border-emerald-900/50 bg-emerald-950/20 px-6 py-4 rounded space-y-3">
-                <div className="text-sm text-emerald-300">
-                  Stack generated · layered-stack.zip
-                </div>
-                <div className="font-mono text-xs text-zinc-500 flex items-center justify-between bg-black/40 px-3 py-2 rounded">
-                  <code>docker compose up</code>
+      {/* Main Chat Area */}
+      <div className="flex-1 flex flex-col">
+        {/* Messages */}
+        <div className="flex-1 overflow-y-auto px-8 py-6">
+          <div className="max-w-3xl mx-auto">
+            {messages.length === 0 ? (
+              <div className="flex flex-col items-center justify-center h-full text-center">
+                <h1 className="text-4xl font-light mb-4">
+                  How can I help you?
+                </h1>
+                <p className="text-zinc-500 mb-8">
+                  Tell me what you're building and I'll configure your stack
+                </p>
+                <div className="grid grid-cols-2 gap-3 max-w-xl w-full">
                   <button
-                    type="button"
                     onClick={() =>
-                      navigator.clipboard.writeText("docker compose up")
+                      setInput("I'm building a SaaS app with authentication")
                     }
-                    className="text-zinc-600 hover:text-zinc-400 transition-colors text-[0.625rem] uppercase tracking-wider"
+                    className="p-4 bg-zinc-900 hover:bg-zinc-800 rounded-lg text-left text-sm transition-colors"
                   >
-                    copy
+                    I'm building a SaaS app with authentication
+                  </button>
+                  <button
+                    onClick={() =>
+                      setInput("I need a Next.js frontend with Node backend")
+                    }
+                    className="p-4 bg-zinc-900 hover:bg-zinc-800 rounded-lg text-left text-sm transition-colors"
+                  >
+                    I need a Next.js frontend with Node backend
+                  </button>
+                  <button
+                    onClick={() => setInput("Add PostgreSQL database")}
+                    className="p-4 bg-zinc-900 hover:bg-zinc-800 rounded-lg text-left text-sm transition-colors"
+                  >
+                    Add PostgreSQL database
+                  </button>
+                  <button
+                    onClick={() => setInput("API-only service")}
+                    className="p-4 bg-zinc-900 hover:bg-zinc-800 rounded-lg text-left text-sm transition-colors"
+                  >
+                    API-only service
                   </button>
                 </div>
               </div>
+            ) : (
+              <div className="space-y-6">
+                {messages.map((msg, idx) => (
+                  <div
+                    key={idx}
+                    className={`flex ${
+                      msg.role === "user" ? "justify-end" : "justify-start"
+                    }`}
+                  >
+                    <div
+                      className={`max-w-[80%] rounded-2xl px-4 py-3 ${
+                        msg.role === "user"
+                          ? "bg-zinc-800 text-zinc-100"
+                          : "bg-zinc-900 text-zinc-300"
+                      }`}
+                    >
+                      <p className="text-sm leading-relaxed">{msg.content}</p>
+                    </div>
+                  </div>
+                ))}
+                {loading && (
+                  <div className="flex justify-start">
+                    <div className="bg-zinc-900 rounded-2xl px-4 py-3">
+                      <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 bg-zinc-600 rounded-full animate-bounce" />
+                        <div className="w-2 h-2 bg-zinc-600 rounded-full animate-bounce [animation-delay:0.2s]" />
+                        <div className="w-2 h-2 bg-zinc-600 rounded-full animate-bounce [animation-delay:0.4s]" />
+                      </div>
+                    </div>
+                  </div>
+                )}
+                <div ref={messagesEndRef} />
+              </div>
             )}
+          </div>
+        </div>
 
-            {/* Actions */}
-            <div className="flex items-center gap-4 pt-8">
+        {/* Input Area */}
+        <div className="border-t border-zinc-800 p-6">
+          <div className="max-w-3xl mx-auto">
+            <form onSubmit={handleSubmit} className="flex items-center gap-3">
+              <input
+                type="text"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                placeholder="Type your message here..."
+                className="flex-1 bg-zinc-900 border border-zinc-800 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-zinc-700"
+                disabled={loading}
+              />
               <Button
                 type="submit"
-                disabled={loading}
-                className="bg-zinc-50 text-black hover:bg-zinc-200 font-medium h-11 px-8 rounded"
+                disabled={loading || !input.trim()}
+                className="bg-zinc-800 hover:bg-zinc-700 px-6"
               >
-                {loading ? "Generating..." : "Generate"}
+                Send
               </Button>
-              {(frontend || backend || database || auth) && !success && (
-                <button
-                  type="button"
-                  onClick={handleReset}
-                  className="text-sm text-zinc-600 hover:text-zinc-400 transition-colors"
-                >
-                  Reset
-                </button>
-              )}
-            </div>
-          </form>
+            </form>
+            <p className="text-xs text-zinc-600 mt-3 text-center">
+              Say "download" when you're ready to generate your stack
+            </p>
+          </div>
         </div>
-      </main>
+      </div>
 
-      {/* Footer */}
-      <footer className="px-8 py-8 border-t border-zinc-900">
-        <div className="max-w-4xl mx-auto flex items-center justify-between text-xs text-zinc-600">
-          <div>Built for developers</div>
-          <a
-            href="https://github.com"
-            className="hover:text-zinc-400 transition-colors"
-          >
-            Source
-          </a>
+      {/* Stack Preview Sidebar */}
+      <div className="w-72 bg-[#111] border-l border-zinc-800 p-6">
+        <div className="mb-6">
+          <h2 className="text-xs uppercase tracking-wider text-zinc-600 mb-4">
+            Current Stack
+          </h2>
+          <Separator className="bg-zinc-800 mb-4" />
         </div>
-      </footer>
+
+        <div className="space-y-3 font-mono text-sm">
+          <div className="flex items-center justify-between p-3 bg-zinc-900/50 rounded border border-zinc-800 transition-all duration-300">
+            <span className="text-zinc-500">intent</span>
+            <span className="text-zinc-300">{resolvedStack.intent}</span>
+          </div>
+
+          {resolvedStack.frontend && (
+            <div className="flex items-center justify-between p-3 bg-zinc-900/50 rounded border border-zinc-800 transition-all duration-300 animate-in fade-in slide-in-from-right-2">
+              <span className="text-zinc-500">frontend</span>
+              <span className="text-zinc-300">{resolvedStack.frontend}</span>
+            </div>
+          )}
+
+          {resolvedStack.backend && (
+            <div className="flex items-center justify-between p-3 bg-zinc-900/50 rounded border border-zinc-800 transition-all duration-300 animate-in fade-in slide-in-from-right-2">
+              <span className="text-zinc-500">backend</span>
+              <span className="text-zinc-300">{resolvedStack.backend}</span>
+            </div>
+          )}
+
+          {resolvedStack.database && (
+            <div className="flex items-center justify-between p-3 bg-zinc-900/50 rounded border border-zinc-800 transition-all duration-300 animate-in fade-in slide-in-from-right-2">
+              <span className="text-zinc-500">database</span>
+              <span className="text-zinc-300">{resolvedStack.database}</span>
+            </div>
+          )}
+
+          {resolvedStack.auth && (
+            <div className="flex items-center justify-between p-3 bg-zinc-900/50 rounded border border-zinc-800 transition-all duration-300 animate-in fade-in slide-in-from-right-2">
+              <span className="text-zinc-500">auth</span>
+              <span className="text-zinc-300">{resolvedStack.auth}</span>
+            </div>
+          )}
+        </div>
+
+        {Object.keys(resolvedStack).length > 1 && (
+          <div className="mt-6 pt-6 border-t border-zinc-800">
+            <Button
+              onClick={() => setInput("download my stack")}
+              className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white"
+            >
+              Download Stack
+            </Button>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
