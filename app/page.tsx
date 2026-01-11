@@ -1,77 +1,17 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import Image from "next/image";
 import type { StackBlueprint } from "@layered/types";
 import { STACK_CONFIG } from "@layered/types";
 import { resolveStack } from "@layered/engine";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { getTechIcon } from "@/lib/icons";
+import { StackArtifact } from "./components/stack-artifact";
+import { StackItem } from "./components/stack-item";
 
 interface Message {
   role: "user" | "assistant";
   content: string;
-}
-
-function StackArtifact({ stack }: { stack: StackBlueprint }) {
-  const iconMap: Record<string, string> = {
-    nextjs: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nextjs/nextjs-original.svg",
-    react: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/react/react-original.svg",
-    nodejs: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nodejs/nodejs-original.svg",
-    fastapi: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/fastapi/fastapi-original.svg",
-    go: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/go/go-original.svg",
-    postgresql: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/postgresql/postgresql-original.svg",
-    mysql: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/mysql/mysql-original.svg",
-    redis: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/redis/redis-original.svg",
-    nextauth: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nextauth/nextauth-original.svg",
-  };
-
-  const items = [
-    { key: "frontend", label: "Frontend", value: stack.frontend },
-    { key: "backend", label: "Backend", value: stack.backend },
-    { key: "database", label: "Database", value: stack.database },
-    { key: "auth", label: "Auth", value: stack.auth },
-  ].filter((item) => item.value);
-
-  return (
-    <div className="space-y-2">
-      {items.map((item) => {
-        const categoryKey = item.key as keyof typeof STACK_CONFIG;
-        const categoryConfig = STACK_CONFIG[categoryKey];
-        let iconKey: string | undefined;
-        
-        if (categoryConfig && item.value) {
-          const options = categoryConfig.options as Record<string, any>;
-          const optionConfig = options?.[item.value];
-          iconKey = optionConfig?.icon;
-        }
-
-        const iconUrl = iconKey ? iconMap[iconKey] : null;
-        return (
-          <div
-            key={item.key}
-            className="flex items-center gap-3 p-3 rounded-lg bg-background border border-[#2a2a2a]"
-          >
-            {iconUrl && (
-              <div className="text-[#0088ff]">
-                <Image
-                  src={iconUrl}
-                  alt={item.value || ""}
-                  width={32}
-                  height={32}
-                />
-              </div>
-            )}
-            <div className="flex-1">
-              <div className="text-xs text-[#666666] uppercase tracking-wider">{item.label}</div>
-              <div className="text-sm font-medium text-foreground">{item.value}</div>
-            </div>
-          </div>
-        );
-      })}
-    </div>
-  );
 }
 
 export default function Home() {
@@ -82,6 +22,12 @@ export default function Home() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const resolvedStack = resolveStack(stack);
+
+  const getIconKey = (category: keyof typeof STACK_CONFIG, value?: string) => {
+    if (!value) return undefined;
+    const options = STACK_CONFIG[category]?.options as Record<string, any> | undefined;
+    return options?.[value]?.icon as string | undefined;
+  };
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -367,83 +313,39 @@ export default function Home() {
           </div>
 
           {resolvedStack.frontend && (
-            <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg p-3 animate-in fade-in slide-in-from-right-2 group">
-              <div className="flex items-center justify-between">
-                <div className="flex-1">
-                  <span className="text-xs text-[#666666]">frontend</span>
-                  <div className="text-xs font-mono font-medium text-[#0088ff]">{resolvedStack.frontend}</div>
-                </div>
-                <button
-                  onClick={() => setStack((prev) => ({ ...prev, frontend: undefined }))}
-                  className="ml-2 p-1.5 rounded text-[#666666] hover:text-red-500 hover:bg-[#2a2a2a] opacity-0 group-hover:opacity-100 transition-all"
-                  title="Remove frontend"
-                >
-                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
-                  </svg>
-                </button>
-              </div>
-            </div>
+            <StackItem
+              label="frontend"
+              value={resolvedStack.frontend}
+              iconKey={getIconKey("frontend", resolvedStack.frontend)}
+              onRemove={() => setStack((prev) => ({ ...prev, frontend: undefined }))}
+            />
           )}
 
           {resolvedStack.backend && (
-            <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg p-3 animate-in fade-in slide-in-from-right-2 group">
-              <div className="flex items-center justify-between">
-                <div className="flex-1">
-                  <span className="text-xs text-[#666666]">backend</span>
-                  <div className="text-xs font-mono font-medium text-[#0088ff]">{resolvedStack.backend}</div>
-                </div>
-                <button
-                  onClick={() => setStack((prev) => ({ ...prev, backend: undefined }))}
-                  className="ml-2 p-1.5 rounded text-[#666666] hover:text-red-500 hover:bg-[#2a2a2a] opacity-0 group-hover:opacity-100 transition-all"
-                  title="Remove backend"
-                >
-                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
-                  </svg>
-                </button>
-              </div>
-            </div>
+            <StackItem
+              label="backend"
+              value={resolvedStack.backend}
+              iconKey={getIconKey("backend", resolvedStack.backend)}
+              onRemove={() => setStack((prev) => ({ ...prev, backend: undefined }))}
+            />
           )}
 
           {resolvedStack.database && (
-            <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg p-3 animate-in fade-in slide-in-from-right-2 group">
-              <div className="flex items-center justify-between">
-                <div className="flex-1">
-                  <span className="text-xs text-[#666666]">database</span>
-                  <div className="text-xs font-mono font-medium text-[#0088ff]">{resolvedStack.database}</div>
-                </div>
-                <button
-                  onClick={() => setStack((prev) => ({ ...prev, database: undefined }))}
-                  className="ml-2 p-1.5 rounded text-[#666666] hover:text-red-500 hover:bg-[#2a2a2a] opacity-0 group-hover:opacity-100 transition-all"
-                  title="Remove database"
-                >
-                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
-                  </svg>
-                </button>
-              </div>
-            </div>
+            <StackItem
+              label="database"
+              value={resolvedStack.database}
+              iconKey={getIconKey("database", resolvedStack.database)}
+              onRemove={() => setStack((prev) => ({ ...prev, database: undefined }))}
+            />
           )}
 
           {resolvedStack.auth && (
-            <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg p-3 animate-in fade-in slide-in-from-right-2 group">
-              <div className="flex items-center justify-between">
-                <div className="flex-1">
-                  <span className="text-xs text-[#666666]">auth</span>
-                  <div className="text-xs font-mono font-medium text-[#0088ff]">{resolvedStack.auth}</div>
-                </div>
-                <button
-                  onClick={() => setStack((prev) => ({ ...prev, auth: undefined }))}
-                  className="ml-2 p-1.5 rounded text-[#666666] hover:text-red-500 hover:bg-[#2a2a2a] opacity-0 group-hover:opacity-100 transition-all"
-                  title="Remove auth"
-                >
-                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
-                  </svg>
-                </button>
-              </div>
-            </div>
+            <StackItem
+              label="auth"
+              value={resolvedStack.auth}
+              iconKey={getIconKey("auth", resolvedStack.auth)}
+              onRemove={() => setStack((prev) => ({ ...prev, auth: undefined }))}
+            />
           )}
         </div>
 
