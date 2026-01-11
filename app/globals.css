@@ -8,6 +8,10 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  .shadButton:hover {
+    cursor: pointer;
+  }
 }
 
 @custom-variant dark (&:is(.dark *));

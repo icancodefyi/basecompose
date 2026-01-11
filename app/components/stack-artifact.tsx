@@ -33,7 +33,7 @@ export function StackArtifact({ stack }: StackArtifactProps) {
             className="flex items-center gap-3 p-3 rounded-lg bg-background border border-[#2a2a2a]"
           >
             {iconUrl && (
-              <div className="text-[#0088ff]">
+              <div className="text-[#01AE74]">
                 <img src={iconUrl} alt={item.value || ""} width={32} height={32} style={{ display: 'block' }} />
               </div>
             )}

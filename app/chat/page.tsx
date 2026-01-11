@@ -163,7 +163,7 @@ export default function Home() {
   if (status === "loading") {
     return (
       <div className="h-screen bg-background flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#0088ff]"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#01AE74]"></div>
       </div>
     );
   }
@@ -190,7 +190,7 @@ export default function Home() {
         <div className="p-4 border-b border-[#2a2a2a]">
           <div className="flex items-center justify-between gap-2">
             <Link href="/">
-            <h1 className="text-lg font-bold text-[#0088ff]">Layered</h1>
+            <h1 className="text-lg font-bold text-[#01AE74]">Layered</h1>
             </Link>
             <button
               onClick={() => setSidebarOpen(false)}
@@ -251,7 +251,7 @@ export default function Home() {
         <div className="p-3 border-b border-[#2a2a2a]">
           <Button
             onClick={handleNewChat}
-            className="w-full justify-start bg-[#1a1a1a] hover:bg-[#222222] text-foreground border border-[#2a2a2a]"
+            className="w-full justify-start bg-[#1a1a1a] hover:bg-[#222222] text-foreground border border-[#2a2a2a] hover:text-gray-300"
             variant="outline"
             size="sm"
           >
@@ -320,7 +320,7 @@ export default function Home() {
                     <div
                       className={`rounded-xl px-3 md:px-4 py-2 md:py-3 max-w-xs md:max-w-[70%] text-sm md:text-base ${
                         msg.role === "user"
-                          ? "bg-[#0088ff] text-white"
+                          ? "bg-[#01AE74] text-white"
                           : "bg-[#1a1a1a] text-[#d0d0d0] border border-[#2a2a2a]"
                       }`}
                     >
@@ -333,7 +333,7 @@ export default function Home() {
                     <div className="mt-3 md:mt-4">
                       <div className="border border-[#3a3a3a] rounded-xl bg-[#1a1a1a] overflow-hidden">
                         <div className="bg-[#252525] border-b border-[#3a3a3a] px-3 md:px-4 py-2 md:py-3 flex items-center gap-2">
-                          <svg className="w-4 h-4 text-[#0088ff]" fill="currentColor" viewBox="0 0 24 24">
+                          <svg className="w-4 h-4 text-[#01AE74]" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
                           </svg>
                           <span className="text-xs md:text-sm font-medium text-foreground">Stack Configuration</span>
@@ -419,7 +419,7 @@ export default function Home() {
                   type="submit"
                   disabled={loading || !input.trim() || !canSendMessage}
                   size="icon"
-                  className="shrink-0 bg-[#0088ff] hover:bg-[#0066cc] text-white rounded-lg h-8 md:h-9 w-8 md:w-9"
+                  className="shrink-0 bg-[#01AE74] hover:bg-[#018e58] text-white rounded-lg h-8 md:h-9 w-8 md:w-9"
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16l-4-4m0 0l4-4m-4 4h18" />
@@ -441,7 +441,7 @@ export default function Home() {
           <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg p-3">
             <div className="flex items-center justify-between">
               <span className="text-xs text-[#666666]">intent</span>
-              <span className="text-xs font-mono font-medium text-[#0088ff]">{resolvedStack.intent}</span>
+              <span className="text-xs font-mono font-medium text-[#01AE74]">{resolvedStack.intent}</span>
             </div>
           </div>
 
@@ -486,7 +486,7 @@ export default function Home() {
           <div className="p-3 border-t border-[#2a2a2a]">
             <Button
               onClick={() => setInput("download my stack")}
-              className="w-full bg-[#0088ff] hover:bg-[#0066cc] text-white text-sm"
+              className="w-full bg-[#01AE74] hover:bg-[#018e58] text-white text-sm"
               disabled={!session && isAtLimit}
             >
               <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

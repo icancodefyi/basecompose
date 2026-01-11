@@ -1,3 +1,3 @@
 export const authIcons = {
-  nextauth: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nextauth/nextauth-original.svg",
+  nextauth: "https://next-auth.js.org/img/logo/logo-sm.png",
 };

@@ -25,7 +25,7 @@ export function StackItem({ label, value, iconKey, onRemove }: StackItemProps) {
           )}
           <div className="flex-1">
             <span className="text-xs text-[#666666]">{label}</span>
-            <div className="text-xs font-mono font-medium text-[#0088ff]">{value}</div>
+            <div className="text-xs font-mono font-medium text-[#01AE74]">{value}</div>
           </div>
         </div>
         {onRemove && (

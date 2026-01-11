@@ -50,13 +50,20 @@ export function NavHeader() {
             <div className="hidden md:flex items-center gap-3">
               {session?.user ? (
                 <div className="flex items-center gap-3">
-                  <div className="flex flex-col items-end">
+                  {session.user.image && (
+                    <img
+                      src={session.user.image}
+                      alt={session.user.name || "User"}
+                      className="w-8 h-8 rounded-full border border-gray-700"
+                    />
+                  )}
+                  <div className="flex flex-col items-start">
                     <p className="text-sm font-medium text-white">{session.user.name}</p>
                     <p className="text-xs text-gray-400">{session.user.email}</p>
                   </div>
                   <Button
                     onClick={() => router.push("/chat")}
-                    className="bg-[#0088ff] hover:bg-[#0066cc] text-white"
+                    className="bg-[#01AE74] hover:bg-[#018e58] text-white"
                   >
                     Go to App
                   </Button>
@@ -130,9 +137,18 @@ export function NavHeader() {
               <div className="pt-4 px-3 space-y-2 border-t border-gray-800">
                 {session?.user ? (
                   <>
-                    <div className="mb-3 pb-3 border-b border-gray-800">
-                      <p className="text-sm font-medium text-white">{session.user.name}</p>
-                      <p className="text-xs text-gray-400">{session.user.email}</p>
+                    <div className="mb-3 pb-3 border-b border-gray-800 flex items-center gap-3">
+                      {session.user.image && (
+                        <img
+                          src={session.user.image}
+                          alt={session.user.name || "User"}
+                          className="w-10 h-10 rounded-full border border-gray-700"
+                        />
+                      )}
+                      <div className="flex flex-col">
+                        <p className="text-sm font-medium text-white">{session.user.name}</p>
+                        <p className="text-xs text-gray-400">{session.user.email}</p>
+                      </div>
                     </div>
                     <Button
                       onClick={() => router.push("/chat")}

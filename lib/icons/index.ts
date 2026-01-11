@@ -8,7 +8,7 @@ export const iconMap: Record<string, string> = {
   postgresql: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/postgresql/postgresql-original.svg",
   mysql: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/mysql/mysql-original.svg",
   redis: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/redis/redis-original.svg",
-  nextauth: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nextauth/nextauth-original.svg",
+  nextauth: "https://next-auth.js.org/img/logo/logo-sm.png",
 };
 import { frontendIcons } from "./frontend-icons";
 import { backendIcons } from "./backend-icons";
