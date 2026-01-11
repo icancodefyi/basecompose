@@ -168,9 +168,11 @@ export function getOptions<T extends StackCategory>(category: T) {
 /**
  * Helper to get option config
  */
-export function getOptionConfig<T extends StackCategory>(
-  category: T,
+export function getOptionConfig(
+  category: StackCategory,
   option: string
-) {
-  return STACK_CONFIG[category].options[option as keyof typeof STACK_CONFIG[T]["options"]];
+): any {
+  const categoryConfig = STACK_CONFIG[category];
+  if (!categoryConfig) return null;
+  return (categoryConfig.options as Record<string, any>)[option];
 }
