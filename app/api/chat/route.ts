@@ -1,10 +1,10 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { Groq } from "groq-sdk";
 import type { StackBlueprint } from "@layered/types";
 import { STACK_CONFIG, getOptions } from "@layered/types";
 
-const genAI = new GoogleGenerativeAI(
-  process.env.GEMINI_API_KEY || "AIzaSyA-your-key-here"
-);
+const groq = new Groq({
+  apiKey: process.env.GROQ_API_KEY,
+});
 
 // Generate available options dynamically from config
 function generateOptionsText() {
@@ -20,8 +20,6 @@ function generateOptionsText() {
 export async function POST(req: Request) {
   try {
     const { message, currentStack } = await req.json();
-
-    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
     const prompt = `You are a stack configuration assistant for a developer tool called "layered".
 
@@ -67,9 +65,23 @@ Examples:
 - "download it" → download with current stack
 - "what can you do?" → chat with helpful message`;
 
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    const text = response.text();
+    const chatCompletion = await groq.chat.completions.create({
+      messages: [
+        {
+          role: "user",
+          content: prompt,
+        },
+      ],
+      model: "moonshotai/kimi-k2-instruct-0905",
+      temperature: 0.6,
+      max_completion_tokens: 4096,
+      top_p: 1,
+      stream: false,
+      stop: null,
+    });
+
+    const text =
+      chatCompletion.choices[0]?.message?.content || "";
 
     // Extract JSON from response
     const jsonMatch = text.match(/\{[\s\S]*\}/);
