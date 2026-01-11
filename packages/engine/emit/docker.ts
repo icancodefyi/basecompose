@@ -1,55 +1,55 @@
 import type { StackBlueprint } from "@layered/types";
+import { getOptionConfig } from "@layered/types";
 
 export function generateDockerCompose(stack: StackBlueprint): string {
   const services: Record<string, unknown> = {};
   const volumes: Record<string, unknown> = {};
 
   // Database service
-  if (stack.database === "postgres") {
-    services.postgres = {
-      image: "postgres:16-alpine",
-      environment: {
-        POSTGRES_USER: "dev",
-        POSTGRES_PASSWORD: "dev",
-        POSTGRES_DB: "layered_db",
-      },
-      ports: ["5432:5432"],
-      volumes: ["postgres_data:/var/lib/postgresql/data"],
+  if (stack.database) {
+    const dbConfig = getOptionConfig("database", stack.database);
+    services[stack.database] = {
+      image: dbConfig.dockerImage,
+      environment: dbConfig.envVars || {},
+      ports: [`${dbConfig.port}:${dbConfig.port}`],
+      volumes: [`${stack.database}_data:/var/lib/${stack.database === "postgres" ? "postgresql" : stack.database}/data`],
       healthcheck: {
-        test: ["CMD-SHELL", "pg_isready -U dev"],
+        test: ["CMD-SHELL", stack.database === "postgres" ? "pg_isready -U dev" : "mysqladmin ping -h localhost"],
         interval: "5s",
         timeout: "5s",
         retries: 5,
       },
     };
-    volumes.postgres_data = {};
+    volumes[`${stack.database}_data`] = {};
   }
 
   // Backend service
-  if (stack.backend === "node") {
+  if (stack.backend) {
+    const backendConfig = getOptionConfig("backend", stack.backend);
     services.backend = {
       build: "./backend",
-      ports: ["3001:3001"],
+      ports: [`${backendConfig.port}:${backendConfig.port}`],
       environment: {
         NODE_ENV: "development",
-        PORT: "3001",
-        ...(stack.database === "postgres" && {
-          DATABASE_URL: "postgresql://dev:dev@postgres:5432/layered_db",
+        PORT: backendConfig.port.toString(),
+        ...(stack.database && {
+          DATABASE_URL: `postgresql://dev:dev@${stack.database}:${getOptionConfig("database", stack.database).port}/layered_db`,
         }),
       },
-      depends_on: stack.database ? ["postgres"] : [],
+      depends_on: stack.database ? [stack.database] : [],
       volumes: ["./backend:/app", "/app/node_modules"],
     };
   }
 
   // Frontend service
-  if (stack.frontend === "nextjs") {
+  if (stack.frontend) {
+    const frontendConfig = getOptionConfig("frontend", stack.frontend);
     services.frontend = {
       build: "./frontend",
-      ports: ["3000:3000"],
+      ports: [`${frontendConfig.port}:${frontendConfig.port}`],
       environment: {
         NODE_ENV: "development",
-        NEXT_PUBLIC_API_URL: "http://localhost:3001",
+        NEXT_PUBLIC_API_URL: stack.backend ? `http://localhost:${getOptionConfig("backend", stack.backend).port}` : "",
       },
       depends_on: stack.backend ? ["backend"] : [],
       volumes: ["./frontend:/app", "/app/node_modules"],

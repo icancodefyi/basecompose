@@ -112,13 +112,17 @@ export default function Home() {
   };
 
   return (
-    <div className="h-screen bg-[#1a1a1a] text-zinc-50 flex">
+    <div className="h-screen bg-background text-foreground flex">
       {/* Sidebar */}
-      <div className="w-48 bg-[#111] border-r border-zinc-800 flex flex-col">
+      <div className="w-64 bg-card border-r border-border flex flex-col">
+        <div className="p-6 border-b border-border">
+          <h1 className="text-xl font-semibold">Layered</h1>
+        </div>
         <div className="p-4">
           <Button
             onClick={handleNewChat}
-            className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white"
+            className="w-full"
+            size="lg"
           >
             New Chat
           </Button>
@@ -128,49 +132,57 @@ export default function Home() {
       {/* Main Chat Area */}
       <div className="flex-1 flex flex-col">
         {/* Messages */}
-        <div className="flex-1 overflow-y-auto px-8 py-6">
-          <div className="max-w-3xl mx-auto">
+        <div className="flex-1 overflow-y-auto px-12 py-8">
+          <div className="max-w-4xl mx-auto">
             {messages.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-full text-center">
-                <h1 className="text-4xl font-light mb-4">
+                <h1 className="text-5xl font-semibold mb-6">
                   How can I help you?
                 </h1>
-                <p className="text-zinc-500 mb-8">
+                <p className="text-muted-foreground text-lg mb-12">
                   Tell me what you're building and I'll configure your stack
                 </p>
-                <div className="grid grid-cols-2 gap-3 max-w-xl w-full">
-                  <button
+                <div className="grid grid-cols-2 gap-4 max-w-2xl w-full">
+                  <Button
+                    variant="outline"
+                    size="lg"
                     onClick={() =>
                       setInput("I'm building a SaaS app with authentication")
                     }
-                    className="p-4 bg-zinc-900 hover:bg-zinc-800 rounded-lg text-left text-sm transition-colors"
+                    className="h-auto p-6 text-left justify-start"
                   >
-                    I'm building a SaaS app with authentication
-                  </button>
-                  <button
+                    <p className="text-sm font-medium">I'm building a SaaS app with authentication</p>
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="lg"
                     onClick={() =>
                       setInput("I need a Next.js frontend with Node backend")
                     }
-                    className="p-4 bg-zinc-900 hover:bg-zinc-800 rounded-lg text-left text-sm transition-colors"
+                    className="h-auto p-6 text-left justify-start"
                   >
-                    I need a Next.js frontend with Node backend
-                  </button>
-                  <button
+                    <p className="text-sm font-medium">I need a Next.js frontend with Node backend</p>
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="lg"
                     onClick={() => setInput("Add PostgreSQL database")}
-                    className="p-4 bg-zinc-900 hover:bg-zinc-800 rounded-lg text-left text-sm transition-colors"
+                    className="h-auto p-6 text-left justify-start"
                   >
-                    Add PostgreSQL database
-                  </button>
-                  <button
+                    <p className="text-sm font-medium">Add PostgreSQL database</p>
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="lg"
                     onClick={() => setInput("API-only service")}
-                    className="p-4 bg-zinc-900 hover:bg-zinc-800 rounded-lg text-left text-sm transition-colors"
+                    className="h-auto p-6 text-left justify-start"
                   >
-                    API-only service
-                  </button>
+                    <p className="text-sm font-medium">API-only service</p>
+                  </Button>
                 </div>
               </div>
             ) : (
-              <div className="space-y-6">
+              <div className="space-y-8">
                 {messages.map((msg, idx) => (
                   <div
                     key={idx}
@@ -179,23 +191,23 @@ export default function Home() {
                     }`}
                   >
                     <div
-                      className={`max-w-[80%] rounded-2xl px-4 py-3 ${
+                      className={`max-w-[75%] rounded-2xl px-5 py-4 ${
                         msg.role === "user"
-                          ? "bg-zinc-800 text-zinc-100"
-                          : "bg-zinc-900 text-zinc-300"
+                          ? "bg-primary text-primary-foreground"
+                          : "bg-muted border border-border"
                       }`}
                     >
-                      <p className="text-sm leading-relaxed">{msg.content}</p>
+                      <p className="text-[15px] leading-relaxed">{msg.content}</p>
                     </div>
                   </div>
                 ))}
                 {loading && (
                   <div className="flex justify-start">
-                    <div className="bg-zinc-900 rounded-2xl px-4 py-3">
+                    <div className="bg-muted border border-border rounded-2xl px-5 py-4">
                       <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 bg-zinc-600 rounded-full animate-bounce" />
-                        <div className="w-2 h-2 bg-zinc-600 rounded-full animate-bounce [animation-delay:0.2s]" />
-                        <div className="w-2 h-2 bg-zinc-600 rounded-full animate-bounce [animation-delay:0.4s]" />
+                        <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" />
+                        <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce [animation-delay:0.2s]" />
+                        <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce [animation-delay:0.4s]" />
                       </div>
                     </div>
                   </div>
@@ -207,26 +219,27 @@ export default function Home() {
         </div>
 
         {/* Input Area */}
-        <div className="border-t border-zinc-800 p-6">
-          <div className="max-w-3xl mx-auto">
-            <form onSubmit={handleSubmit} className="flex items-center gap-3">
+        <div className="border-t border-border p-8">
+          <div className="max-w-4xl mx-auto">
+            <form onSubmit={handleSubmit} className="flex items-center gap-4">
               <input
                 type="text"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder="Type your message here..."
-                className="flex-1 bg-zinc-900 border border-zinc-800 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-zinc-700"
+                className="flex-1 bg-input border border-border rounded-xl px-5 py-4 text-[15px] focus:outline-none focus:ring-2 focus:ring-ring placeholder:text-muted-foreground transition-all"
                 disabled={loading}
               />
               <Button
                 type="submit"
                 disabled={loading || !input.trim()}
-                className="bg-zinc-800 hover:bg-zinc-700 px-6"
+                size="lg"
+                className="px-8"
               >
                 Send
               </Button>
             </form>
-            <p className="text-xs text-zinc-600 mt-3 text-center">
+            <p className="text-sm text-muted-foreground mt-4 text-center">
               Say "download" when you're ready to generate your stack
             </p>
           </div>
@@ -234,54 +247,55 @@ export default function Home() {
       </div>
 
       {/* Stack Preview Sidebar */}
-      <div className="w-72 bg-[#111] border-l border-zinc-800 p-6">
-        <div className="mb-6">
-          <h2 className="text-xs uppercase tracking-wider text-zinc-600 mb-4">
+      <div className="w-80 bg-card border-l border-border p-8">
+        <div className="mb-8">
+          <h2 className="text-xs uppercase tracking-widest text-muted-foreground font-semibold mb-4">
             Current Stack
           </h2>
-          <Separator className="bg-zinc-800 mb-4" />
+          <Separator />
         </div>
 
         <div className="space-y-3 font-mono text-sm">
-          <div className="flex items-center justify-between p-3 bg-zinc-900/50 rounded border border-zinc-800 transition-all duration-300">
-            <span className="text-zinc-500">intent</span>
-            <span className="text-zinc-300">{resolvedStack.intent}</span>
+          <div className="flex items-center justify-between p-4 bg-muted rounded-lg border border-border transition-all duration-300">
+            <span className="text-muted-foreground">intent</span>
+            <span className="font-medium">{resolvedStack.intent}</span>
           </div>
 
           {resolvedStack.frontend && (
-            <div className="flex items-center justify-between p-3 bg-zinc-900/50 rounded border border-zinc-800 transition-all duration-300 animate-in fade-in slide-in-from-right-2">
-              <span className="text-zinc-500">frontend</span>
-              <span className="text-zinc-300">{resolvedStack.frontend}</span>
+            <div className="flex items-center justify-between p-4 bg-muted rounded-lg border border-border transition-all duration-300 animate-in fade-in slide-in-from-right-2">
+              <span className="text-muted-foreground">frontend</span>
+              <span className="font-medium">{resolvedStack.frontend}</span>
             </div>
           )}
 
           {resolvedStack.backend && (
-            <div className="flex items-center justify-between p-3 bg-zinc-900/50 rounded border border-zinc-800 transition-all duration-300 animate-in fade-in slide-in-from-right-2">
-              <span className="text-zinc-500">backend</span>
-              <span className="text-zinc-300">{resolvedStack.backend}</span>
+            <div className="flex items-center justify-between p-4 bg-muted rounded-lg border border-border transition-all duration-300 animate-in fade-in slide-in-from-right-2">
+              <span className="text-muted-foreground">backend</span>
+              <span className="font-medium">{resolvedStack.backend}</span>
             </div>
           )}
 
           {resolvedStack.database && (
-            <div className="flex items-center justify-between p-3 bg-zinc-900/50 rounded border border-zinc-800 transition-all duration-300 animate-in fade-in slide-in-from-right-2">
-              <span className="text-zinc-500">database</span>
-              <span className="text-zinc-300">{resolvedStack.database}</span>
+            <div className="flex items-center justify-between p-4 bg-muted rounded-lg border border-border transition-all duration-300 animate-in fade-in slide-in-from-right-2">
+              <span className="text-muted-foreground">database</span>
+              <span className="font-medium">{resolvedStack.database}</span>
             </div>
           )}
 
           {resolvedStack.auth && (
-            <div className="flex items-center justify-between p-3 bg-zinc-900/50 rounded border border-zinc-800 transition-all duration-300 animate-in fade-in slide-in-from-right-2">
-              <span className="text-zinc-500">auth</span>
-              <span className="text-zinc-300">{resolvedStack.auth}</span>
+            <div className="flex items-center justify-between p-4 bg-muted rounded-lg border border-border transition-all duration-300 animate-in fade-in slide-in-from-right-2">
+              <span className="text-muted-foreground">auth</span>
+              <span className="font-medium">{resolvedStack.auth}</span>
             </div>
           )}
         </div>
 
         {Object.keys(resolvedStack).length > 1 && (
-          <div className="mt-6 pt-6 border-t border-zinc-800">
+          <div className="mt-8 pt-8 border-t border-border">
             <Button
               onClick={() => setInput("download my stack")}
-              className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white"
+              className="w-full"
+              size="lg"
             >
               Download Stack
             </Button>

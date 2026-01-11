@@ -1,9 +1,21 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import type { StackBlueprint } from "@layered/types";
+import { STACK_CONFIG, getOptions } from "@layered/types";
 
 const genAI = new GoogleGenerativeAI(
   process.env.GEMINI_API_KEY || "AIzaSyA-your-key-here"
 );
+
+// Generate available options dynamically from config
+function generateOptionsText() {
+  return Object.entries(STACK_CONFIG)
+    .map(([category, config]) => {
+      const options = getOptions(category as keyof typeof STACK_CONFIG);
+      const optionsList = options.map((opt) => opt.key).join(" | ");
+      return `- ${category}: ${optionsList} (or null)`;
+    })
+    .join("\n");
+}
 
 export async function POST(req: Request) {
   try {
@@ -25,11 +37,7 @@ Based on the user's message, determine if they want to:
 4. Just have a conversation
 
 Available options:
-- intent: "saas" | "api"
-- frontend: "nextjs" (or null)
-- backend: "node" | "fastapi" (or null)
-- database: "postgres" (or null)
-- auth: "authjs" (or null)
+${generateOptionsText()}
 
 Respond with a JSON object in this exact format:
 {

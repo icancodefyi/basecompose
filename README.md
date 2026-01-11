@@ -1,36 +1,78 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Layered
+
+AI-powered stack generator for full-stack applications. Chat with AI to configure your stack, get Docker Compose files instantly.
+
+## Features
+
+- 🤖 **AI-Powered**: Natural language stack configuration using Gemini AI
+- 📦 **Full Stack Templates**: Frontend, backend, database, auth — all pre-configured
+- 🐳 **Docker Ready**: Generates production-ready docker-compose.yml files
+- ⚡ **Instant Download**: Get your complete stack as a ZIP file
+- 🎯 **Smart Resolution**: Automatically resolves dependencies (e.g., auth requires database)
 
 ## Getting Started
 
-First, run the development server:
+### 1. Install Dependencies
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Set Up Environment
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Create `.env.local`:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+GEMINI_API_KEY=your_api_key_here
+```
 
-## Learn More
+Get your API key from [Google AI Studio](https://makersuite.google.com/app/apikey).
 
-To learn more about Next.js, take a look at the following resources:
+### 3. Run Development Server
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+pnpm dev
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Open [http://localhost:3000](http://localhost:3000) and start chatting!
 
-## Deploy on Vercel
+## Architecture
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+This is a **pnpm monorepo** with internal packages:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+layered/
+├── app/                    # Next.js application
+│   ├── api/chat/          # AI chat endpoint
+│   ├── api/generate/      # Stack generator endpoint
+│   └── page.tsx           # Main UI
+└── packages/
+    ├── engine/            # Stack generation logic
+    │   ├── resolve.ts     # Dependency resolution
+    │   ├── generate.ts    # File orchestration
+    │   └── emit/          # File generators
+    └── types/             # Shared types & config
+        ├── blueprint.ts   # Stack type definitions
+        └── stack-config.ts # Technology catalog
+```
+
+## Available Stacks
+
+- **Frontend**: Next.js
+- **Backend**: Node.js, FastAPI
+- **Database**: PostgreSQL
+- **Auth**: Auth.js
+
+## Contributing
+
+Want to add support for React, Go, MySQL, or other technologies? Check out [CONTRIBUTING.md](CONTRIBUTING.md) for a step-by-step guide.
+
+All stack options are centralized in [`packages/types/stack-config.ts`](packages/types/stack-config.ts) — adding new tech is as simple as adding an object to the config!
+
+## Tech Stack
+
+- **Framework**: Next.js 16 (App Router)
+- **UI**: shadcn/ui + Tailwind CSS 4
+- **AI**: Google Gemini 2.5 Flash
+- **Monorepo**: pnpm workspaces
+- **Language**: TypeScript (strict mode)
