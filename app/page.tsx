@@ -15,6 +15,18 @@ interface Message {
 }
 
 function StackArtifact({ stack }: { stack: StackBlueprint }) {
+  const iconMap: Record<string, string> = {
+    nextjs: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nextjs/nextjs-original.svg",
+    react: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/react/react-original.svg",
+    nodejs: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nodejs/nodejs-original.svg",
+    fastapi: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/fastapi/fastapi-original.svg",
+    go: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/go/go-original.svg",
+    postgresql: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/postgresql/postgresql-original.svg",
+    mysql: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/mysql/mysql-original.svg",
+    redis: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/redis/redis-original.svg",
+    nextauth: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nextauth/nextauth-original.svg",
+  };
+
   const items = [
     { key: "frontend", label: "Frontend", value: stack.frontend },
     { key: "backend", label: "Backend", value: stack.backend },
@@ -35,26 +47,25 @@ function StackArtifact({ stack }: { stack: StackBlueprint }) {
           iconKey = optionConfig?.icon;
         }
 
+        const iconUrl = iconKey ? iconMap[iconKey] : null;
         return (
           <div
             key={item.key}
-            className="flex items-center gap-3 p-3 rounded-lg bg-[#0d0d0d] border border-[#2a2a2a]"
+            className="flex items-center gap-3 p-3 rounded-lg bg-background border border-[#2a2a2a]"
           >
-            {iconKey && (
+            {iconUrl && (
               <div className="text-[#0088ff]">
                 <Image
-                  src={getTechIcon(iconKey) as string}
+                  src={iconUrl}
                   alt={item.value || ""}
-                  width={20}
-                  height={20}
-                  className="w-5 h-5"
-                  unoptimized
+                  width={32}
+                  height={32}
                 />
               </div>
             )}
             <div className="flex-1">
               <div className="text-xs text-[#666666] uppercase tracking-wider">{item.label}</div>
-              <div className="text-sm font-medium text-[#e0e0e0]">{item.value}</div>
+              <div className="text-sm font-medium text-foreground">{item.value}</div>
             </div>
           </div>
         );
@@ -161,14 +172,14 @@ export default function Home() {
   };
 
   return (
-    <div className="h-screen bg-[#0d0d0d] text-[#e0e0e0] flex overflow-hidden">
+    <div className="h-screen bg-background text-foreground flex overflow-hidden">
       {/* Sidebar */}
       <div className="w-64 bg-[#111111] border-r border-[#2a2a2a] flex flex-col">
         {/* New Chat Button */}
         <div className="p-3 border-b border-[#2a2a2a]">
           <Button 
             onClick={handleNewChat} 
-            className="w-full justify-start bg-[#1a1a1a] hover:bg-[#222222] text-[#e0e0e0] border border-[#2a2a2a]"
+            className="w-full justify-start bg-[#1a1a1a] hover:bg-[#222222] text-foreground border border-[#2a2a2a]"
             variant="outline"
           >
             <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -251,7 +262,7 @@ export default function Home() {
                       onClick={() => setInput(item.title)}
                       className="p-4 rounded-xl bg-[#1a1a1a] border border-[#2a2a2a] hover:border-[#3a3a3a] text-left transition-colors"
                     >
-                      <div className="text-sm font-medium text-[#e0e0e0]">{item.title}</div>
+                      <div className="text-sm font-medium text-foreground">{item.title}</div>
                       <div className="text-xs text-[#666666] mt-1">{item.subtitle}</div>
                     </button>
                   ))}
@@ -287,7 +298,7 @@ export default function Home() {
                             <svg className="w-4 h-4 text-[#0088ff]" fill="currentColor" viewBox="0 0 24 24">
                               <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
                             </svg>
-                            <span className="text-sm font-medium text-[#e0e0e0]">Stack Configuration</span>
+                            <span className="text-sm font-medium text-foreground">Stack Configuration</span>
                           </div>
                         </div>
                         <div className="p-4 space-y-3">
@@ -315,7 +326,7 @@ export default function Home() {
         </div>
 
         {/* Input Area */}
-        <div className="border-t border-[#2a2a2a] bg-[#0d0d0d] px-4 py-4">
+        <div className="border-t border-[#2a2a2a] bg-background px-4 py-4">
           <div className="max-w-2xl mx-auto">
             <form onSubmit={handleSubmit} className="relative">
               <input
@@ -344,7 +355,7 @@ export default function Home() {
       {/* Right Sidebar - Stack Info */}
       <div className="w-80 bg-[#111111] border-l border-[#2a2a2a] flex flex-col">
         <div className="p-4 border-b border-[#2a2a2a]">
-          <h2 className="text-sm font-semibold text-[#e0e0e0]">Current Stack</h2>
+          <h2 className="text-sm font-semibold text-foreground">Current Stack</h2>
         </div>
 
         <div className="flex-1 overflow-y-auto p-3 space-y-2">
