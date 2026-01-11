@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Inter, Space_Grotesk } from "next/font/google";
 import "./globals.css";
+import { SessionProvider } from "next-auth/react";
 
 const inter = Space_Grotesk({
   subsets: ["latin"],
@@ -20,7 +21,9 @@ export default function RootLayout({
   return (
     <html lang="en" style={{ colorScheme: "dark" }}>
       <body className={`${inter.className} antialiased`}>
-        {children}
+        <SessionProvider>
+          {children}
+        </SessionProvider>
       </body>
     </html>
   );
