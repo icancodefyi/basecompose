@@ -1,0 +1,8 @@
+{
+  "name": "@layered/engine",
+  "version": "0.0.1",
+  "type": "module",
+  "dependencies": {
+    "@layered/types": "workspace:*"
+  }
+}

@@ -18,8 +18,11 @@
         "name": "next"
       }
     ],
+    "baseUrl": ".",
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./*"],
+      "@layered/engine": ["packages/engine"],
+      "@layered/types": ["packages/types"]
     }
   },
   "include": [
