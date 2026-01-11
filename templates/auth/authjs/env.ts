@@ -1,0 +1,6 @@
+export const env = {
+  GITHUB_ID: "",
+  GITHUB_SECRET: "",
+  NEXTAUTH_URL: "http://localhost:3000",
+  NEXTAUTH_SECRET: ""
+};

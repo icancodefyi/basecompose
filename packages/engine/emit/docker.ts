@@ -1,121 +1,114 @@
-import type { StackBlueprint } from "@layered/types";
-import { getOptionConfig } from "@layered/types";
+import * as fs from "fs";
+import * as path from "path";
+import * as yaml from "js-yaml";
+import type { GenerationState, DockerFragments } from "../types";
 
-export function generateDockerCompose(stack: StackBlueprint): string {
-  const services: Record<string, unknown> = {};
-  const volumes: Record<string, unknown> = {};
+/**
+ * Load docker-compose fragment from addon
+ */
+export function loadDockerFragment(
+  addon: string,
+  templatesRoot: string
+): DockerFragments {
+  let fragmentPath: string;
 
-  // Database service
-  if (stack.database) {
-    const dbConfig = getOptionConfig("database", stack.database);
-    services[stack.database] = {
-      image: dbConfig.dockerImage,
-      environment: dbConfig.envVars || {},
-      ports: [`${dbConfig.port}:${dbConfig.port}`],
-      volumes: [`${stack.database}_data:/var/lib/${stack.database === "postgres" ? "postgresql" : stack.database}/data`],
-      healthcheck: {
-        test: ["CMD-SHELL", stack.database === "postgres" ? "pg_isready -U dev" : "mysqladmin ping -h localhost"],
-        interval: "5s",
-        timeout: "5s",
-        retries: 5,
-      },
-    };
-    volumes[`${stack.database}_data`] = {};
+  if (addon === "mongodb") {
+    fragmentPath = path.join(
+      templatesRoot,
+      "databases/mongodb/docker/docker-compose.mongo.yml"
+    );
+  } else if (addon === "authjs") {
+    // Auth.js doesn't need a docker service
+    return {};
+  } else if (addon === "demo") {
+    // Demo doesn't need a docker service
+    return {};
+  } else {
+    throw new Error(`Unknown addon: ${addon}`);
   }
 
-  // Backend service
-  if (stack.backend) {
-    const backendConfig = getOptionConfig("backend", stack.backend);
-    services.backend = {
-      build: "./backend",
-      ports: [`${backendConfig.port}:${backendConfig.port}`],
-      environment: {
-        NODE_ENV: "development",
-        PORT: backendConfig.port.toString(),
-        ...(stack.database && {
-          DATABASE_URL: `postgresql://dev:dev@${stack.database}:${getOptionConfig("database", stack.database).port}/layered_db`,
-        }),
-      },
-      depends_on: stack.database ? [stack.database] : [],
-      volumes: ["./backend:/app", "/app/node_modules"],
-    };
+  if (!fs.existsSync(fragmentPath)) {
+    console.warn(`Docker fragment not found: ${fragmentPath}`);
+    return {};
   }
 
-  // Frontend service
-  if (stack.frontend) {
-    const frontendConfig = getOptionConfig("frontend", stack.frontend);
-    services.frontend = {
-      build: "./frontend",
-      ports: [`${frontendConfig.port}:${frontendConfig.port}`],
-      environment: {
-        NODE_ENV: "development",
-        NEXT_PUBLIC_API_URL: stack.backend ? `http://localhost:${getOptionConfig("backend", stack.backend).port}` : "",
-      },
-      depends_on: stack.backend ? ["backend"] : [],
-      volumes: ["./frontend:/app", "/app/node_modules"],
-    };
+  try {
+    const content = fs.readFileSync(fragmentPath, "utf-8");
+    const parsed = yaml.load(content) as Record<string, unknown>;
+    return parsed || {};
+  } catch (err) {
+    console.warn(`Error parsing docker fragment ${fragmentPath}:`, err);
+    return {};
+  }
+}
+
+/**
+ * Collect docker fragments from all addons
+ */
+export function collectDockerFragments(state: GenerationState) {
+  const templatesRoot = path.resolve(process.cwd(), "templates");
+
+  for (const addon of state.context.addons) {
+    const fragment = loadDockerFragment(addon, templatesRoot);
+    // Merge fragment into state
+    state.dockerFragments = { ...state.dockerFragments, ...fragment };
   }
 
-  const compose = {
-    version: "3.8",
-    services,
-    ...(Object.keys(volumes).length > 0 && { volumes }),
+  console.log(`✓ Collected docker fragments:`, Object.keys(state.dockerFragments));
+}
+
+/**
+ * Collect volumes from docker fragments
+ */
+export function collectDockerVolumes(state: GenerationState) {
+  // MongoDB adds a volume
+  if (state.context.addons.includes("mongodb")) {
+    state.dockerVolumes.mongo_data = {};
+  }
+
+  console.log(`✓ Collected volumes:`, Object.keys(state.dockerVolumes));
+}
+
+/**
+ * Merge docker fragments into base compose file
+ */
+export function mergeDockerCompose(state: GenerationState): string {
+  const baseCompose = {
+    version: "3.8" as const,
+    services: {
+      app: {
+        build: ".",
+        ports: ["3000:3000"],
+        environment: {
+          NODE_ENV: "development"
+        }
+      }
+    }
   };
 
-  return `version: '3.8'\n\nservices:\n${Object.entries(compose.services)
-    .map(([name, config]) => {
-      const cfg = config as Record<string, unknown>;
-      const lines = [`  ${name}:`];
-      Object.entries(cfg).forEach(([key, value]) => {
-        if (typeof value === "string") {
-          lines.push(`    ${key}: ${value}`);
-        } else if (key === "environment") {
-          lines.push(`    environment:`);
-          Object.entries(value as Record<string, string>).forEach(([k, v]) => {
-            lines.push(`      ${k}: ${v}`);
-          });
-        } else if (key === "ports") {
-          lines.push(`    ports:`);
-          (value as string[]).forEach((p) => {
-            lines.push(`      - ${p}`);
-          });
-        } else if (key === "volumes") {
-          lines.push(`    volumes:`);
-          (value as (string | { [key: string]: unknown })[]).forEach((v) => {
-            if (typeof v === "string") {
-              lines.push(`      - ${v}`);
-            }
-          });
-        } else if (key === "depends_on") {
-          if ((value as string[]).length > 0) {
-            lines.push(`    depends_on:`);
-            (value as string[]).forEach((d) => {
-              lines.push(`      - ${d}`);
-            });
-          }
-        } else if (key === "healthcheck") {
-          const hc = value as {
-            test: string[];
-            interval: string;
-            timeout: string;
-            retries: number;
-          };
-          lines.push(`    healthcheck:`);
-          lines.push(`      test: ${JSON.stringify(hc.test)}`);
-          lines.push(`      interval: ${hc.interval}`);
-          lines.push(`      timeout: ${hc.timeout}`);
-          lines.push(`      retries: ${hc.retries}`);
-        } else if (key === "build") {
-          lines.push(`    build: ${value}`);
-        }
-      });
-      return lines.join("\n");
-    })
-    .join("\n")}${
-    Object.keys(volumes).length > 0
-      ? `\n\nvolumes:\n${Object.entries(volumes)
-          .map(([name]) => `  ${name}:`)
-          .join("\n")}`
-      : ""
-  }\n`;
+  // Merge addon service fragments
+  for (const [serviceName, serviceConfig] of Object.entries(
+    state.dockerFragments
+  )) {
+    baseCompose.services[serviceName] = serviceConfig;
+  }
+
+  // Add volumes if any
+  if (Object.keys(state.dockerVolumes).length > 0) {
+    (baseCompose as any).volumes = state.dockerVolumes;
+  }
+
+  // Convert to YAML
+  return yaml.dump(baseCompose, { lineWidth: -1 });
+}
+
+/**
+ * Write docker-compose.yml to output directory
+ */
+export function writeDockerCompose(state: GenerationState) {
+  const compose = mergeDockerCompose(state);
+  const composePath = path.join(state.context.outDir, "docker-compose.yml");
+
+  fs.writeFileSync(composePath, compose, "utf-8");
+  console.log(`✓ docker-compose.yml written`);
 }

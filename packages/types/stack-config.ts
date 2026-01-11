@@ -87,6 +87,18 @@ export const STACK_CONFIG = {
           POSTGRES_DB: "layered_db",
         },
       },
+      mongodb: {
+        label: "MongoDB",
+        description: "NoSQL document database",
+        dockerImage: "mongo:7",
+        port: 27017,
+        icon: "mongodb",
+        envVars: {
+          MONGODB_URI: "mongodb://root:example@localhost:27017",
+          MONGODB_ROOT_USERNAME: "root",
+          MONGODB_ROOT_PASSWORD: "example",
+        },
+      },
       // Add more database options here:
       // mysql: {
       //   label: "MySQL",
@@ -127,6 +139,7 @@ export const STACK_CONFIG = {
     },
   },
 } as const;
+
 
 // Type helpers
 export type StackCategory = keyof typeof STACK_CONFIG;

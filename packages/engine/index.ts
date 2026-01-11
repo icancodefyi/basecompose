@@ -1,4 +1,4 @@
 export { resolveStack } from "./resolve";
-export { generateStackFiles } from "./generate";
-export type { GeneratedFiles } from "./generate";
+export { generateProject } from "./generate";
+export type { GenerationContext, GenerationState } from "./types";
 

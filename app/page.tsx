@@ -3,7 +3,11 @@
 import { useState, useEffect, useRef } from "react";
 import type { StackBlueprint } from "@layered/types";
 import { STACK_CONFIG } from "@layered/types";
-import { resolveStack } from "@layered/engine";
+// Local resolveStack to avoid importing Node code from @layered/engine
+function resolveStack(input) {
+  // For now, just return input (no rules applied client-side)
+  return input;
+}
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { StackArtifact } from "./components/stack-artifact";
@@ -84,7 +88,7 @@ export default function Home() {
           const url = window.URL.createObjectURL(blob);
           const a = document.createElement("a");
           a.href = url;
-          a.download = "layered-stack.zip";
+          a.download = "layered-stack.tar.gz";
           document.body.appendChild(a);
           a.click();
           window.URL.revokeObjectURL(url);
@@ -94,7 +98,7 @@ export default function Home() {
             ...prev,
             {
               role: "assistant",
-              content: "✓ Stack downloaded as layered-stack.zip",
+              content: "✓ Stack downloaded as layered-stack.tar.gz",
             },
           ]);
         }

@@ -1,38 +1,28 @@
-import { generateStackFiles } from "@layered/engine";
+import { generateProject } from "@layered/engine";
 import type { StackBlueprint } from "@layered/types";
-import JSZip from "jszip";
 
 export async function POST(req: Request) {
   try {
     const blueprint: StackBlueprint = await req.json();
 
-    // Generate files using the engine
-    const { stack, files } = generateStackFiles(blueprint);
+    console.log("📝 Received blueprint:", blueprint);
 
-    // Create zip file
-    const zip = new JSZip();
-    
-    // Add all generated files to zip
-    Object.entries(files).forEach(([filename, content]) => {
-      zip.file(filename, content);
-    });
+    // Generate the full project as a tar.gz archive
+    const buffer = await generateProject(blueprint);
 
-    // Generate zip blob
-    const zipBlob = await zip.generateAsync({ type: "blob" });
-
-    // Return zip as response
-    return new Response(zipBlob, {
+    // Return as downloadable archive
+    return new Response(buffer, {
       status: 200,
       headers: {
-        "Content-Type": "application/zip",
-        "Content-Disposition": 'attachment; filename="layered-stack.zip"',
+        "Content-Type": "application/gzip",
+        "Content-Disposition": 'attachment; filename="layered-stack.tar.gz"',
       },
     });
   } catch (error) {
     console.error("Generate error:", error);
     return Response.json(
       {
-        error: "Failed to generate stack",
+        error: "Failed to generate project",
         message: error instanceof Error ? error.message : "Unknown error",
       },
       { status: 500 }
