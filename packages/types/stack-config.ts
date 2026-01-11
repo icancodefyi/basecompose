@@ -31,6 +31,7 @@ export const STACK_CONFIG = {
         description: "React framework with server-side rendering",
         dockerImage: "node:20-alpine",
         port: 3000,
+        icon: "nextjs",
       },
       // Add more frontend options here:
       // react: {
@@ -38,6 +39,7 @@ export const STACK_CONFIG = {
       //   description: "React with Vite",
       //   dockerImage: "node:20-alpine",
       //   port: 5173,
+      //   icon: "react",
       // },
     },
   },
@@ -50,12 +52,14 @@ export const STACK_CONFIG = {
         description: "JavaScript/TypeScript runtime",
         dockerImage: "node:20-alpine",
         port: 3001,
+        icon: "nodejs",
       },
       fastapi: {
         label: "FastAPI",
         description: "Python async framework",
         dockerImage: "python:3.11-slim",
         port: 8000,
+        icon: "fastapi",
       },
       // Add more backend options here:
       // go: {
@@ -63,6 +67,7 @@ export const STACK_CONFIG = {
       //   description: "Go HTTP server",
       //   dockerImage: "golang:1.21-alpine",
       //   port: 8080,
+      //   icon: "go",
       // },
     },
   },
@@ -75,6 +80,7 @@ export const STACK_CONFIG = {
         description: "Relational database",
         dockerImage: "postgres:16-alpine",
         port: 5432,
+        icon: "postgresql",
         envVars: {
           POSTGRES_USER: "dev",
           POSTGRES_PASSWORD: "dev",
@@ -87,6 +93,7 @@ export const STACK_CONFIG = {
       //   description: "Relational database",
       //   dockerImage: "mysql:8.0",
       //   port: 3306,
+      //   icon: "mysql",
       //   envVars: {
       //     MYSQL_ROOT_PASSWORD: "dev",
       //     MYSQL_DATABASE: "layered_db",
@@ -97,6 +104,7 @@ export const STACK_CONFIG = {
       //   description: "In-memory cache",
       //   dockerImage: "redis:7-alpine",
       //   port: 6379,
+      //   icon: "redis",
       // },
     },
   },
@@ -107,6 +115,7 @@ export const STACK_CONFIG = {
       authjs: {
         label: "Auth.js",
         description: "NextAuth.js authentication",
+        icon: "nextauth",
         requiresDatabase: true,
       },
       // Add more auth options here:
