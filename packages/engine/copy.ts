@@ -88,9 +88,12 @@ export function copyAddonFiles(state: GenerationState, addon: string) {
     fs.mkdirSync(path.dirname(healthDest), { recursive: true });
     fs.copyFileSync(healthSrc, healthDest);
 
-    // Copy ui/page.tsx to app/demo
+    // Copy ui component to app/lib/components/demo-hero.tsx
     const uiSrc = path.join(addonPath, "ui/page.tsx");
-    const uiDest = path.join(state.context.outDir, "app/demo/page.tsx");
+    const uiDest = path.join(
+      state.context.outDir,
+      "app/lib/components/demo-hero.tsx"
+    );
     fs.mkdirSync(path.dirname(uiDest), { recursive: true });
     fs.copyFileSync(uiSrc, uiDest);
   }

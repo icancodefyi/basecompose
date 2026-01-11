@@ -2,15 +2,29 @@
 
 ## What it adds
 
-- Demo API route at `/api/health`
-- Demo UI page showcasing API integration
-- Interactive button to test the API
+- **Health check API** at `/api/health` that reports stack features
+- **Hero component** integrated into homepage that displays:
+  - Frontend status (Next.js)
+  - Database status (MongoDB, if selected)
+  - Authentication status (Auth.js, if selected)
 
 ## Files injected
 
-- `api/health.ts` - Simple health check endpoint
-- `ui/page.tsx` - Demo UI page with interactive elements
+- `api/health/route.ts` - API endpoint that checks feature availability
+- `lib/components/demo-hero.tsx` - Reusable hero component for homepage
 
-## Purpose
+## How it works
 
-Demonstrates that the generated app is immediately runnable and functional. Provides a starting point for your custom routes and pages.
+The demo addon provides:
+
+1. **Backend health check**: Verifies which addons are properly configured
+2. **Frontend visualization**: Shows feature cards on the homepage indicating what's enabled
+
+The component automatically detects:
+- ✅ Next.js (always enabled)
+- 🗄️ Database (MongoDB if connected)
+- 🔐 Authentication (Auth.js if available)
+
+## Usage in generated app
+
+The home page automatically imports and displays the `DemoHero` component in the hero section. It calls `/api/health` on load to determine which features are available and displays them as feature cards.

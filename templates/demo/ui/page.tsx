@@ -1,34 +1,74 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-export default function DemoPage() {
-  const [status, setStatus] = useState<string | null>(null);
+export function DemoHero() {
+  const [status, setStatus] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
 
-  const callHealthAPI = async () => {
-    const res = await fetch("/api/health");
-    const data = await res.json();
-    setStatus(JSON.stringify(data));
-  };
+  useEffect(() => {
+    const checkStatus = async () => {
+      try {
+        const res = await fetch("/api/health");
+        const data = await res.json();
+        setStatus(data);
+      } catch (err) {
+        setStatus({ error: "Failed to load" });
+      } finally {
+        setLoading(false);
+      }
+    };
+    checkStatus();
+  }, []);
 
   return (
-    <main style={{ padding: "2rem" }}>
-      <h1>Layered Starter</h1>
-      <p>This is your generated Next.js app with demo addon.</p>
-      <button
-        onClick={callHealthAPI}
-        style={{
-          padding: "0.5rem 1rem",
-          backgroundColor: "#0070f3",
-          color: "white",
-          border: "none",
-          borderRadius: "4px",
-          cursor: "pointer"
-        }}
-      >
-        Call Demo API
-      </button>
-      {status && <p>Status: {status}</p>}
-    </main>
+    <section style={{
+      padding: "4rem 2rem",
+      textAlign: "center",
+      backgroundColor: "#f5f5f5",
+      borderRadius: "8px",
+      marginBottom: "2rem"
+    }}>
+      <h1 style={{ marginBottom: "1rem" }}>Welcome to Layered</h1>
+      <p style={{ color: "#666", marginBottom: "2rem" }}>
+        Your complete, runnable stack is ready.
+      </p>
+
+      {loading ? (
+        <p>Loading stack info...</p>
+      ) : status?.features ? (
+        <div style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+          gap: "1rem",
+          marginTop: "2rem"
+        }}>
+          <FeatureCard label="Frontend" enabled={status.features.nextjs} icon="⚛️" />
+          <FeatureCard label="Database" enabled={status.features.database} icon="🗄️" />
+          <FeatureCard label="Authentication" enabled={status.features.auth} icon="🔐" />
+        </div>
+      ) : null}
+
+      <p style={{ fontSize: "0.9rem", color: "#999", marginTop: "2rem" }}>
+        Start editing to build your application.
+      </p>
+    </section>
+  );
+}
+
+function FeatureCard({ label, enabled, icon }: { label: string; enabled: boolean; icon: string }) {
+  return (
+    <div style={{
+      padding: "1.5rem",
+      backgroundColor: enabled ? "#e8f5e9" : "#f5f5f5",
+      borderRadius: "8px",
+      border: `2px solid ${enabled ? "#4caf50" : "#ddd"}`
+    }}>
+      <div style={{ fontSize: "2rem", marginBottom: "0.5rem" }}>{icon}</div>
+      <div style={{ fontWeight: "bold" }}>{label}</div>
+      <div style={{ fontSize: "0.9rem", color: enabled ? "#4caf50" : "#999" }}>
+        {enabled ? "✓ Enabled" : "○ Not configured"}
+      </div>
+    </div>
   );
 }
