@@ -1,4 +1,4 @@
-import { connectMongo } from "@/lib/db/mongodb";
+import { connectMongo } from "@/app/lib/db/mongodb";
 
 export async function GET() {
   const features = {

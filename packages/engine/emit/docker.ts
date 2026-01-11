@@ -74,7 +74,6 @@ export function collectDockerVolumes(state: GenerationState) {
  */
 export function mergeDockerCompose(state: GenerationState): string {
   const baseCompose = {
-    version: "3.8" as const,
     services: {
       app: {
         build: ".",
