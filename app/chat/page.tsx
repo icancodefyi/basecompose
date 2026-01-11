@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { StackArtifact } from "../components/stack-artifact";
 import { StackItem } from "../components/stack-item";
+import Link from "next/link";
 
 function resolveStack(input: StackBlueprint): StackBlueprint {
   return input;
@@ -188,7 +189,9 @@ export default function Home() {
         {/* Header with Auth */}
         <div className="p-4 border-b border-[#2a2a2a]">
           <div className="flex items-center justify-between gap-2">
+            <Link href="/">
             <h1 className="text-lg font-bold text-[#0088ff]">Layered</h1>
+            </Link>
             <button
               onClick={() => setSidebarOpen(false)}
               className="md:hidden p-1 hover:bg-[#1a1a1a] rounded"
@@ -203,11 +206,23 @@ export default function Home() {
           <div className="mt-3 pt-3 border-t border-[#2a2a2a]">
             {session?.user ? (
               <div className="space-y-3">
-                <div className="text-xs text-[#666666]">
-                  Signed in as <span className="text-white font-medium">{session.user.name}</span>
+                <div className="bg-[#1a1a1a] rounded-lg p-3 space-y-2">
+                  <div className="flex items-center gap-2">
+                    {session.user.image && (
+                      <img
+                        src={session.user.image}
+                        alt={session.user.name || "User"}
+                        className="w-8 h-8 rounded-full"
+                      />
+                    )}
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs font-medium text-white truncate">{session.user.name}</p>
+                      <p className="text-xs text-[#666666] truncate">{session.user.email}</p>
+                    </div>
+                  </div>
                 </div>
                 <Button
-                  onClick={() => signOut()}
+                  onClick={() => signOut({ callbackUrl: "/" })}
                   variant="outline"
                   size="sm"
                   className="w-full justify-center text-xs bg-white text-black cursor-pointer"
@@ -221,7 +236,7 @@ export default function Home() {
                   {messageCount}/5 messages used
                 </div>
                 <Button
-                  onClick={() => signIn("google", { callbackUrl: "/" })}
+                  onClick={() => signIn("google", { callbackUrl: "/chat" })}
                   size="sm"
                   className="w-full justify-center text-xs bg-white text-black hover:bg-gray-100"
                 >
@@ -496,7 +511,7 @@ export default function Home() {
 
             <div className="space-y-3">
               <Button
-                onClick={() => signIn("google", { callbackUrl: "/" })}
+                onClick={() => signIn("google", { callbackUrl: "/chat" })}
                 className="w-full bg-white text-black hover:bg-gray-100 justify-center"
               >
                 <svg className="w-4 h-4 mr-2" viewBox="0 0 24 24" fill="currentColor">

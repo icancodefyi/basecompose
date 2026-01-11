@@ -2,10 +2,12 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useSession, signIn } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 
 export function NavHeader() {
+  const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { data: session } = useSession();
 
@@ -21,7 +23,7 @@ export function NavHeader() {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 group">
-            <div className="w-8 h-8 bg-gradient-to-br from-emerald-600 to-emerald-700 rounded-lg flex items-center justify-center font-bold text-white">
+            <div className="w-8 h-8 bg-linear-to-br from-emerald-600 to-emerald-700 rounded-lg flex items-center justify-center font-bold text-white">
               L
             </div>
             <span className="text-lg font-bold text-white group-hover:text-emerald-400 transition-colors">
@@ -47,12 +49,18 @@ export function NavHeader() {
             {/* Desktop Auth */}
             <div className="hidden md:flex items-center gap-3">
               {session?.user ? (
-                <Button
-                  onClick={() => (window.location.href = "/chat")}
-                  className="bg-[#0088ff] hover:bg-[#0066cc] text-white"
-                >
-                  Go to App
-                </Button>
+                <div className="flex items-center gap-3">
+                  <div className="flex flex-col items-end">
+                    <p className="text-sm font-medium text-white">{session.user.name}</p>
+                    <p className="text-xs text-gray-400">{session.user.email}</p>
+                  </div>
+                  <Button
+                    onClick={() => router.push("/chat")}
+                    className="bg-[#0088ff] hover:bg-[#0066cc] text-white"
+                  >
+                    Go to App
+                  </Button>
+                </div>
               ) : (
                 <>
                   <Button
@@ -121,12 +129,18 @@ export function NavHeader() {
               {/* Mobile Auth */}
               <div className="pt-4 px-3 space-y-2 border-t border-gray-800">
                 {session?.user ? (
-                  <Button
-                    onClick={() => (window.location.href = "/chat")}
-                    className="bg-white hover:bg-gray-100 text-black font-semibold"
-                  >
-                    Go to App
-                  </Button>
+                  <>
+                    <div className="mb-3 pb-3 border-b border-gray-800">
+                      <p className="text-sm font-medium text-white">{session.user.name}</p>
+                      <p className="text-xs text-gray-400">{session.user.email}</p>
+                    </div>
+                    <Button
+                      onClick={() => router.push("/chat")}
+                      className="w-full bg-white hover:bg-gray-100 text-black font-semibold"
+                    >
+                      Go to App
+                    </Button>
+                  </>
                 ) : (
                   <>
                     <Button

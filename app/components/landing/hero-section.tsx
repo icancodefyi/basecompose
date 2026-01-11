@@ -1,13 +1,15 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useSession, signIn } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 
 export function HeroSection() {
+  const router = useRouter();
   const { data: session } = useSession();
 
   return (
-    <section className="relative min-h-screen pt-20 pb-20 px-4 sm:px-6 lg:px-8 overflow-hidden flex flex-col items-center justify-center">
+    <section className="relative min-h-[calc(100vh-4rem)] pt-32 pb-20 px-4 sm:px-6 lg:px-8 overflow-hidden flex flex-col items-center justify-center">
       {/* Subtle background effects */}
       <div className="absolute inset-0 opacity-20">
         <div className="absolute top-40 right-20 w-96 h-96 bg-emerald-600/10 rounded-full blur-3xl"></div>
@@ -46,10 +48,10 @@ export function HeroSection() {
           <Button
             onClick={() =>
               session?.user
-                ? (window.location.href = "/chat")
+                ? router.push("/chat")
                 : signIn("google", { callbackUrl: "/chat" })
             }
-            className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-8 py-3 rounded-lg transition-all duration-300 shadow-lg shadow-emerald-600/20"
+            className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-8 py-3 rounded-lg transition-all duration-300 shadow-lg shadow-emerald-600/20 cursor-pointer"
           >
             {session?.user ? "Open Layered" : "Start your project"}
           </Button>
@@ -83,7 +85,7 @@ export function HeroSection() {
         {/* Feature Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Feature Card 1 */}
-          <div className="rounded-xl border border-gray-800 bg-gradient-to-br from-gray-900/50 to-gray-950 p-8 text-left hover:border-emerald-600/40 transition-all duration-300">
+          <div className="rounded-xl border border-gray-800 bg-linear-to-br from-gray-900/50 to-gray-950 p-8 text-left hover:border-emerald-600/40 transition-all duration-300">
             <div className="w-12 h-12 bg-emerald-600/20 rounded-lg flex items-center justify-center mb-6">
               <span className="text-xl">🗄️</span>
             </div>
@@ -94,7 +96,7 @@ export function HeroSection() {
           </div>
 
           {/* Feature Card 2 */}
-          <div className="rounded-xl border border-gray-800 bg-gradient-to-br from-gray-900/50 to-gray-950 p-8 text-left hover:border-emerald-600/40 transition-all duration-300">
+          <div className="rounded-xl border border-gray-800 bg-linear-to-br from-gray-900/50 to-gray-950 p-8 text-left hover:border-emerald-600/40 transition-all duration-300">
             <div className="w-12 h-12 bg-emerald-600/20 rounded-lg flex items-center justify-center mb-6">
               <span className="text-xl">🔐</span>
             </div>
@@ -105,7 +107,7 @@ export function HeroSection() {
           </div>
 
           {/* Feature Card 3 */}
-          <div className="rounded-xl border border-gray-800 bg-gradient-to-br from-gray-900/50 to-gray-950 p-8 text-left hover:border-emerald-600/40 transition-all duration-300">
+          <div className="rounded-xl border border-gray-800 bg-linear-to-br from-gray-900/50 to-gray-950 p-8 text-left hover:border-emerald-600/40 transition-all duration-300">
             <div className="w-12 h-12 bg-emerald-600/20 rounded-lg flex items-center justify-center mb-6">
               <span className="text-xl">⚡</span>
             </div>
