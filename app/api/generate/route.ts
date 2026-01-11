@@ -11,7 +11,7 @@ export async function POST(req: Request) {
     const buffer = await generateProject(blueprint);
 
     // Return as downloadable archive
-    return new Response(buffer, {
+    return new Response(new Uint8Array(buffer), {
       status: 200,
       headers: {
         "Content-Type": "application/gzip",

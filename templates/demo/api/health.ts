@@ -1,4 +1,4 @@
-import { connectMongo } from "@/app/lib/db/mongodb";
+import { connectMongo } from "@/templates/databases/mongodb/client";
 
 export async function GET() {
   const features = {

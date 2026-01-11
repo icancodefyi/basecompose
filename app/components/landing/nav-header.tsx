@@ -21,10 +21,10 @@ export function NavHeader() {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 group">
-            <div className="w-8 h-8 bg-gradient-to-br from-[#0088ff] to-[#0055aa] rounded-lg flex items-center justify-center font-bold text-white">
+            <div className="w-8 h-8 bg-gradient-to-br from-emerald-600 to-emerald-700 rounded-lg flex items-center justify-center font-bold text-white">
               L
             </div>
-            <span className="text-lg font-bold text-foreground group-hover:text-[#0088ff] transition-colors">
+            <span className="text-lg font-bold text-white group-hover:text-emerald-400 transition-colors">
               Layered
             </span>
           </Link>
@@ -35,7 +35,7 @@ export function NavHeader() {
               <a
                 key={link.href}
                 href={link.href}
-                className="text-sm text-[#999999] hover:text-foreground transition-colors"
+                className="text-sm text-gray-400 hover:text-white transition-colors"
               >
                 {link.label}
               </a>
@@ -58,13 +58,13 @@ export function NavHeader() {
                   <Button
                     onClick={() => signIn("google", { callbackUrl: "/chat" })}
                     variant="outline"
-                    className="border-[#2a2a2a] hover:bg-[#1a1a1a] text-sm"
+                    className="border-gray-700 hover:bg-gray-900 text-gray-300 hover:text-white text-sm transition-colors"
                   >
                     Sign In
                   </Button>
                   <Button
                     onClick={() => signIn("google", { callbackUrl: "/chat" })}
-                    className="bg-[#0088ff] hover:bg-[#0066cc] text-white text-sm"
+                    className="bg-white hover:bg-gray-100 text-black text-sm font-semibold"
                   >
                     Get Started
                   </Button>
@@ -105,25 +105,25 @@ export function NavHeader() {
 
         {/* Mobile Navigation Menu */}
         {mobileMenuOpen && (
-          <div className="md:hidden border-t border-[#2a2a2a] bg-background">
+          <div className="md:hidden border-t border-gray-800 bg-background">
             <div className="px-2 pt-2 pb-3 space-y-1">
               {navLinks.map((link) => (
                 <a
                   key={link.href}
                   href={link.href}
                   onClick={() => setMobileMenuOpen(false)}
-                  className="block px-3 py-2 rounded-lg text-sm text-[#999999] hover:bg-[#1a1a1a] hover:text-foreground transition-colors"
+                  className="block px-3 py-2 rounded-lg text-sm text-gray-400 hover:bg-gray-900 hover:text-white transition-colors"
                 >
                   {link.label}
                 </a>
               ))}
 
               {/* Mobile Auth */}
-              <div className="pt-4 px-3 space-y-2 border-t border-[#2a2a2a]">
+              <div className="pt-4 px-3 space-y-2 border-t border-gray-800">
                 {session?.user ? (
                   <Button
                     onClick={() => (window.location.href = "/chat")}
-                    className="w-full bg-[#0088ff] hover:bg-[#0066cc] text-white"
+                    className="bg-white hover:bg-gray-100 text-black font-semibold"
                   >
                     Go to App
                   </Button>
@@ -132,13 +132,13 @@ export function NavHeader() {
                     <Button
                       onClick={() => signIn("google", { callbackUrl: "/chat" })}
                       variant="outline"
-                      className="w-full border-[#2a2a2a] hover:bg-[#1a1a1a]"
+                      className="w-full border-gray-700 hover:bg-gray-900 text-gray-300 hover:text-white transition-colors"
                     >
                       Sign In
                     </Button>
                     <Button
                       onClick={() => signIn("google", { callbackUrl: "/chat" })}
-                      className="w-full bg-[#0088ff] hover:bg-[#0066cc] text-white"
+                      className="w-full bg-white hover:bg-gray-100 text-black font-semibold"
                     >
                       Get Started
                     </Button>

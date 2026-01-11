@@ -1,10 +1,11 @@
 "use client";
 
+import { Suspense } from "react";
 import { signIn } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { useSearchParams } from "next/navigation";
 
-export default function SignIn() {
+function SignInContent() {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl") || "/";
 
@@ -13,17 +14,17 @@ export default function SignIn() {
       <div className="w-full max-w-md space-y-8">
         {/* Header */}
         <div className="text-center space-y-2">
-          <h1 className="text-3xl md:text-4xl font-bold text-[#0088ff]">Layered</h1>
-          <p className="text-sm md:text-base text-[#999999]">
+          <h1 className="text-3xl md:text-4xl font-bold text-emerald-600">Layered</h1>
+          <p className="text-sm md:text-base text-gray-400">
             AI-Powered Stack Generator
           </p>
         </div>
 
         {/* Sign In Card */}
-        <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl p-6 md:p-8 space-y-6">
+        <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 md:p-8 space-y-6">
           <div className="text-center space-y-2">
             <h2 className="text-xl md:text-2xl font-semibold">Welcome Back</h2>
-            <p className="text-xs md:text-sm text-[#666666]">
+            <p className="text-xs md:text-sm text-gray-500">
               Sign in to unlock unlimited chats and downloads
             </p>
           </div>
@@ -52,8 +53,8 @@ export default function SignIn() {
           </Button>
 
           {/* Benefits */}
-          <div className="space-y-3 pt-6 border-t border-[#2a2a2a]">
-            <p className="text-xs text-[#666666] font-medium uppercase tracking-wider">
+          <div className="space-y-3 pt-6 border-t border-gray-800">
+            <p className="text-xs text-gray-500 font-medium uppercase tracking-wider">
               When you sign in, you get:
             </p>
             <ul className="space-y-2">
@@ -65,10 +66,10 @@ export default function SignIn() {
               ].map((benefit) => (
                 <li
                   key={benefit}
-                  className="text-xs md:text-sm text-[#d0d0d0] flex items-start gap-2"
+                  className="text-xs md:text-sm text-gray-300 flex items-start gap-2"
                 >
                   <svg
-                    className="w-4 h-4 text-[#0088ff] shrink-0 mt-0.5"
+                    className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5"
                     fill="currentColor"
                     viewBox="0 0 20 20"
                   >
@@ -86,10 +87,24 @@ export default function SignIn() {
         </div>
 
         {/* Footer */}
-        <div className="text-center text-xs text-[#666666]">
+        <div className="text-center text-xs text-gray-500">
           By signing in, you agree to our Terms of Service and Privacy Policy
         </div>
       </div>
     </div>
+  );
+}
+
+export default function SignIn() {
+  return (
+    <Suspense
+      fallback={
+        <div className="h-screen bg-background flex items-center justify-center">
+          <div className="text-gray-400">Loading...</div>
+        </div>
+      }
+    >
+      <SignInContent />
+    </Suspense>
   );
 }

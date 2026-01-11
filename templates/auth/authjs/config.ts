@@ -1,14 +1,11 @@
-import { NextAuthOptions } from "next-auth";
+import NextAuth from "next-auth";
+import GitHub from "next-auth/providers/github";
 
-export const authConfig: NextAuthOptions = {
+export const authConfig = {
   providers: [
-    {
-      id: "github",
-      name: "GitHub",
-      type: "oauth",
+    GitHub({
       clientId: process.env.GITHUB_ID!,
       clientSecret: process.env.GITHUB_SECRET!,
-      wellKnown: "https://github.com/login/oauth/authorize"
-    }
-  ]
+    }),
+  ],
 };
