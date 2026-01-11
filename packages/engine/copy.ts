@@ -30,6 +30,7 @@ export function copyDir(src: string, dest: string) {
 export function copyFrameworkBase(state: GenerationState) {
   const templatesRoot = path.resolve(process.cwd(), "templates");
   const frameworkBase = path.join(templatesRoot, "frameworks/nextjs/base");
+  const dockerDir = path.join(templatesRoot, "frameworks/nextjs/docker");
 
   if (!fs.existsSync(frameworkBase)) {
     throw new Error(`Framework template not found: ${frameworkBase}`);
@@ -37,6 +38,24 @@ export function copyFrameworkBase(state: GenerationState) {
 
   copyDir(frameworkBase, state.context.outDir);
   console.log(`✓ Framework base copied to ${state.context.outDir}`);
+
+  // Copy Docker files to root
+  if (fs.existsSync(dockerDir)) {
+    const dockerfileSrc = path.join(dockerDir, "Dockerfile");
+    const dockerfileDest = path.join(state.context.outDir, "Dockerfile");
+    const dockerignoreSrc = path.join(dockerDir, ".dockerignore");
+    const dockerignoreDest = path.join(state.context.outDir, ".dockerignore");
+
+    if (fs.existsSync(dockerfileSrc)) {
+      fs.copyFileSync(dockerfileSrc, dockerfileDest);
+      console.log(`✓ Dockerfile copied`);
+    }
+
+    if (fs.existsSync(dockerignoreSrc)) {
+      fs.copyFileSync(dockerignoreSrc, dockerignoreDest);
+      console.log(`✓ .dockerignore copied`);
+    }
+  }
 }
 
 /**

@@ -98,7 +98,16 @@ export async function generateProject(
       );
     }
 
-    // Step 6: Zip the output
+    // Step 6: Copy setup guide
+    console.log("📚 Copying setup guide...");
+    const templatesRoot = path.resolve(process.cwd(), "templates");
+    const setupGuideSrc = path.join(templatesRoot, "shared/README_SETUP.md");
+    const setupGuideDest = path.join(outDir, "SETUP.md");
+    if (fs.existsSync(setupGuideSrc)) {
+      fs.copyFileSync(setupGuideSrc, setupGuideDest);
+    }
+
+    // Step 7: Zip the output
     console.log("📦 Creating zip archive...");
     const zipPath = path.join(tmpDir, "project.tar.gz");
     

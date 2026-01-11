@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import type { StackBlueprint } from "@layered/types";
 import { STACK_CONFIG } from "@layered/types";
 // Local resolveStack to avoid importing Node code from @layered/engine
-function resolveStack(input) {
+function resolveStack(input: StackBlueprint): StackBlueprint {
   // For now, just return input (no rules applied client-side)
   return input;
 }

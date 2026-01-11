@@ -34,7 +34,7 @@ export function loadDockerFragment(
 
   try {
     const content = fs.readFileSync(fragmentPath, "utf-8");
-    const parsed = yaml.load(content) as Record<string, unknown>;
+    const parsed = yaml.load(content) as DockerFragments;
     return parsed || {};
   } catch (err) {
     console.warn(`Error parsing docker fragment ${fragmentPath}:`, err);
@@ -70,31 +70,54 @@ export function collectDockerVolumes(state: GenerationState) {
 }
 
 /**
- * Merge docker fragments into base compose file
+ * Merge docker fragments into development compose file
+ * Includes volume mounts, explicit command, and no auth
  */
-export function mergeDockerCompose(state: GenerationState): string {
-  const baseCompose = {
+export function mergeDockerComposeDev(state: GenerationState): string {
+  const baseCompose: any = {
+    version: "3.8",
     services: {
       app: {
-        build: ".",
+        build: {
+          context: ".",
+          dockerfile: "Dockerfile"
+        },
+        command: "pnpm dev",
         ports: ["3000:3000"],
         environment: {
           NODE_ENV: "development"
-        }
+        },
+        volumes: [".:/app", "/app/node_modules"],
+        depends_on: []
       }
     }
   };
 
-  // Merge addon service fragments
+  // Add MongoDB-specific dev settings
+  if (state.context.addons.includes("mongodb")) {
+    baseCompose.services.app.environment.MONGODB_URI = "mongodb://mongodb:27017/layered";
+    baseCompose.services.app.depends_on.push("mongodb");
+    baseCompose.services.mongodb = {
+      image: "mongo:7",
+      restart: "unless-stopped",
+      ports: ["27017:27017"],
+      volumes: ["mongo_data:/data/db"]
+    };
+  }
+
+  // Merge addon service fragments (if any)
   for (const [serviceName, serviceConfig] of Object.entries(
     state.dockerFragments
   )) {
-    baseCompose.services[serviceName] = serviceConfig;
+    if (serviceName !== "mongodb") {
+      baseCompose.services[serviceName] = serviceConfig;
+      baseCompose.services.app.depends_on.push(serviceName);
+    }
   }
 
   // Add volumes if any
   if (Object.keys(state.dockerVolumes).length > 0) {
-    (baseCompose as any).volumes = state.dockerVolumes;
+    baseCompose.volumes = state.dockerVolumes;
   }
 
   // Convert to YAML
@@ -102,12 +125,77 @@ export function mergeDockerCompose(state: GenerationState): string {
 }
 
 /**
- * Write docker-compose.yml to output directory
+ * Merge docker fragments into production compose file
+ * Includes auth, restart policies, and optimized settings
+ */
+export function mergeDockerComposeProd(state: GenerationState): string {
+  const baseCompose: any = {
+    version: "3.8",
+    services: {
+      app: {
+        build: {
+          context: ".",
+          dockerfile: "Dockerfile"
+        },
+        ports: ["3000:3000"],
+        environment: {
+          NODE_ENV: "production"
+        },
+        restart: "always",
+        depends_on: []
+      }
+    }
+  };
+
+  // Add MongoDB-specific prod settings
+  if (state.context.addons.includes("mongodb")) {
+    baseCompose.services.app.environment.MONGODB_URI = "mongodb://mongodb:27017/layered";
+    baseCompose.services.app.depends_on.push("mongodb");
+    baseCompose.services.mongodb = {
+      image: "mongo:7",
+      restart: "always",
+      ports: ["27017:27017"],
+      environment: {
+        MONGO_INITDB_ROOT_USERNAME: "root",
+        MONGO_INITDB_ROOT_PASSWORD: "${MONGO_PASSWORD:-changeme}",
+        MONGO_INITDB_DATABASE: "layered"
+      },
+      volumes: ["mongo_data:/data/db"]
+    };
+  }
+
+  // Merge addon service fragments (if any)
+  for (const [serviceName, serviceConfig] of Object.entries(
+    state.dockerFragments
+  )) {
+    if (serviceName !== "mongodb") {
+      baseCompose.services[serviceName] = serviceConfig;
+      baseCompose.services.app.depends_on.push(serviceName);
+    }
+  }
+
+  // Add volumes if any
+  if (Object.keys(state.dockerVolumes).length > 0) {
+    baseCompose.volumes = state.dockerVolumes;
+  }
+
+  // Convert to YAML
+  return yaml.dump(baseCompose, { lineWidth: -1 });
+}
+
+/**
+ * Write both docker-compose files to output directory
  */
 export function writeDockerCompose(state: GenerationState) {
-  const compose = mergeDockerCompose(state);
-  const composePath = path.join(state.context.outDir, "docker-compose.yml");
+  const composeDev = mergeDockerComposeDev(state);
+  const composeProd = mergeDockerComposeProd(state);
 
-  fs.writeFileSync(composePath, compose, "utf-8");
-  console.log(`✓ docker-compose.yml written`);
+  const composeDevPath = path.join(state.context.outDir, "docker-compose.dev.yml");
+  const composeProdPath = path.join(state.context.outDir, "docker-compose.prod.yml");
+
+  fs.writeFileSync(composeDevPath, composeDev, "utf-8");
+  fs.writeFileSync(composeProdPath, composeProd, "utf-8");
+
+  console.log(`✓ docker-compose.dev.yml written`);
+  console.log(`✓ docker-compose.prod.yml written`);
 }
