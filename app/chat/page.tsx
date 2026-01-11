@@ -6,8 +6,8 @@ import { STACK_CONFIG } from "@layered/types";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { StackArtifact } from "./components/stack-artifact";
-import { StackItem } from "./components/stack-item";
+import { StackArtifact } from "../components/stack-artifact";
+import { StackItem } from "../components/stack-item";
 
 function resolveStack(input: StackBlueprint): StackBlueprint {
   return input;
