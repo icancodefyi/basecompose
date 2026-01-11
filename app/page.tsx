@@ -75,6 +75,13 @@ export default function Home() {
     setMessages((prev) => [...prev, { role: "user", content: userMessage }]);
     setLoading(true);
 
+    // Increment message count immediately when user sends message (for non-authenticated users)
+    if (!session) {
+      const newCount = messageCount + 1;
+      setMessageCount(newCount);
+      localStorage.setItem("layered_message_count", newCount.toString());
+    }
+
     try {
       const response = await fetch("/api/chat", {
         method: "POST",
@@ -88,13 +95,6 @@ export default function Home() {
         ...prev,
         { role: "assistant", content: data.message },
       ]);
-
-      // Increment message count for non-authenticated users
-      if (!session) {
-        const newCount = messageCount + 1;
-        setMessageCount(newCount);
-        localStorage.setItem("layered_message_count", newCount.toString());
-      }
 
       if (data.action === "modify" && data.changes) {
         setStack((prev) => {
@@ -210,7 +210,7 @@ export default function Home() {
                   onClick={() => signOut()}
                   variant="outline"
                   size="sm"
-                  className="w-full justify-center text-xs"
+                  className="w-full justify-center text-xs bg-white text-black cursor-pointer"
                 >
                   Sign Out
                 </Button>
@@ -218,7 +218,7 @@ export default function Home() {
             ) : (
               <div className="space-y-2">
                 <div className="text-xs text-[#666666]">
-                  {messageCount}/5 free chats used
+                  {messageCount}/5 messages used
                 </div>
                 <Button
                   onClick={() => signIn("google", { callbackUrl: "/" })}
@@ -348,7 +348,7 @@ export default function Home() {
                 <div className="flex justify-center">
                   <div className="bg-amber-900/20 border border-amber-700/50 rounded-lg px-4 py-3 max-w-md">
                     <p className="text-xs md:text-sm text-amber-300">
-                      You've used all 5 free chats. Sign in to continue building!
+                      You've used all 5 free messages. Sign in to continue building!
                     </p>
                   </div>
                 </div>
@@ -360,32 +360,57 @@ export default function Home() {
         </div>
 
         {/* Input Area */}
-        <div className="border-t border-[#2a2a2a] bg-background px-3 md:px-4 py-3 md:py-4">
-          <div className="max-w-full md:max-w-2xl mx-auto">
+        <div className="border-t border-[#2a2a2a] bg-background px-3 md:px-4 py-4 md:py-6">
+          <div className="max-w-full md:max-w-3xl mx-auto">
             {!canSendMessage && (
-              <div className="mb-2 p-2 md:p-3 bg-amber-900/20 border border-amber-700/50 rounded-lg text-xs md:text-sm text-amber-300">
-                Free chat limit reached. Sign in to continue! →
+              <div className="mb-3 p-2 md:p-3 bg-amber-900/20 border border-amber-700/50 rounded-lg text-xs md:text-sm text-amber-300">
+                Free message limit reached. Sign in to continue! →
               </div>
             )}
             <form onSubmit={handleSubmit} className="relative">
-              <input
-                type="text"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                placeholder={canSendMessage ? "Ask a follow-up..." : "Sign in to continue..."}
-                className="w-full bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl px-3 md:px-4 py-2 md:py-3 pr-10 md:pr-12 text-sm text-[#d0d0d0] placeholder:text-[#666666] focus:outline-none focus:border-[#3a3a3a] focus:ring-1 focus:ring-[#3a3a3a]"
-                disabled={loading || !canSendMessage}
-              />
-              <Button
-                type="submit"
-                disabled={loading || !input.trim() || !canSendMessage}
-                size="icon"
-                className="absolute right-1 md:right-2 top-1/2 -translate-y-1/2 bg-[#0088ff] hover:bg-[#0066cc] text-white rounded-lg h-7 md:h-8 w-7 md:w-8"
-              >
-                <svg className="w-3 md:w-4 h-3 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19V5M5 12h14" />
-                </svg>
-              </Button>
+              <div className="flex items-center gap-2 md:gap-3 bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl px-3 md:px-4 py-3 md:py-4 hover:border-[#3a3a3a] focus-within:border-[#3a3a3a] focus-within:ring-1 focus-within:ring-[#3a3a3a] transition-all">
+                {/* Plus Button */}
+                <button
+                  type="button"
+                  className="shrink-0 p-2 rounded-lg hover:bg-[#2a2a2a] text-[#666666] hover:text-[#d0d0d0] transition-colors"
+                  title="Add attachment"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                  </svg>
+                </button>
+
+                {/* Input Field */}
+                <input
+                  type="text"
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  placeholder={canSendMessage ? "Ask Layered to build..." : "Sign in to continue..."}
+                  className="flex-1 bg-transparent text-sm md:text-base text-[#d0d0d0] placeholder:text-[#666666] focus:outline-none"
+                  disabled={loading || !canSendMessage}
+                />
+
+                {/* Model Selector */}
+                <div className="shrink-0 flex items-center gap-1 px-2 md:px-3 py-1 rounded-lg bg-[#0a0a0a] border border-[#3a3a3a] text-xs md:text-sm text-[#d0d0d0]">
+                  <span>⚡</span>
+                  <span>Layered</span>
+                  <svg className="w-3 h-3 text-[#666666]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                  </svg>
+                </div>
+
+                {/* Send Button */}
+                <Button
+                  type="submit"
+                  disabled={loading || !input.trim() || !canSendMessage}
+                  size="icon"
+                  className="shrink-0 bg-[#0088ff] hover:bg-[#0066cc] text-white rounded-lg h-8 md:h-9 w-8 md:w-9"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16l-4-4m0 0l4-4m-4 4h18" />
+                  </svg>
+                </Button>
+              </div>
             </form>
           </div>
         </div>
@@ -465,7 +490,7 @@ export default function Home() {
             <div className="space-y-2">
               <h2 className="text-xl md:text-2xl font-semibold">Unlock More Features</h2>
               <p className="text-sm text-[#999999]">
-                You've used your 5 free chats. Sign in with Google to get unlimited chats and downloads.
+                You've used your 5 free messages. Sign in with Google to get unlimited messages and downloads.
               </p>
             </div>
 
@@ -493,7 +518,7 @@ export default function Home() {
             </div>
 
             <div className="text-xs text-[#666666] text-center">
-              You'll get unlimited chats, downloads, and project history.
+              You'll get unlimited messages, downloads, and project history.
             </div>
           </div>
         </div>
