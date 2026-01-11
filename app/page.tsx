@@ -3,6 +3,9 @@
 import { useState, useMemo } from "react";
 import type { StackBlueprint } from "@layered/types";
 import { resolveStack } from "@layered/engine";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
 
 export default function Home() {
   const [intent, setIntent] = useState<"saas" | "api">("saas");
@@ -82,280 +85,275 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-50">
-      {/* Hero Section */}
-      <div className="pt-16 pb-12 px-6 sm:px-8">
-        <div className="max-w-3xl mx-auto">
-          <h1 className="text-5xl sm:text-6xl font-bold tracking-tight mb-4">
-            layered
-          </h1>
-          <p className="text-xl text-slate-400 leading-relaxed max-w-2xl">
-            Generate a production-ready stack from intent.
-          </p>
-          <p className="text-lg text-slate-500 mt-2">
-            Choose what you're building. We'll wire the rest.
+    <div className="min-h-screen bg-black text-zinc-50 flex flex-col">
+      {/* Minimal Header */}
+      <header className="px-8 pt-20 pb-16">
+        <div className="max-w-4xl mx-auto">
+          <div className="inline-block">
+            <h1 className="text-[3.5rem] font-light tracking-tight leading-none mb-3">
+              layered
+            </h1>
+            <div className="h-px bg-gradient-to-r from-zinc-800 to-transparent" />
+          </div>
+          <p className="text-zinc-500 text-lg mt-6 max-w-md font-light">
+            Stack generation from intent
           </p>
         </div>
-      </div>
-
-      {/* Divider */}
-      <div className="border-t border-slate-800 px-6 sm:px-8 mb-12">
-        <div className="max-w-3xl mx-auto" />
-      </div>
+      </header>
 
       {/* Main Content */}
-      <div className="px-6 sm:px-8 pb-24">
-        <div className="max-w-3xl mx-auto">
-          <form onSubmit={handleSubmit} className="space-y-8">
-            {/* Card 1: Intent */}
-            <div className="bg-slate-900 border border-slate-800 rounded-xl p-8">
-              <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-400 mb-6">
-                What are you building?
-              </h2>
-              <div className="flex flex-col sm:flex-row gap-4">
+      <main className="flex-1 px-8 pb-24">
+        <div className="max-w-4xl mx-auto">
+          <form onSubmit={handleSubmit} className="space-y-12">
+            {/* Intent Selection - Minimal Segmented Control */}
+            <div className="space-y-4">
+              <div className="text-[0.6875rem] uppercase tracking-[0.15em] text-zinc-600 font-medium">
+                Intent
+              </div>
+              <div className="inline-flex border border-zinc-800 rounded-md overflow-hidden">
                 <button
                   type="button"
                   onClick={() => setIntent("saas")}
-                  className={`flex-1 px-6 py-4 rounded-lg font-medium transition-all duration-200 ${
+                  className={`px-8 py-3 text-sm font-medium transition-all ${
                     intent === "saas"
-                      ? "bg-blue-600 text-white border border-blue-500"
-                      : "bg-slate-800 text-slate-300 border border-slate-700 hover:border-slate-600"
+                      ? "bg-zinc-900 text-zinc-50"
+                      : "bg-transparent text-zinc-500 hover:text-zinc-300"
                   }`}
                 >
-                  <div className="font-semibold">SaaS App</div>
-                  <div className="text-sm text-slate-400 mt-1">
-                    Frontend, backend & auth
-                  </div>
+                  SaaS
                 </button>
+                <div className="w-px bg-zinc-800" />
                 <button
                   type="button"
                   onClick={() => setIntent("api")}
-                  className={`flex-1 px-6 py-4 rounded-lg font-medium transition-all duration-200 ${
+                  className={`px-8 py-3 text-sm font-medium transition-all ${
                     intent === "api"
-                      ? "bg-blue-600 text-white border border-blue-500"
-                      : "bg-slate-800 text-slate-300 border border-slate-700 hover:border-slate-600"
+                      ? "bg-zinc-900 text-zinc-50"
+                      : "bg-transparent text-zinc-500 hover:text-zinc-300"
                   }`}
                 >
-                  <div className="font-semibold">API Only</div>
-                  <div className="text-sm text-slate-400 mt-1">
-                    Backend service
-                  </div>
+                  API
                 </button>
               </div>
             </div>
 
-            {/* Card 2: Frontend */}
-            <div className="bg-slate-900 border border-slate-800 rounded-xl p-8">
-              <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-400 mb-6">
-                Frontend (Optional)
-              </h2>
-              <div className="flex gap-4">
-                <button
-                  type="button"
-                  onClick={() => setFrontend(!frontend)}
-                  className={`flex-1 px-6 py-4 rounded-lg font-medium transition-all duration-200 ${
-                    frontend
-                      ? "bg-blue-600 text-white border border-blue-500"
-                      : "bg-slate-800 text-slate-300 border border-slate-700 hover:border-slate-600"
-                  }`}
-                >
-                  Next.js
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setFrontend(false)}
-                  className={`flex-1 px-6 py-4 rounded-lg font-medium transition-all duration-200 ${
-                    !frontend
-                      ? "bg-blue-600 text-white border border-blue-500"
-                      : "bg-slate-800 text-slate-300 border border-slate-700 hover:border-slate-600"
-                  }`}
-                >
-                  None
-                </button>
-              </div>
-              {frontend && (
-                <p className="text-sm text-slate-400 mt-4 flex items-start gap-2">
-                  <span className="text-blue-400 mt-0.5">→</span>
-                  Auto-selects Node.js backend for compatibility
-                </p>
-              )}
-            </div>
+            <Separator className="bg-zinc-900" />
 
-            {/* Card 3: Backend */}
-            <div className="bg-slate-900 border border-slate-800 rounded-xl p-8">
-              <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-400 mb-6">
-                Backend (Optional)
-              </h2>
-              <div className="space-y-3">
-                <label className="flex items-center p-4 rounded-lg border border-slate-700 hover:border-slate-600 cursor-pointer transition-colors">
-                  <input
-                    type="checkbox"
-                    checked={backend === "node"}
-                    onChange={(e) =>
-                      setBackend(e.target.checked ? "node" : null)
-                    }
-                    className="w-4 h-4 rounded"
-                  />
-                  <span className="ml-3 font-medium">Node.js</span>
-                </label>
-                <label className="flex items-center p-4 rounded-lg border border-slate-700 hover:border-slate-600 cursor-pointer transition-colors">
-                  <input
-                    type="checkbox"
-                    checked={backend === "fastapi"}
-                    onChange={(e) =>
-                      setBackend(e.target.checked ? "fastapi" : null)
-                    }
-                    className="w-4 h-4 rounded"
-                  />
-                  <span className="ml-3 font-medium">FastAPI</span>
-                </label>
-              </div>
-            </div>
-
-            {/* Card 4: Database */}
-            <div className="bg-slate-900 border border-slate-800 rounded-xl p-8">
-              <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-400 mb-6">
-                Database (Optional)
-              </h2>
-              <label className="flex items-center p-4 rounded-lg border border-slate-700 hover:border-slate-600 cursor-pointer transition-colors">
-                <input
-                  type="checkbox"
-                  checked={database}
-                  onChange={(e) => setDatabase(e.target.checked)}
-                  className="w-4 h-4 rounded"
-                />
-                <span className="ml-3 font-medium">PostgreSQL</span>
-              </label>
-            </div>
-
-            {/* Card 5: Auth */}
-            <div className="bg-slate-900 border border-slate-800 rounded-xl p-8">
-              <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-400 mb-6">
-                Authentication (Optional)
-              </h2>
-              <label className="flex items-center p-4 rounded-lg border border-slate-700 hover:border-slate-600 cursor-pointer transition-colors">
-                <input
-                  type="checkbox"
-                  checked={auth}
-                  onChange={(e) => setAuth(e.target.checked)}
-                  className="w-4 h-4 rounded"
-                />
-                <span className="ml-3 font-medium">Auth.js</span>
-              </label>
-              {auth && (
-                <p className="text-sm text-slate-400 mt-4 flex items-start gap-2">
-                  <span className="text-blue-400 mt-0.5">→</span>
-                  Requires PostgreSQL (will be added automatically)
-                </p>
-              )}
-            </div>
-
-            {/* Live Stack Preview */}
-            <div className="bg-slate-900 border border-slate-800 rounded-xl p-8">
-              <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-400 mb-6">
-                Resolved Stack
-              </h2>
-              <div className="font-mono text-sm space-y-3 text-slate-300">
-                <div className="flex justify-between items-start">
-                  <span className="text-slate-500">Intent:</span>
-                  <span className="text-slate-100 font-semibold">
-                    {resolvedStack.intent}
+            {/* Stack Options - Ultra Minimal Grid */}
+            <div className="grid grid-cols-2 gap-x-16 gap-y-8">
+              {/* Frontend */}
+              <button
+                type="button"
+                onClick={() => setFrontend(!frontend)}
+                className="group text-left"
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm text-zinc-400 group-hover:text-zinc-300 transition-colors">
+                    Frontend
                   </span>
+                  <div
+                    className={`w-8 h-[1px] transition-all ${
+                      frontend ? "bg-zinc-50" : "bg-zinc-800"
+                    }`}
+                  />
+                </div>
+                <div
+                  className={`text-base font-light transition-colors ${
+                    frontend ? "text-zinc-50" : "text-zinc-600"
+                  }`}
+                >
+                  {frontend ? "Next.js" : "None"}
+                </div>
+              </button>
+
+              {/* Backend */}
+              <button
+                type="button"
+                onClick={() => setBackend(backend === "node" ? null : "node")}
+                className="group text-left"
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm text-zinc-400 group-hover:text-zinc-300 transition-colors">
+                    Backend
+                  </span>
+                  <div
+                    className={`w-8 h-[1px] transition-all ${
+                      backend ? "bg-zinc-50" : "bg-zinc-800"
+                    }`}
+                  />
+                </div>
+                <div
+                  className={`text-base font-light transition-colors ${
+                    backend ? "text-zinc-50" : "text-zinc-600"
+                  }`}
+                >
+                  {backend === "node"
+                    ? "Node.js"
+                    : backend === "fastapi"
+                    ? "FastAPI"
+                    : "None"}
+                </div>
+              </button>
+
+              {/* Database */}
+              <button
+                type="button"
+                onClick={() => setDatabase(!database)}
+                className="group text-left"
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm text-zinc-400 group-hover:text-zinc-300 transition-colors">
+                    Database
+                  </span>
+                  <div
+                    className={`w-8 h-[1px] transition-all ${
+                      database ? "bg-zinc-50" : "bg-zinc-800"
+                    }`}
+                  />
+                </div>
+                <div
+                  className={`text-base font-light transition-colors ${
+                    database ? "text-zinc-50" : "text-zinc-600"
+                  }`}
+                >
+                  {database ? "PostgreSQL" : "None"}
+                </div>
+              </button>
+
+              {/* Auth */}
+              <button
+                type="button"
+                onClick={() => setAuth(!auth)}
+                className="group text-left"
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm text-zinc-400 group-hover:text-zinc-300 transition-colors">
+                    Auth
+                  </span>
+                  <div
+                    className={`w-8 h-[1px] transition-all ${
+                      auth ? "bg-zinc-50" : "bg-zinc-800"
+                    }`}
+                  />
+                </div>
+                <div
+                  className={`text-base font-light transition-colors ${
+                    auth ? "text-zinc-50" : "text-zinc-600"
+                  }`}
+                >
+                  {auth ? "Auth.js" : "None"}
+                </div>
+              </button>
+            </div>
+
+            <Separator className="bg-zinc-900" />
+
+            {/* Resolved Stack Preview */}
+            <div className="space-y-4">
+              <div className="text-[0.6875rem] uppercase tracking-[0.15em] text-zinc-600 font-medium">
+                Stack
+              </div>
+              <div className="font-mono text-[0.8125rem] space-y-2">
+                <div className="flex items-center gap-3">
+                  <span className="text-zinc-600 w-20">intent</span>
+                  <span className="text-zinc-500">→</span>
+                  <span className="text-zinc-300">{resolvedStack.intent}</span>
                 </div>
                 {resolvedStack.frontend && (
-                  <div className="flex justify-between items-start">
-                    <span className="text-slate-500">Frontend:</span>
-                    <span className="text-slate-100 font-semibold">
+                  <div className="flex items-center gap-3">
+                    <span className="text-zinc-600 w-20">frontend</span>
+                    <span className="text-zinc-500">→</span>
+                    <span className="text-zinc-300">
                       {resolvedStack.frontend}
                     </span>
+                    {frontend && !backend && (
+                      <Badge
+                        variant="outline"
+                        className="text-[0.625rem] font-normal border-zinc-800 text-zinc-500"
+                      >
+                        +backend
+                      </Badge>
+                    )}
                   </div>
                 )}
                 {resolvedStack.backend && (
-                  <div className="flex justify-between items-start">
-                    <span className="text-slate-500">Backend:</span>
-                    <span className="text-slate-100 font-semibold">
+                  <div className="flex items-center gap-3">
+                    <span className="text-zinc-600 w-20">backend</span>
+                    <span className="text-zinc-500">→</span>
+                    <span className="text-zinc-300">
                       {resolvedStack.backend}
                     </span>
                   </div>
                 )}
                 {resolvedStack.database && (
-                  <div className="flex justify-between items-start">
-                    <span className="text-slate-500">Database:</span>
-                    <span className="text-slate-100 font-semibold">
+                  <div className="flex items-center gap-3">
+                    <span className="text-zinc-600 w-20">database</span>
+                    <span className="text-zinc-500">→</span>
+                    <span className="text-zinc-300">
                       {resolvedStack.database}
                     </span>
+                    {auth && !database && (
+                      <Badge
+                        variant="outline"
+                        className="text-[0.625rem] font-normal border-zinc-800 text-zinc-500"
+                      >
+                        auto
+                      </Badge>
+                    )}
                   </div>
                 )}
                 {resolvedStack.auth && (
-                  <div className="flex justify-between items-start">
-                    <span className="text-slate-500">Auth:</span>
-                    <span className="text-slate-100 font-semibold">
-                      {resolvedStack.auth}
-                    </span>
+                  <div className="flex items-center gap-3">
+                    <span className="text-zinc-600 w-20">auth</span>
+                    <span className="text-zinc-500">→</span>
+                    <span className="text-zinc-300">{resolvedStack.auth}</span>
                   </div>
                 )}
               </div>
             </div>
 
-            {/* Error Message */}
+            {/* Error State */}
             {error && (
-              <div className="bg-red-900/20 border border-red-800 rounded-lg p-4 text-red-200">
+              <div className="border border-red-900/50 bg-red-950/20 px-6 py-4 rounded text-sm text-red-300">
                 {error}
               </div>
             )}
 
-            {/* Success Message */}
+            {/* Success State */}
             {success && (
-              <div className="bg-green-900/20 border border-green-800 rounded-lg p-6">
-                <div className="flex items-start gap-3">
-                  <span className="text-2xl">✓</span>
-                  <div>
-                    <div className="font-semibold text-green-200 mb-2">
-                      Stack generated successfully
-                    </div>
-                    <div className="text-sm text-green-300 mb-3">
-                      Your <code className="bg-slate-800 px-2 py-1 rounded">layered-stack.zip</code> is ready.
-                    </div>
-                    <div className="bg-slate-800 rounded p-3 text-slate-300 font-mono text-sm">
-                      <div className="flex items-center justify-between">
-                        <span>docker compose up</span>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            navigator.clipboard.writeText("docker compose up");
-                          }}
-                          className="text-slate-500 hover:text-slate-300 text-xs"
-                        >
-                          copy
-                        </button>
-                      </div>
-                    </div>
-                  </div>
+              <div className="border border-emerald-900/50 bg-emerald-950/20 px-6 py-4 rounded space-y-3">
+                <div className="text-sm text-emerald-300">
+                  Stack generated · layered-stack.zip
+                </div>
+                <div className="font-mono text-xs text-zinc-500 flex items-center justify-between bg-black/40 px-3 py-2 rounded">
+                  <code>docker compose up</code>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      navigator.clipboard.writeText("docker compose up")
+                    }
+                    className="text-zinc-600 hover:text-zinc-400 transition-colors text-[0.625rem] uppercase tracking-wider"
+                  >
+                    copy
+                  </button>
                 </div>
               </div>
             )}
 
-            {/* Buttons */}
-            <div className="flex gap-3 pt-4">
-              <button
+            {/* Actions */}
+            <div className="flex items-center gap-4 pt-8">
+              <Button
                 type="submit"
                 disabled={loading}
-                className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-900 disabled:cursor-not-allowed text-white font-semibold py-4 px-6 rounded-lg transition-colors"
+                className="bg-zinc-50 text-black hover:bg-zinc-200 font-medium h-11 px-8 rounded"
               >
-                {loading ? (
-                  <span className="flex items-center justify-center gap-2">
-                    <span className="inline-block w-4 h-4 border-2 border-blue-400 border-t-blue-200 rounded-full animate-spin" />
-                    Assembling layers…
-                  </span>
-                ) : (
-                  "Generate Stack"
-                )}
-              </button>
-              {!success && (
+                {loading ? "Generating..." : "Generate"}
+              </Button>
+              {(frontend || backend || database || auth) && !success && (
                 <button
                   type="button"
                   onClick={handleReset}
-                  className="bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold py-4 px-6 rounded-lg transition-colors"
+                  className="text-sm text-zinc-600 hover:text-zinc-400 transition-colors"
                 >
                   Reset
                 </button>
@@ -363,20 +361,20 @@ export default function Home() {
             </div>
           </form>
         </div>
-      </div>
+      </main>
 
       {/* Footer */}
-      <div className="border-t border-slate-800 px-6 sm:px-8 py-12">
-        <div className="max-w-3xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-slate-500">
-          <div>Built for developers.</div>
+      <footer className="px-8 py-8 border-t border-zinc-900">
+        <div className="max-w-4xl mx-auto flex items-center justify-between text-xs text-zinc-600">
+          <div>Built for developers</div>
           <a
             href="https://github.com"
-            className="hover:text-slate-400 transition-colors"
+            className="hover:text-zinc-400 transition-colors"
           >
-            GitHub
+            Source
           </a>
         </div>
-      </div>
+      </footer>
     </div>
   );
 }
