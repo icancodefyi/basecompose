@@ -11,12 +11,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       refetchWhenOffline={false}
       basePath="/api/auth"
       // Force session update on tab focus to catch account changes
-      onUnauthenticated={() => {
-        // Clear any stale session data
-        if (typeof window !== "undefined") {
-          sessionStorage.clear();
-        }
-      }}
     >
       {children}
     </SessionProvider>
