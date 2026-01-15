@@ -11,7 +11,7 @@ export function NavHeader() {
           <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center text-white font-bold">
             <Image src="/logo.svg" alt="L" width={32} height={32} />
           </div>
-          <span className="text-white font-semibold">Layered</span>
+          <span className="text-white font-semibold">Layered.</span>
         </Link>
 
         <div className="flex items-center gap-4">

@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Layered - AI-Powered Stack Generator",
-  description: "Chat with AI to configure your full-stack application",
+  title: "Layered - Instant App Environment Setup",
+  description: "Instantly set up dev or production environments with databases, authentication, and essential add-ons.",
 };
 
 export default function RootLayout({

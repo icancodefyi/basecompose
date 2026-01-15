@@ -38,7 +38,7 @@ export function HeroSection() {
         <div className="mb-6 flex justify-center">
           <button className="inline-flex items-center gap-2 px-3.5 py-2 rounded-full border border-gray-700/60 bg-gray-950/40 hover:bg-gray-900/60 transition-all duration-300 group backdrop-blur-sm">
             <span className="text-xs font-medium text-gray-300">
-              Layered - AI Stack Generator
+              Environment setup in minutes
             </span>
             <svg 
               className="w-3.5 h-3.5 text-gray-500 group-hover:translate-x-0.5 transition-transform duration-200" 
@@ -95,7 +95,7 @@ export function HeroSection() {
         </div>
 
         {/* Social Proof Section - Compact */}
-        <div className="space-y-4 border-t border-gray-800/50 pt-8">
+        <div className="space-y-4 border-t border-gray-800/50 pt-10 mt-2">
           <div className="flex flex-wrap justify-center gap-8 sm:gap-12 items-center">
             <div className="flex items-center gap-2.5 text-gray-400 text-sm font-semibold tracking-wide hover:text-gray-300 transition-colors">
               <NextjsIcon className="w-5 h-5" />
