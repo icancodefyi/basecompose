@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-import { Space_Grotesk } from "next/font/google";
+import { Space_Grotesk,Inter } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "./providers";
 
-const inter = Space_Grotesk({
+const inter = Inter({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
 });
