@@ -1,36 +1,68 @@
-// Direct icon map for use with plain <img> tags (devicons CDN URLs)
-export const iconMap: Record<string, string> = {
-  nextjs: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nextjs/nextjs-original.svg",
-  react: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/react/react-original.svg",
-  nodejs: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nodejs/nodejs-original.svg",
-  fastapi: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/fastapi/fastapi-original.svg",
-  go: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/go/go-original.svg",
-  postgresql: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/postgresql/postgresql-original.svg",
-  mongodb: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/mongodb/mongodb-original.svg",
-  mysql: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/mysql/mysql-original.svg",
-  redis: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/redis/redis-original.svg",
-  nextauth: "https://next-auth.js.org/img/logo/logo-sm.png",
-};
-import { frontendIcons } from "./frontend-icons";
-import { backendIcons } from "./backend-icons";
-import { databaseIcons } from "./database-icons";
-import { authIcons } from "./auth-icons";
+// Import icons by category
+import { NextjsIcon } from "./frontend";
+import { NodejsIcon, FastapiIcon } from "./backend";
+import { PostgresqlIcon, MongodbIcon } from "./database";
+import { NextAuthIcon } from "./auth";
 
-export { frontendIcons, backendIcons, databaseIcons, authIcons };
+// Re-export icon metadata utilities for AI discovery
+export {
+  getAllIconKeys,
+  getIconsByCategory,
+  getIconMetadata,
+  getAllIconMetadata,
+  iconMetadataRegistry,
+  type IconKey,
+  type IconMetadata,
+} from "./icon-metadata";
 
-// Combined icon registry for easy lookup
-export const techIcons: Record<string, string> = {
-  ...frontendIcons,
-  ...backendIcons,
-  ...databaseIcons,
-  ...authIcons,
+// Re-export category indexes
+export * from "./frontend";
+export * from "./backend";
+export * from "./database";
+export * from "./auth";
+
+/**
+ * Icon component registry
+ * Maps icon keys to their React components
+ * 
+ * Available icons organized by category:
+ * - Frontend: nextjs
+ * - Backend: nodejs, fastapi
+ * - Database: postgresql, mongodb
+ * - Auth: nextauth
+ */
+export const iconRegistry: Record<
+  string,
+  React.ComponentType<{ className?: string }>
+> = {
+  // Frontend
+  nextjs: NextjsIcon,
+  // Backend
+  nodejs: NodejsIcon,
+  fastapi: FastapiIcon,
+  // Database
+  postgresql: PostgresqlIcon,
+  mongodb: MongodbIcon,
+  // Auth
+  nextauth: NextAuthIcon,
 };
 
 /**
- * Get tech icon URL by key
+ * Get icon component by key
+ * 
+ * @example
+ * ```tsx
+ * const IconComponent = getIconComponent('nextjs');
+ * if (IconComponent) {
+ *   return <IconComponent className="w-6 h-6" />;
+ * }
+ * ```
+ * 
  * @param iconKey - The icon identifier (e.g., 'nextjs', 'nodejs', 'postgresql')
- * @returns Icon URL or null if not found
+ * @returns Icon component or null if not found
  */
-export function getTechIcon(iconKey: string): string | null {
-  return techIcons[iconKey] || null;
+export function getIconComponent(
+  iconKey: string
+): React.ComponentType<{ className?: string }> | null {
+  return iconRegistry[iconKey] || null;
 }

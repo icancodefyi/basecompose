@@ -1,7 +1,6 @@
 "use client";
 
-import Image from "next/image";
-import { getTechIcon } from "@/lib/icons";
+import { getIconComponent } from "@/lib/icons";
 
 interface StackItemProps {
   label: string;
@@ -13,15 +12,14 @@ interface StackItemProps {
 export function StackItem({ label, value, iconKey, onRemove }: StackItemProps) {
 	if (!value) return null;
 
-	const iconUrl = iconKey ? getTechIcon(iconKey) : undefined;
-	const validIconUrl = typeof iconUrl === "string" && iconUrl.length > 0 ? iconUrl : undefined;
+	const IconComponent = iconKey ? getIconComponent(iconKey) : undefined;
 
   return (
     <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg p-3 animate-in fade-in slide-in-from-right-2 group">
       <div className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-3 flex-1">
-          {validIconUrl && (
-            <Image src={validIconUrl} alt={value} width={24} height={24} />
+          {IconComponent && (
+            <IconComponent className="w-6 h-6" />
           )}
           <div className="flex-1">
             <span className="text-xs text-[#666666]">{label}</span>

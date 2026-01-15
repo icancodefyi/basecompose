@@ -15,6 +15,7 @@ export function NavHeader() {
 
         <div className="flex items-center gap-4">
           <NavMetrics />
+          <div className="h-6 w-px bg-neutral-800" />
           <UserMenu />
         </div>
       </nav>

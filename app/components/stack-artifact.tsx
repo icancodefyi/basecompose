@@ -2,7 +2,7 @@
 
 import type { StackBlueprint } from "@layered/types";
 import { STACK_CONFIG } from "@layered/types";
-import { iconMap } from "@/lib/icons/index";
+import { getIconComponent } from "@/lib/icons/index";
 
 interface StackArtifactProps {
   stack: StackBlueprint;
@@ -25,16 +25,16 @@ export function StackArtifact({ stack }: StackArtifactProps) {
         const options = categoryConfig?.options as Record<string, any> | undefined;
         const optionConfig = options?.[item.value as string];
         const iconKey = optionConfig?.icon as string | undefined;
-        const iconUrl = iconKey ? iconMap[iconKey] : undefined;
+        const IconComponent = iconKey ? getIconComponent(iconKey) : undefined;
 
         return (
           <div
             key={item.key}
             className="flex items-center gap-3 p-3 rounded-lg bg-background border border-[#2a2a2a]"
           >
-            {iconUrl && (
+            {IconComponent && (
               <div className="text-[#01AE74]">
-                <img src={iconUrl} alt={item.value || ""} width={32} height={32} style={{ display: 'block' }} />
+                <IconComponent className="w-8 h-8" />
               </div>
             )}
             <div className="flex-1">
