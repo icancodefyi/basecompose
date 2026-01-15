@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useSession, signIn } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import Orb from "@/components/Orb";
+import { NextjsIcon, NodejsIcon, MongodbIcon, NextAuthIcon, RedisIcon } from "@/lib/icons";
 
 export function HeroSection() {
   const router = useRouter();
@@ -97,14 +98,30 @@ export function HeroSection() {
         {/* Social Proof Section - Compact */}
         <div className="space-y-4 border-t border-gray-800/50 pt-8">
           <div className="flex flex-wrap justify-center gap-6 sm:gap-10 items-center">
-            <div className="text-gray-500 text-xs font-semibold tracking-wide">Betashares</div>
-            <div className="text-gray-500 text-xs font-semibold tracking-wide">Vercel</div>
-            <div className="text-gray-500 text-xs font-semibold tracking-wide">GitHub</div>
-            <div className="text-gray-500 text-xs font-semibold tracking-wide">Mozilla</div>
-            <div className="text-gray-500 text-xs font-semibold tracking-wide">Stripe</div>
+            <div className="flex items-center gap-2 text-gray-500 text-xs font-semibold tracking-wide hover:text-gray-400 transition-colors">
+              <NextjsIcon className="w-4 h-4" />
+              Next.js
+            </div>
+            <div className="flex items-center gap-2 text-gray-500 text-xs font-semibold tracking-wide hover:text-gray-400 transition-colors">
+              <NodejsIcon className="w-4 h-4" />
+              Node.js
+            </div>
+            <div className="flex items-center gap-2 text-gray-500 text-xs font-semibold tracking-wide hover:text-gray-400 transition-colors">
+              <NextAuthIcon className="w-4 h-4" />
+              NextAuth
+            </div>
+            <div className="flex items-center gap-2 text-gray-500 text-xs font-semibold tracking-wide hover:text-gray-400 transition-colors">
+              <MongodbIcon className="w-4 h-4" />
+              MongoDB
+            </div>
+            <div className="flex items-center gap-2 text-gray-500 text-xs font-semibold tracking-wide hover:text-gray-400 transition-colors">
+              {/* Redis Icon */}
+            <RedisIcon className="w-4 h-4" />
+              Redis
+            </div>
           </div>
           <p className="text-center text-xs text-gray-600 font-light">
-            Trusted by fast-growing companies worldwide
+            Supports wide range of frameworks, databases, and addons.
           </p>
         </div>
 
