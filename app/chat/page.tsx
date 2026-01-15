@@ -173,7 +173,7 @@ export default function Home() {
     setStack({ intent: "saas" });
   };
 
-  if (status === "loading") {
+  if (authLoading) {
     return (
       <div className="h-screen bg-background flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#01AE74]"></div>
