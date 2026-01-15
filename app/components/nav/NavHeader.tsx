@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { NavMetrics } from "../nav/NavMetrics";
-import { UserMenu } from "../nav/UserMenu";
+import { NavMetrics } from "./NavMetrics";
+import { UserMenu } from "./UserMenu";
 
 export function NavHeader() {
   return (
