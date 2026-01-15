@@ -75,19 +75,19 @@ const HowItWorks = () => {
   return (
     <section className="relative w-full px-4 sm:px-6 lg:px-8 border-t border-gray-800/50" ref={containerRef}>
       <div className="w-full max-w-7xl mx-auto py-24">
-        <div className="mb-12">
+        <div className="mb-12 px-2">
           <h2 className="text-3xl sm:text-4xl font-normal text-white leading-[1.3] mb-3">
             How it works
           </h2>
-          <p className="text-base text-gray-400 font-light max-w-2xl">
+          <p className="text-sm sm:text-base text-gray-400 font-light max-w-2xl">
             From request to ready-to-pull code.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 px-2">
           {/* Step 1 */}
           <div
-            className={`border rounded-lg p-8 transition-all duration-300 ${
+            className={`border rounded-lg p-6 sm:p-8 transition-all duration-300 ${
               activeStep === 1
                 ? "border-emerald-400/60 bg-emerald-950/10 shadow-lg shadow-emerald-500/10"
                 : "border-gray-800/50 opacity-60"
@@ -95,12 +95,12 @@ const HowItWorks = () => {
             onMouseEnter={() => setActiveStep(1)}
             onMouseLeave={() => setActiveStep(1)}
           >
-            <h3 className={`text-sm font-semibold uppercase tracking-wide mb-3 transition-colors ${
+            <h3 className={`text-xs sm:text-sm font-semibold uppercase tracking-wide mb-3 transition-colors ${
               activeStep === 1 ? "text-emerald-300" : "text-gray-500"
             }`}>
               Step 1
             </h3>
-            <p className={`text-sm mb-4 transition-colors ${
+            <p className={`text-xs sm:text-sm mb-4 transition-colors ${
               activeStep === 1 ? "text-white" : "text-gray-400"
             }`}>
               Describe what you need
@@ -109,13 +109,13 @@ const HowItWorks = () => {
               activeStep === 1 ? "text-gray-300" : "text-gray-600"
             }`}>
               <div>&gt; ask-layered</div>
-              <div>Add authentication to my application</div>
+              <div className="break-words">Add authentication to my application</div>
             </div>
           </div>
 
           {/* Step 2 */}
           <div
-            className={`border rounded-lg p-8 transition-all duration-300 ${
+            className={`border rounded-lg p-6 sm:p-8 transition-all duration-300 ${
               activeStep === 2
                 ? "border-emerald-400/60 bg-emerald-950/15 shadow-lg shadow-emerald-500/10"
                 : "border-gray-800/50 opacity-60"
@@ -123,7 +123,7 @@ const HowItWorks = () => {
             onMouseEnter={() => setActiveStep(2)}
             onMouseLeave={() => setActiveStep(1)}
           >
-            <h3 className={`text-sm font-semibold uppercase tracking-wide mb-3 transition-colors ${
+            <h3 className={`text-xs sm:text-sm font-semibold uppercase tracking-wide mb-3 transition-colors ${
               activeStep === 2 ? "text-emerald-300" : "text-gray-500"
             }`}>
               Layered applies

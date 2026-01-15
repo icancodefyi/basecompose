@@ -7,48 +7,49 @@ const Footer = () => {
     {
       label: "GitHub",
       href: "https://github.com/icancodefyi/layered",
-      icon: true,
+    },
+    {
+      label: "License",
+      href: "https://github.com/icancodefyi/layered/blob/main/LICENSE",
     },
     {
       label: "Docs",
       href: "https://github.com/icancodefyi/layered#readme",
     },
-    {
-      label: "Status",
-      href: "/system-status",
-    },
   ];
 
   return (
     <footer className="relative w-full px-4 sm:px-6 lg:px-8 border-t border-gray-800/50">
-      <div className="w-full max-w-7xl mx-auto py-12">
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-8">
-          <div className="flex flex-col sm:flex-row items-center gap-6">
-            <p className="text-xs text-gray-600">
-              Layered — Build modern web apps, faster.
-            </p>
-            <div className="hidden sm:block w-px h-4 bg-gray-800/50"></div>
-            <p className="text-xs text-gray-600">
-              MIT License
-            </p>
+      <div className="w-full max-w-7xl mx-auto py-12 sm:py-16">
+        <div className="flex flex-col gap-6 sm:gap-8">
+          {/* Main footer content */}
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+            <div className="flex flex-col gap-2">
+              <p className="text-xs sm:text-sm text-gray-600">
+                Layered — Build modern web apps, faster.
+              </p>
+              <p className="text-xs text-gray-700">
+                MIT License. Open source.
+              </p>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-4 sm:gap-6">
+              {links.map((link) => (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-xs text-gray-600 hover:text-emerald-400 transition-colors"
+                >
+                  {link.label}
+                </a>
+              ))}
+            </div>
           </div>
 
-          <div className="flex items-center gap-6">
-            {links.map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-xs text-gray-600 hover:text-gray-400 transition-colors"
-              >
-                {link.label}
-              </a>
-            ))}
-          </div>
-        </div>
+          <div className="border-t border-gray-800/30"></div>
 
-        <div className="mt-8 pt-8 border-t border-gray-800/30">
           <p className="text-xs text-gray-700 text-center">
             © 2025 Layered. Built by developers, for developers.
           </p>

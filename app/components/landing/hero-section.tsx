@@ -5,7 +5,7 @@ import { useSession, signIn } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import Orb from "@/components/Orb";
 import { NextjsIcon, NodejsIcon, MongodbIcon, NextAuthIcon, RedisIcon } from "@/lib/icons";
-import GitHubIcon from "../nav/NavMetrics";
+
 
 export function HeroSection() {
   const router = useRouter();
@@ -57,27 +57,26 @@ export function HeroSection() {
         </div>
 
         {/* Main Headline - Locked Hierarchy */}
-        <div className="mb-6 text-center">
-          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-normal text-white leading-[1.2] tracking-tight">
+        <div className="mb-8 text-center px-2">
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-normal text-white leading-[1.2] tracking-tight">
            Set up your dev or prod environment <span className="text-emerald-600"> instantly.</span>
           </h1>
         </div>
 
         {/* Subheading - Concrete Benefit */}
-        <p className="text-center text-sm sm:text-base text-gray-300 max-w-2xl mx-auto leading-relaxed mb-6 font-light">
+        <p className="text-center text-xs sm:text-sm lg:text-base text-gray-300 max-w-2xl mx-auto px-2 leading-relaxed mb-8 font-light">
           Layered configures databases, authentication, and essential add-ons so you can start building right away.
-
         </p>
 
         {/* CTA Buttons - Compact */}
-        <div className="flex flex-col sm:flex-row gap-3 justify-center items-center mb-8">
+        <div className="flex flex-col sm:flex-row gap-3 justify-center items-center mb-10 px-2">
           <Button
             onClick={() =>
               session?.user
                 ? router.push("/chat")
                 : signIn("google", { callbackUrl: "/chat" })
             }
-            className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-7 py-2.5 rounded-lg transition-all duration-300 shadow-lg shadow-emerald-600/30 hover:shadow-emerald-600/50 cursor-pointer w-full sm:w-auto text-sm"
+            className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-6 sm:px-7 py-2.5 rounded-lg transition-all duration-300 shadow-lg shadow-emerald-600/30 hover:shadow-emerald-600/50 cursor-pointer w-full sm:w-auto text-xs sm:text-sm"
           >
             {session?.user ? "Setup My Environment" : "Setup My environment"}
           </Button>
@@ -95,25 +94,25 @@ export function HeroSection() {
         </div>
 
         {/* Social Proof Section - Compact */}
-        <div className="space-y-4 border-t border-gray-800/50 pt-10 mt-2">
-          <div className="flex flex-wrap justify-center gap-8 sm:gap-12 items-center">
-            <div className="flex items-center gap-2.5 text-gray-400 text-sm font-semibold tracking-wide hover:text-gray-300 transition-colors">
-              <NextjsIcon className="w-5 h-5" />
-              Next.js
+        <div className="space-y-4 border-t border-gray-800/50 pt-10 mt-6">
+          <div className="flex flex-wrap justify-center gap-4 sm:gap-6 lg:gap-12 items-center px-2">
+            <div className="flex items-center gap-1.5 text-gray-400 text-xs sm:text-sm font-semibold tracking-wide hover:text-gray-300 transition-colors">
+              <NextjsIcon className="w-4 sm:w-5 h-4 sm:h-5" />
+              <span className="hidden sm:inline">Next.js</span>
             </div>
-            <div className="flex items-center gap-2.5 text-gray-400 text-sm font-semibold tracking-wide hover:text-gray-300 transition-colors">
-              <NodejsIcon className="w-5 h-5" />
-              Node.js
+            <div className="flex items-center gap-1.5 text-gray-400 text-xs sm:text-sm font-semibold tracking-wide hover:text-gray-300 transition-colors">
+              <NodejsIcon className="w-4 sm:w-5 h-4 sm:h-5" />
+              <span className="hidden sm:inline">Node.js</span>
             </div>
-            <div className="flex items-center gap-2.5 text-gray-400 text-sm font-semibold tracking-wide hover:text-gray-300 transition-colors">
-              <NextAuthIcon className="w-5 h-5" />
-              NextAuth
+            <div className="flex items-center gap-1.5 text-gray-400 text-xs sm:text-sm font-semibold tracking-wide hover:text-gray-300 transition-colors">
+              <NextAuthIcon className="w-4 sm:w-5 h-4 sm:h-5" />
+              <span className="hidden sm:inline">NextAuth</span>
             </div>
-            <div className="flex items-center gap-2.5 text-gray-400 text-sm font-semibold tracking-wide hover:text-gray-300 transition-colors">
-              <MongodbIcon className="w-5 h-5" />
-              MongoDB
+            <div className="flex items-center gap-1.5 text-gray-400 text-xs sm:text-sm font-semibold tracking-wide hover:text-gray-300 transition-colors">
+              <MongodbIcon className="w-4 sm:w-5 h-4 sm:h-5" />
+              <span className="hidden sm:inline">MongoDB</span>
             </div>
-            <div className="flex items-center gap-2.5 text-gray-400 text-sm font-semibold tracking-wide hover:text-gray-300 transition-colors">
+            <div className="flex items-center gap-1.5 text-gray-400 text-xs sm:text-sm font-semibold tracking-wide hover:text-gray-300 transition-colors">
               {/* Redis Icon */}
             <RedisIcon className="w-5 h-5" />
               Redis

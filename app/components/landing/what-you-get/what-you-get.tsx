@@ -43,16 +43,16 @@ const WhatYouGet = () => {
   return (
     <section className="relative w-full px-4 sm:px-6 lg:px-8 border-t border-gray-800/50">
       <div className="w-full max-w-7xl mx-auto py-24">
-        <div className="max-w-3xl mb-16">
+        <div className="max-w-3xl mb-16 px-2">
           <h2 className="text-3xl sm:text-4xl font-normal text-white leading-[1.3] mb-3">
             What you get
           </h2>
-          <p className="text-base text-gray-500 font-light">
+          <p className="text-sm sm:text-base text-gray-500 font-light">
             Everything a production app needs. Generated, customized, and pushed to your repo in one command.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 px-2">
           {deliverables.map((item, idx) => (
             <div
               key={idx}
@@ -64,22 +64,22 @@ const WhatYouGet = () => {
               {/* Content */}
               <div className="relative z-10">
                 {/* Icon & Title */}
-                <div className="flex items-start gap-4 mb-3">
-                  <span className="text-2xl">
+                <div className="flex items-start gap-3 mb-3">
+                  <span className="text-xl sm:text-2xl">
                     {item.icon}
                   </span>
-                  <h3 className="text-sm font-semibold text-white group-hover:text-emerald-400 transition-colors">
+                  <h3 className="text-xs sm:text-sm font-semibold text-white group-hover:text-emerald-400 transition-colors">
                     {item.title}
                   </h3>
                 </div>
 
                 {/* Description */}
-                <p className="text-xs text-gray-500 leading-relaxed mb-4">
+                <p className="text-xs text-gray-500 leading-relaxed mb-3">
                   {item.description}
                 </p>
 
                 {/* Features */}
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-1.5">
                   {item.features.map((feature, fidx) => (
                     <span
                       key={fidx}
