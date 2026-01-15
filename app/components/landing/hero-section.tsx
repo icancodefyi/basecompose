@@ -3,21 +3,35 @@
 import { useRouter } from "next/navigation";
 import { useSession, signIn } from "next-auth/react";
 import { Button } from "@/components/ui/button";
+import Orb from "@/components/Orb";
 
 export function HeroSection() {
   const router = useRouter();
   const { data: session } = useSession();
 
   return (
-    <section className="relative min-h-[calc(100vh-4rem)] pt-32 pb-20 px-4 sm:px-6 lg:px-8 overflow-hidden flex flex-col items-center justify-center">
-      {/* Subtle background effects */}
-      <div className="absolute inset-0 opacity-20">
-        <div className="absolute top-40 right-20 w-96 h-96 bg-emerald-600/10 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-40 left-0 w-80 h-80 bg-emerald-700/5 rounded-full blur-3xl"></div>
+    <section className="relative h-screen pt-20 pb-10 px-4 sm:px-6 lg:px-8 overflow-hidden flex flex-col items-center justify-center bg-black">
+      {/* Orb Background - Subtle */}
+      <div className="absolute inset-0 w-full h-full opacity-50">
+        <Orb
+          hoverIntensity={0.15}
+          rotateOnHover={true}
+          forceHoverState={true}
+          backgroundColor="#000000"
+        />
+      </div>
+
+      {/* Dark Gradient Overlay for Text Readability */}
+      <div className="absolute inset-0 bg-linear-to-b from-black/40 via-black/20 to-black/40"></div>
+
+      {/* Subtle Background Effects (Emerald Accent) */}
+      <div className="absolute inset-0 opacity-30">
+        <div className="absolute top-1/4 right-1/3 w-96 h-96 bg-emerald-500/5 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-1/4 left-1/4 w-80 h-80 bg-emerald-600/5 rounded-full blur-3xl"></div>
       </div>
 
       {/* Main Content */}
-      <div className="relative max-w-4xl mx-auto w-full text-center">
+      <div className="relative max-w-4xl mx-auto w-full text-center z-10">
         {/* Top Badge */}
         <div className="mb-8 flex justify-center">
           <button className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-gray-700 bg-gray-900/30 hover:bg-gray-900/50 transition-colors group">
