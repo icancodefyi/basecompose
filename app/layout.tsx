@@ -1,11 +1,17 @@
 import type { Metadata } from "next";
-import { Space_Grotesk,Inter } from "next/font/google";
+import { Lora, Geist_Mono, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "./providers";
 
-const inter = Inter({
+const lora = Space_Grotesk({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["400"],
+  variable: "--font-lora",
+});
+
+const geistMono = Geist_Mono({
+  subsets: ["latin"],
+  variable: "--font-geist-mono",
 });
 
 export const metadata: Metadata = {
@@ -19,8 +25,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" style={{ colorScheme: "dark" }}>
-      <body className={`${inter.className} antialiased`}>
+    <html lang="en" style={{ colorScheme: "dark" }} className={`${lora.variable} ${geistMono.variable}`}>
+      <body className={`${geistMono.className} antialiased`}>
         <AuthProvider>
           {children}
         </AuthProvider>

@@ -57,7 +57,7 @@ export function NavMetrics() {
 
 /* ---------------- Icons ---------------- */
 
-function GitHubIcon() {
+export default function GitHubIcon() {
   return (
     <svg
       viewBox="0 0 24 24"

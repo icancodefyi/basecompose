@@ -48,8 +48,8 @@ function SignInContent() {
       <div className="w-full max-w-md space-y-8">
         {/* Header */}
         <div className="text-center space-y-2">
-          <h1 className="text-3xl md:text-4xl font-bold text-emerald-600">Layered</h1>
-          <p className="text-sm md:text-base text-gray-400">
+          <h1 className="text-3xl md:text-4xl font-normal text-emerald-600 leading-[1.3]">Layered</h1>
+          <p className="text-sm md:text-base text-gray-400 font-light">
             AI-Powered Stack Generator
           </p>
         </div>
@@ -57,8 +57,8 @@ function SignInContent() {
         {/* Sign In Card */}
         <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 md:p-8 space-y-6">
           <div className="text-center space-y-2">
-            <h2 className="text-xl md:text-2xl font-semibold">Welcome Back</h2>
-            <p className="text-xs md:text-sm text-gray-500">
+            <h2 className="text-xl md:text-2xl font-normal leading-[1.3]">Welcome Back</h2>
+            <p className="text-xs md:text-sm text-gray-500 font-light">
               Sign in to unlock unlimited chats and downloads
             </p>
           </div>

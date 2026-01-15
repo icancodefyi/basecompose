@@ -203,7 +203,7 @@ export default function Home() {
         <div className="p-4 border-b border-[#2a2a2a]">
           <div className="flex items-center justify-between gap-2">
             <Link href="/">
-            <h1 className="text-lg font-bold text-[#01AE74]">Layered</h1>
+            <h1 className="text-lg font-normal text-[#01AE74] leading-[1.3]">Layered</h1>
             </Link>
             <button
               onClick={() => setSidebarOpen(false)}
@@ -307,8 +307,8 @@ export default function Home() {
             <div className="h-full flex items-center justify-center p-4">
               <div className="text-center space-y-6 md:space-y-8 w-full max-w-2xl">
                 <div className="space-y-2 md:space-y-4">
-                  <h1 className="text-3xl md:text-5xl font-semibold">How can I help you?</h1>
-                  <p className="text-sm md:text-base text-[#999999]">Tell me what stack you want to build</p>
+                  <h1 className="text-3xl md:text-5xl font-normal leading-[1.3]">How can I help you?</h1>
+                  <p className="text-sm md:text-base text-[#999999] font-light">Tell me what stack you want to build</p>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 md:gap-3">
