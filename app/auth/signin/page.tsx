@@ -1,13 +1,47 @@
 "use client";
 
-import { Suspense } from "react";
-import { signIn } from "next-auth/react";
+import { Suspense, useState } from "react";
+import { useAuth } from "@/app/hooks/useAuth";
+import { useSearchParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { useSearchParams } from "next/navigation";
 
 function SignInContent() {
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") || "/";
+  const router = useRouter();
+  const { signIn, isAuthenticated, loading } = useAuth();
+  const [error, setError] = useState<string | null>(null);
+  const [isSigningIn, setIsSigningIn] = useState(false);
+
+  const callbackUrl = searchParams.get("callbackUrl") || "/chat";
+
+  // Redirect if already authenticated
+  if (isAuthenticated && !loading) {
+    router.push(callbackUrl);
+    return null;
+  }
+
+  const handleGoogleSignIn = async () => {
+    setError(null);
+    setIsSigningIn(true);
+    
+    try {
+      const result = await signIn("google", {
+        callbackUrl,
+        redirect: false,
+      });
+
+      if (result?.error) {
+        setError(result.error);
+        setIsSigningIn(false);
+      } else if (result?.ok) {
+        // Success - redirect will happen automatically
+        router.push(callbackUrl);
+      }
+    } catch (err) {
+      setError("Sign in failed. Please try again.");
+      setIsSigningIn(false);
+    }
+  };
 
   return (
     <div className="h-screen bg-background flex items-center justify-center p-4">
@@ -29,15 +63,18 @@ function SignInContent() {
             </p>
           </div>
 
+          {/* Error Message */}
+          {error && (
+            <div className="bg-red-900/20 border border-red-800 text-red-200 px-4 py-3 rounded-lg text-sm">
+              {error}
+            </div>
+          )}
+
           {/* Google Sign In Button */}
           <Button
-            onClick={() =>
-              signIn("google", {
-                callbackUrl,
-                redirect: true,
-              })
-            }
-            className="w-full bg-white text-black hover:bg-gray-100 h-11 md:h-12 font-medium"
+            onClick={handleGoogleSignIn}
+            disabled={isSigningIn || loading}
+            className="w-full bg-white text-black hover:bg-gray-100 h-11 md:h-12 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <svg
               className="w-5 h-5 mr-3"
@@ -49,7 +86,7 @@ function SignInContent() {
               <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
               <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
             </svg>
-            Sign in with Google
+            {isSigningIn ? "Signing in..." : "Sign in with Google"}
           </Button>
 
           {/* Benefits */}

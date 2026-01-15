@@ -3,11 +3,13 @@
 import { useState, useEffect, useRef } from "react";
 import type { StackBlueprint } from "@layered/types";
 import { STACK_CONFIG } from "@layered/types";
-import { useSession, signIn, signOut } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { StackArtifact } from "../components/stack-artifact";
 import { StackItem } from "../components/stack-item";
+import { useAuth } from "@/app/hooks/useAuth";
+import { getUserIdFromSession } from "@/lib/auth-utils";
 import Link from "next/link";
 
 function resolveStack(input: StackBlueprint): StackBlueprint {
@@ -20,7 +22,8 @@ interface Message {
 }
 
 export default function Home() {
-  const { data: session, status } = useSession();
+  const router = useRouter();
+  const { session, isAuthenticated, loading: authLoading, signIn, signOut } = useAuth();
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -31,8 +34,18 @@ export default function Home() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const resolvedStack = resolveStack(stack);
-  const canSendMessage = session ? true : messageCount < 5;
-  const isAtLimit = !session && messageCount >= 5;
+  const canSendMessage = isAuthenticated ? true : messageCount < 5;
+  const isAtLimit = !isAuthenticated && messageCount >= 5;
+
+  // Redirect to signin if not authenticated (after checking initial load)
+  useEffect(() => {
+    if (!authLoading && !isAuthenticated) {
+      // Allow 5 messages before redirecting
+      if (messageCount >= 5) {
+        router.push("/auth/signin?callbackUrl=/chat");
+      }
+    }
+  }, [authLoading, isAuthenticated, messageCount, router]);
 
   const getIconKey = (category: keyof typeof STACK_CONFIG, value?: string) => {
     if (!value) return undefined;
@@ -56,10 +69,10 @@ export default function Home() {
 
   useEffect(() => {
     // Auto-open modal when free tier is exhausted
-    if (!session && messageCount >= 5 && messages.length > 0) {
+    if (!isAuthenticated && messageCount >= 5 && messages.length > 0) {
       setShowSignupModal(true);
     }
-  }, [messageCount, session, messages.length]);
+  }, [messageCount, isAuthenticated, messages.length]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -77,7 +90,7 @@ export default function Home() {
     setLoading(true);
 
     // Increment message count immediately when user sends message (for non-authenticated users)
-    if (!session) {
+    if (!isAuthenticated) {
       const newCount = messageCount + 1;
       setMessageCount(newCount);
       localStorage.setItem("layered_message_count", newCount.toString());
@@ -111,7 +124,7 @@ export default function Home() {
         });
       } else if (data.action === "download") {
         // Check if user needs to sign up
-        if (!session && messageCount >= 5) {
+        if (!isAuthenticated && messageCount >= 5) {
           setShowSignupModal(true);
           return;
         }
@@ -204,7 +217,7 @@ export default function Home() {
 
           {/* Auth Section */}
           <div className="mt-3 pt-3 border-t border-[#2a2a2a]">
-            {session?.user ? (
+            {isAuthenticated && session?.user ? (
               <div className="space-y-3">
                 <div className="bg-[#1a1a1a] rounded-lg p-3 space-y-2">
                   <div className="flex items-center gap-2">
@@ -222,7 +235,10 @@ export default function Home() {
                   </div>
                 </div>
                 <Button
-                  onClick={() => signOut({ callbackUrl: "/" })}
+                  onClick={async () => {
+                    await signOut();
+                    router.push("/");
+                  }}
                   variant="outline"
                   size="sm"
                   className="w-full justify-center text-xs bg-white text-black cursor-pointer"
@@ -236,7 +252,9 @@ export default function Home() {
                   {messageCount}/5 messages used
                 </div>
                 <Button
-                  onClick={() => signIn("google", { callbackUrl: "/chat" })}
+                  onClick={async () => {
+                    await signIn("google", { callbackUrl: "/chat" });
+                  }}
                   size="sm"
                   className="w-full justify-center text-xs bg-white text-black hover:bg-gray-100"
                 >
@@ -487,7 +505,7 @@ export default function Home() {
             <Button
               onClick={() => setInput("download my stack")}
               className="w-full bg-[#01AE74] hover:bg-[#018e58] text-white text-sm"
-              disabled={!session && isAtLimit}
+              disabled={!isAuthenticated && isAtLimit}
             >
               <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
@@ -511,7 +529,9 @@ export default function Home() {
 
             <div className="space-y-3">
               <Button
-                onClick={() => signIn("google", { callbackUrl: "/chat" })}
+                onClick={async () => {
+                  await signIn("google", { callbackUrl: "/chat" });
+                }}
                 className="w-full bg-white text-black hover:bg-gray-100 justify-center"
               >
                 <svg className="w-4 h-4 mr-2" viewBox="0 0 24 24" fill="currentColor">
