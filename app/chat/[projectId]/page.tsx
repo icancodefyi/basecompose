@@ -39,6 +39,7 @@ export default function ProjectChatPage() {
   const [projectLoading, setProjectLoading] = useState(false);
   const [currentProject, setCurrentProject] = useState<Project | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const resolvedStack = resolveStack(stack);
   const canSendMessage = isAuthenticated ? true : messageCount < 5;
@@ -289,6 +290,8 @@ export default function ProjectChatPage() {
       ]);
     } finally {
       setLoading(false);
+      // Restore focus to input after message is sent
+      setTimeout(() => inputRef.current?.focus(), 100);
     }
   };
 
@@ -444,12 +447,14 @@ export default function ProjectChatPage() {
 
                 {/* Input Field */}
                 <input
+                  ref={inputRef}
                   type="text"
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   placeholder="Ask BaseCompose to build..."
                   className="flex-1 bg-transparent text-sm md:text-base text-[#d0d0d0] placeholder:text-[#666666] focus:outline-none"
                   disabled={loading}
+                  autoFocus
                 />
 
                 {/* Model Selector */}

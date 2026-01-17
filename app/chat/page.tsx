@@ -37,6 +37,7 @@ export default function Home() {
   const [currentProjectId, setCurrentProjectId] = useState<string | null>(null);
   const [projectLoading, setProjectLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const resolvedStack = resolveStack(stack);
   const canSendMessage = isAuthenticated ? true : messageCount < 5;
@@ -318,6 +319,8 @@ export default function Home() {
       ]);
     } finally {
       setLoading(false);
+      // Restore focus to input after message is sent
+      setTimeout(() => inputRef.current?.focus(), 100);
     }
   };
 
@@ -483,12 +486,14 @@ export default function Home() {
 
                 {/* Input Field */}
                 <input
+                  ref={inputRef}
                   type="text"
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   placeholder={canSendMessage ? "Ask BaseCompose to build..." : "Sign in to continue..."}
                   className="flex-1 bg-transparent text-sm md:text-base text-[#d0d0d0] placeholder:text-[#666666] focus:outline-none"
                   disabled={loading || !canSendMessage}
+                  autoFocus
                 />
 
                 {/* Model Selector */}
