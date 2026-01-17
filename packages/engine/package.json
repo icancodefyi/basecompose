@@ -1,9 +1,9 @@
 {
-  "name": "@layered/engine",
+  "name": "@BaseCompose/engine",
   "version": "0.0.1",
   "type": "module",
   "dependencies": {
-    "@layered/types": "workspace:*",
+    "@BaseCompose/types": "workspace:*",
     "js-yaml": "^4.1.0",
     "tar": "^6.2.0"
   }

@@ -1,4 +1,4 @@
-# Layered Generation Flow - Complete Overview
+# BaseCompose Generation Flow - Complete Overview
 
 ## User Journey
 
@@ -34,7 +34,7 @@
                        ▼
 ┌─────────────────────────────────────────────────────────────┐
 │ Generation Pipeline (packages/engine/generate.ts)           │
-│ Creates temp directory at: /tmp/layered-XXXXX/project       │
+│ Creates temp directory at: /tmp/BaseCompose-XXXXX/project       │
 │                                                             │
 │ Step 1: Copy Framework Base                                 │
 │ ────────────────────────────────────────────────────────────│
@@ -105,7 +105,7 @@
 │   │   ├── volumes: [.:/app, /app/node_modules]              │
 │   │   ├── environment:                                      │
 │   │   │   ├── NODE_ENV: development                         │
-│   │   │   └── MONGODB_URI: mongodb://mongodb:27017/layered  │
+│   │   │   └── MONGODB_URI: mongodb://mongodb:27017/BaseCompose  │
 │   │   └── depends_on: [mongodb]                             │
 │   └── mongodb:                                              │
 │       ├── image: mongo:7                                    │
@@ -143,7 +143,7 @@
 │ writeEnvExample(state):                                     │
 │   Create .env.example with all addon env vars:              │
 │                                                             │
-│   MONGODB_URI=mongodb://mongodb:27017/layered               │
+│   MONGODB_URI=mongodb://mongodb:27017/BaseCompose               │
 │   MONGODB_ROOT_USERNAME=root                                │
 │   MONGODB_ROOT_PASSWORD=example                             │
 │   GITHUB_ID=                                                │
@@ -179,7 +179,7 @@
 │                                                             │
 │ Using tar.create():                                         │
 │   - Gzip compression enabled                                │
-│   - Archive path: /tmp/layered-XXXXX/project.tar.gz         │
+│   - Archive path: /tmp/BaseCompose-XXXXX/project.tar.gz         │
 │   - Includes entire project directory                       │
 │                                                             │
 │ Read buffer into memory:                                    │
@@ -195,10 +195,10 @@
 │                                                             │
 │ HTTP 200 OK                                                 │
 │ Content-Type: application/gzip                              │
-│ Content-Disposition: attachment; filename="layered-stack..."│
+│ Content-Disposition: attachment; filename="BaseCompose-stack..."│
 │ Body: tar.gz Buffer                                         │
 │                                                             │
-│ Browser downloads: layered-stack.tar.gz                     │
+│ Browser downloads: BaseCompose-stack.tar.gz                     │
 └──────────────────────┬──────────────────────────────────────┘
                        │
                        ▼
@@ -206,7 +206,7 @@
 │ User Extracts & Runs                                        │
 │ ────────────────────────────────────────────────────────────│
 │                                                             │
-│ $ tar -xzf layered-stack.tar.gz                             │
+│ $ tar -xzf BaseCompose-stack.tar.gz                             │
 │ $ cd project                                                │
 │                                                             │
 │ $ pnpm install                                              │

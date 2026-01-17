@@ -1,4 +1,4 @@
-# Contributing to Layered
+# Contributing to BaseCompose
 
 Thanks for your interest in contributing! This guide will help you add new stack options.
 

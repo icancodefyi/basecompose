@@ -6,15 +6,15 @@ const Footer = () => {
   const links = [
     {
       label: "GitHub",
-      href: "https://github.com/icancodefyi/layered",
+      href: "https://github.com/icancodefyi/BaseCompose",
     },
     {
       label: "License",
-      href: "https://github.com/icancodefyi/layered/blob/main/LICENSE",
+      href: "https://github.com/icancodefyi/BaseCompose/blob/main/LICENSE",
     },
     {
       label: "Docs",
-      href: "https://github.com/icancodefyi/layered#readme",
+      href: "https://github.com/icancodefyi/BaseCompose#readme",
     },
   ];
 
@@ -26,7 +26,7 @@ const Footer = () => {
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
             <div className="flex flex-col gap-2">
               <p className="text-xs sm:text-sm text-gray-600">
-                Layered — Build modern web apps, faster.
+                BaseCompose — Build modern web apps, faster.
               </p>
               <p className="text-xs text-gray-700">
                 MIT License. Open source.
@@ -51,7 +51,7 @@ const Footer = () => {
           <div className="border-t border-gray-800/30"></div>
 
           <p className="text-xs text-gray-700 text-center">
-            © 2025 Layered. Built by developers, for developers.
+            © 2025 BaseCompose. Built by developers, for developers.
           </p>
         </div>
       </div>

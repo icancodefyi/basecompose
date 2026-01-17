@@ -95,7 +95,7 @@ export function mergeDockerComposeDev(state: GenerationState): string {
 
   // Add MongoDB-specific dev settings
   if (state.context.addons.includes("mongodb")) {
-    baseCompose.services.app.environment.MONGODB_URI = "mongodb://mongodb:27017/layered";
+    baseCompose.services.app.environment.MONGODB_URI = "mongodb://mongodb:27017/BaseCompose";
     baseCompose.services.app.depends_on.push("mongodb");
     baseCompose.services.mongodb = {
       image: "mongo:7",
@@ -149,7 +149,7 @@ export function mergeDockerComposeProd(state: GenerationState): string {
 
   // Add MongoDB-specific prod settings
   if (state.context.addons.includes("mongodb")) {
-    baseCompose.services.app.environment.MONGODB_URI = "mongodb://mongodb:27017/layered";
+    baseCompose.services.app.environment.MONGODB_URI = "mongodb://mongodb:27017/BaseCompose";
     baseCompose.services.app.depends_on.push("mongodb");
     baseCompose.services.mongodb = {
       image: "mongo:7",
@@ -158,7 +158,7 @@ export function mergeDockerComposeProd(state: GenerationState): string {
       environment: {
         MONGO_INITDB_ROOT_USERNAME: "root",
         MONGO_INITDB_ROOT_PASSWORD: "${MONGO_PASSWORD:-changeme}",
-        MONGO_INITDB_DATABASE: "layered"
+        MONGO_INITDB_DATABASE: "BaseCompose"
       },
       volumes: ["mongo_data:/data/db"]
     };

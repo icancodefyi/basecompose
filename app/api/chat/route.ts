@@ -1,6 +1,6 @@
 import { Groq } from "groq-sdk";
-import type { StackBlueprint } from "@layered/types";
-import { STACK_CONFIG, getOptions } from "@layered/types";
+import type { StackBlueprint } from "@BaseCompose/types";
+import { STACK_CONFIG, getOptions } from "@BaseCompose/types";
 
 const groq = new Groq({
   apiKey: process.env.GROQ_API_KEY,
@@ -21,7 +21,7 @@ export async function POST(req: Request) {
   try {
     const { message, currentStack } = await req.json();
 
-    const prompt = `You are a stack configuration assistant for a developer tool called "layered".
+    const prompt = `You are a stack configuration assistant for a developer tool called "BaseCompose".
 
 Current stack configuration:
 ${JSON.stringify(currentStack, null, 2)}

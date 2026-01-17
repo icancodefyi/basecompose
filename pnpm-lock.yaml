@@ -108,7 +108,7 @@ importers:
 
   packages/engine:
     dependencies:
-      '@layered/types':
+      '@BaseCompose/types':
         specifier: workspace:*
         version: link:../types
       js-yaml:

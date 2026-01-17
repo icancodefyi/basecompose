@@ -1,6 +1,6 @@
 "use client";
 
-const WhyLayered = () => {
+const WhyBaseCompose = () => {
   const reasons = [
     {
       icon: "→",
@@ -33,7 +33,7 @@ const WhyLayered = () => {
       <div className="w-full max-w-7xl mx-auto py-24">
         <div className="max-w-2xl mb-16 px-2">
           <h2 className="text-3xl sm:text-4xl font-normal text-white leading-[1.3] mb-3">
-            Why Layered?
+            Why BaseCompose?
           </h2>
           <p className="text-sm sm:text-base text-gray-500 font-light">
             Four reasons this isn't just another boilerplate.
@@ -78,4 +78,4 @@ const WhyLayered = () => {
   );
 };
 
-export default WhyLayered;
+export default WhyBaseCompose;

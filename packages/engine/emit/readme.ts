@@ -1,7 +1,7 @@
-import type { StackBlueprint } from "@layered/types";
+import type { StackBlueprint } from "@BaseCompose/types";
 
 export function generateReadme(stack: StackBlueprint): string {
-  const lines: string[] = ["# Layered Stack"];
+  const lines: string[] = ["# BaseCompose Stack"];
 
   lines.push("\nGenerated stack for " + stack.intent + " application.");
 
@@ -39,7 +39,7 @@ export function generateReadme(stack: StackBlueprint): string {
     lines.push("- Port: 5432");
     lines.push("- User: dev");
     lines.push("- Password: dev");
-    lines.push("- Database: layered_db");
+    lines.push("- Database: BaseCompose_db");
   }
 
   lines.push("\n## Environment Variables");

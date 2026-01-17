@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import type { StackBlueprint } from "@layered/types";
-import { STACK_CONFIG } from "@layered/types";
+import type { StackBlueprint } from "@BaseCompose/types";
+import { STACK_CONFIG } from "@BaseCompose/types";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -63,7 +63,7 @@ export default function Home() {
 
   useEffect(() => {
     // Load message count from localStorage or API
-    const saved = localStorage.getItem("layered_message_count");
+    const saved = localStorage.getItem("BaseCompose_message_count");
     if (saved) setMessageCount(parseInt(saved));
   }, []);
 
@@ -93,7 +93,7 @@ export default function Home() {
     if (!isAuthenticated) {
       const newCount = messageCount + 1;
       setMessageCount(newCount);
-      localStorage.setItem("layered_message_count", newCount.toString());
+      localStorage.setItem("BaseCompose_message_count", newCount.toString());
     }
 
     try {
@@ -140,7 +140,7 @@ export default function Home() {
           const url = window.URL.createObjectURL(blob);
           const a = document.createElement("a");
           a.href = url;
-          a.download = "layered-stack.tar.gz";
+          a.download = "BaseCompose-stack.tar.gz";
           document.body.appendChild(a);
           a.click();
           window.URL.revokeObjectURL(url);
@@ -150,7 +150,7 @@ export default function Home() {
             ...prev,
             {
               role: "assistant",
-              content: "✓ Stack downloaded as layered-stack.tar.gz",
+              content: "✓ Stack downloaded as BaseCompose-stack.tar.gz",
             },
           ]);
         }
@@ -203,7 +203,7 @@ export default function Home() {
         <div className="p-4 border-b border-[#2a2a2a]">
           <div className="flex items-center justify-between gap-2">
             <Link href="/">
-            <h1 className="text-lg font-normal text-[#01AE74] leading-[1.3]">Layered</h1>
+            <h1 className="text-lg font-normal text-[#01AE74] leading-[1.3]">BaseCompose</h1>
             </Link>
             <button
               onClick={() => setSidebarOpen(false)}
@@ -418,7 +418,7 @@ export default function Home() {
                   type="text"
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
-                  placeholder={canSendMessage ? "Ask Layered to build..." : "Sign in to continue..."}
+                  placeholder={canSendMessage ? "Ask BaseCompose to build..." : "Sign in to continue..."}
                   className="flex-1 bg-transparent text-sm md:text-base text-[#d0d0d0] placeholder:text-[#666666] focus:outline-none"
                   disabled={loading || !canSendMessage}
                 />
@@ -426,7 +426,7 @@ export default function Home() {
                 {/* Model Selector */}
                 <div className="shrink-0 flex items-center gap-1 px-2 md:px-3 py-1 rounded-lg bg-[#0a0a0a] border border-[#3a3a3a] text-xs md:text-sm text-[#d0d0d0]">
                   <span>⚡</span>
-                  <span>Layered</span>
+                  <span>BaseCompose</span>
                   <svg className="w-3 h-3 text-[#666666]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
                   </svg>

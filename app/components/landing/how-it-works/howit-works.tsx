@@ -108,7 +108,7 @@ const HowItWorks = () => {
             <div className={`font-mono text-xs space-y-1 ${
               activeStep === 1 ? "text-gray-300" : "text-gray-600"
             }`}>
-              <div>&gt; ask-layered</div>
+              <div>&gt; ask-BaseCompose</div>
               <div className="break-words">Add authentication to my application</div>
             </div>
           </div>
@@ -126,7 +126,7 @@ const HowItWorks = () => {
             <h3 className={`text-xs sm:text-sm font-semibold uppercase tracking-wide mb-3 transition-colors ${
               activeStep === 2 ? "text-emerald-300" : "text-gray-500"
             }`}>
-              Layered applies
+              BaseCompose applies
             </h3>
             <p className={`font-medium mb-4 transition-all ${
               activeStep === 2 ? "text-white text-base" : "text-gray-400 text-sm"

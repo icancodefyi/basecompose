@@ -33,7 +33,7 @@ const WhoIsThisFor = () => {
             Built for teams shipping code, not infrastructure
           </h2>
           <p className="text-sm sm:text-base text-gray-500 font-light max-w-3xl">
-            Whether you're bootstrapping or scaling, Layered handles the patterns you'd build anyway.
+            Whether you're bootstrapping or scaling, BaseCompose handles the patterns you'd build anyway.
           </p>
         </div>
 

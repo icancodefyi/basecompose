@@ -64,7 +64,7 @@ const SupportedTech = () => {
         <div className="mt-16 pt-8 border-t border-gray-800/50 px-2">
           <div className="flex flex-col gap-4">
             <p className="text-xs text-gray-500">
-              More frameworks coming. <a href="https://github.com/icancodefyi/layered" className="text-emerald-400 hover:text-emerald-300 transition-colors underline">Contribute on GitHub</a> to expand support.
+              More frameworks coming. <a href="https://github.com/icancodefyi/BaseCompose" className="text-emerald-400 hover:text-emerald-300 transition-colors underline">Contribute on GitHub</a> to expand support.
             </p>
           </div>
         </div>

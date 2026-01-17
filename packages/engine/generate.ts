@@ -5,7 +5,7 @@ import { promisify } from "util";
 import { pipeline } from "stream";
 import * as zlib from "zlib";
 import * as tar from "tar";
-import type { StackBlueprint } from "@layered/types";
+import type { StackBlueprint } from "@BaseCompose/types";
 import type { GenerationContext, GenerationState } from "./types";
 import { copyFrameworkBase, copyAddonFiles } from "./copy";
 import { collectAddonEnv, writeEnvExample } from "./emit/env";
@@ -44,7 +44,7 @@ export async function generateProject(
   blueprint: StackBlueprint
 ): Promise<Buffer> {
   // Create temp directory
-  const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "layered-"));
+  const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "BaseCompose-"));
   const outDir = path.join(tmpDir, "project");
 
   try {

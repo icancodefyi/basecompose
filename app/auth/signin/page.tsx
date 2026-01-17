@@ -48,7 +48,7 @@ function SignInContent() {
       <div className="w-full max-w-md space-y-8">
         {/* Header */}
         <div className="text-center space-y-2">
-          <h1 className="text-3xl md:text-4xl font-normal text-emerald-600 leading-[1.3]">Layered</h1>
+          <h1 className="text-3xl md:text-4xl font-normal text-emerald-600 leading-[1.3]">BaseCompose</h1>
           <p className="text-sm md:text-base text-gray-400 font-light">
             AI-Powered Stack Generator
           </p>

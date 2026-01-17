@@ -21,8 +21,8 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./*"],
-      "@layered/engine": ["packages/engine"],
-      "@layered/types": ["packages/types"]
+      "@BaseCompose/engine": ["packages/engine"],
+      "@BaseCompose/types": ["packages/types"]
     }
   },
   "include": [

@@ -1,4 +1,4 @@
-# Quick Start Guide - Layered Stack Generator
+# Quick Start Guide - BaseCompose Stack Generator
 
 ## Installation & Setup
 
@@ -20,7 +20,7 @@ pnpm dev
 # http://localhost:3000
 ```
 
-## Using Layered
+## Using BaseCompose
 
 ### Step 1: Generate a Project
 
@@ -30,13 +30,13 @@ pnpm dev
    - **Database:** MongoDB (optional)
    - **Authentication:** Auth.js (optional)
 3. Click **"Generate & Download"**
-4. Browser downloads: `layered-stack.tar.gz`
+4. Browser downloads: `BaseCompose-stack.tar.gz`
 
 ### Step 2: Extract & Setup
 
 ```bash
 # Extract the archive
-tar -xzf layered-stack.tar.gz
+tar -xzf BaseCompose-stack.tar.gz
 cd project
 
 # View setup instructions
@@ -114,8 +114,8 @@ docker compose -f docker-compose.dev.yml down -v
 docker compose -f docker-compose.dev.yml up
 
 # Check connection string in .env.local
-# Should be: mongodb://mongodb:27017/layered (in Docker)
-# Or: mongodb://localhost:27017/layered (local MongoDB)
+# Should be: mongodb://mongodb:27017/BaseCompose (in Docker)
+# Or: mongodb://localhost:27017/BaseCompose (local MongoDB)
 ```
 
 ### Hot Reload Not Working

@@ -1,4 +1,4 @@
-# Layered System Status & Checklist
+# BaseCompose System Status & Checklist
 
 ## ✅ System Complete & Production-Ready
 
@@ -173,7 +173,7 @@ These errors only appear in template files and are resolved when the project is 
 
 **Overall Status:** ✅ PRODUCTION READY
 
-The Layered template-based project generator is fully implemented and ready for use. Users can:
+The BaseCompose template-based project generator is fully implemented and ready for use. Users can:
 1. Select stack components via the UI
 2. Generate production-ready projects
 3. Download tar.gz archives

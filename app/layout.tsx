@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Layered - Instant App Environment Setup",
+  title: "BaseCompose - Instant App Environment Setup",
   description: "Instantly set up dev or production environments with databases, authentication, and essential add-ons.",
 };
 

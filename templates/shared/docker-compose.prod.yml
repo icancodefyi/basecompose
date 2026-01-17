@@ -9,7 +9,7 @@ services:
       - "3000:3000"
     environment:
       NODE_ENV: production
-      MONGODB_URI: mongodb://mongodb:27017/layered
+      MONGODB_URI: mongodb://mongodb:27017/BaseCompose
     depends_on:
       - mongodb
     restart: always
@@ -22,7 +22,7 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD:-changeme}
-      MONGO_INITDB_DATABASE: layered
+      MONGO_INITDB_DATABASE: BaseCompose
     volumes:
       - mongo_data:/data/db
 

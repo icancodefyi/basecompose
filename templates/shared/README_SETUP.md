@@ -1,4 +1,4 @@
-# Layered Generated Project
+# BaseCompose Generated Project
 
 Your complete, runnable tech stack is ready! 🚀
 

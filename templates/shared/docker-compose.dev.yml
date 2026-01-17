@@ -10,7 +10,7 @@ services:
       - "3000:3000"
     environment:
       NODE_ENV: development
-      MONGODB_URI: mongodb://mongodb:27017/layered
+      MONGODB_URI: mongodb://mongodb:27017/BaseCompose
     volumes:
       - .:/app
       - /app/node_modules

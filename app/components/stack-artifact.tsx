@@ -1,7 +1,7 @@
 "use client";
 
-import type { StackBlueprint } from "@layered/types";
-import { STACK_CONFIG } from "@layered/types";
+import type { StackBlueprint } from "@BaseCompose/types";
+import { STACK_CONFIG } from "@BaseCompose/types";
 import { getIconComponent } from "@/lib/icons/index";
 
 interface StackArtifactProps {

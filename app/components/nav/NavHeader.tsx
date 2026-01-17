@@ -10,7 +10,7 @@ export function NavHeader() {
           <div className="w-8 h-8 rounded-lg bg-emerald-600 flex items-center justify-center text-white font-bold">
             L
           </div>
-          <span className="text-white font-semibold">Layered</span>
+          <span className="text-white font-semibold">BaseCompose</span>
         </Link>
 
         <div className="flex items-center gap-4">

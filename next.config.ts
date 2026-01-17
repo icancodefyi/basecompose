@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  transpilePackages: ["@layered/engine", "@layered/types"],
+  transpilePackages: ["@BaseCompose/engine", "@BaseCompose/types"],
   turbopack: {}, // Use default Turbopack config
 };
 

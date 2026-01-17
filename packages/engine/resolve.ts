@@ -1,5 +1,5 @@
-import type { StackBlueprint } from "@layered/types";
-import { RESOLUTION_RULES } from "@layered/types";
+import type { StackBlueprint } from "@BaseCompose/types";
+import { RESOLUTION_RULES } from "@BaseCompose/types";
 
 export function resolveStack(input: StackBlueprint): StackBlueprint {
   const stack = { ...input };

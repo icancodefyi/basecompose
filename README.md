@@ -1,4 +1,4 @@
-# Layered
+# BaseCompose
 
 AI-powered stack generator for full-stack applications. Chat with AI to configure your stack, get Docker Compose files instantly.
 
@@ -41,7 +41,7 @@ Open [http://localhost:3000](http://localhost:3000) and start chatting!
 This is a **pnpm monorepo** with internal packages:
 
 ```
-layered/
+BaseCompose/
 ├── app/                    # Next.js application
 │   ├── api/chat/          # AI chat endpoint
 │   ├── api/generate/      # Stack generator endpoint

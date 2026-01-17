@@ -1,4 +1,4 @@
-import type { StackBlueprint } from "@layered/types";
+import type { StackBlueprint } from "@BaseCompose/types";
 
 export type GenerationContext = {
   outDir: string;

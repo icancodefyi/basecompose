@@ -29,7 +29,7 @@ export function DemoHero() {
       borderRadius: "8px",
       marginBottom: "2rem"
     }}>
-      <h1 style={{ marginBottom: "1rem" }}>Welcome to Layered</h1>
+      <h1 style={{ marginBottom: "1rem" }}>Welcome to BaseCompose</h1>
       <p style={{ color: "#666", marginBottom: "2rem" }}>
         Your complete, runnable stack is ready.
       </p>

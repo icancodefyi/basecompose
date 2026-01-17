@@ -12,12 +12,12 @@ const FinalCTA = () => {
           </h2>
           
           <p className="text-sm sm:text-base text-gray-400 font-light mb-8 leading-relaxed max-w-2xl">
-            Your stack. Your repo. Five minutes from now. Let Layered generate everything so you can focus on what makes your app different.
+            Your stack. Your repo. Five minutes from now. Let BaseCompose generate everything so you can focus on what makes your app different.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-center justify-center w-full">
             <a
-              href="https://github.com/icancodefyi/layered"
+              href="https://github.com/icancodefyi/BaseCompose"
               className="px-6 sm:px-8 py-2.5 sm:py-3 rounded border border-emerald-500/60 text-emerald-400 hover:border-emerald-400 hover:bg-emerald-950/30 transition-all text-xs sm:text-sm font-medium w-full sm:w-auto text-center"
             >
               Explore on GitHub

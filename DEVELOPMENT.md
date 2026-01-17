@@ -1,8 +1,8 @@
-# Layered Development Documentation
+# BaseCompose Development Documentation
 
 ## System Architecture
 
-Layered is a **template-based** project generator that creates complete, production-ready Next.js applications with selected technology stacks.
+BaseCompose is a **template-based** project generator that creates complete, production-ready Next.js applications with selected technology stacks.
 
 ### How It Works
 

@@ -84,7 +84,7 @@ export const STACK_CONFIG = {
         envVars: {
           POSTGRES_USER: "dev",
           POSTGRES_PASSWORD: "dev",
-          POSTGRES_DB: "layered_db",
+          POSTGRES_DB: "BaseCompose_db",
         },
       },
       mongodb: {
@@ -108,7 +108,7 @@ export const STACK_CONFIG = {
       //   icon: "mysql",
       //   envVars: {
       //     MYSQL_ROOT_PASSWORD: "dev",
-      //     MYSQL_DATABASE: "layered_db",
+      //     MYSQL_DATABASE: "BaseCompose_db",
       //   },
       // },
       // redis: {

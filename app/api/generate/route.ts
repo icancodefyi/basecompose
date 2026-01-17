@@ -1,5 +1,5 @@
-import { generateProject } from "@layered/engine";
-import type { StackBlueprint } from "@layered/types";
+import { generateProject } from "@BaseCompose/engine";
+import type { StackBlueprint } from "@BaseCompose/types";
 
 export async function POST(req: Request) {
   try {
@@ -15,7 +15,7 @@ export async function POST(req: Request) {
       status: 200,
       headers: {
         "Content-Type": "application/gzip",
-        "Content-Disposition": 'attachment; filename="layered-stack.tar.gz"',
+        "Content-Disposition": 'attachment; filename="BaseCompose-stack.tar.gz"',
       },
     });
   } catch (error) {
