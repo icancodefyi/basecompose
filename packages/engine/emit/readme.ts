@@ -7,7 +7,6 @@ export function generateReadme(stack: StackBlueprint): string {
 
   lines.push("\n## Stack");
   if (stack.frontend) lines.push(`- Frontend: ${stack.frontend}`);
-  if (stack.backend) lines.push(`- Backend: ${stack.backend}`);
   if (stack.database) lines.push(`- Database: ${stack.database}`);
   if (stack.auth) lines.push(`- Auth: ${stack.auth}`);
 
@@ -28,18 +27,11 @@ export function generateReadme(stack: StackBlueprint): string {
     lines.push("Running on http://localhost:3000");
   }
 
-  if (stack.backend === "node") {
-    lines.push("\n### Backend (Node)");
-    lines.push("Running on http://localhost:3001");
-  }
-
-  if (stack.database === "postgres") {
-    lines.push("\n### Database (PostgreSQL)");
+  if (stack.database === "mongodb") {
+    lines.push("\n### Database (MongoDB)");
     lines.push("- Host: localhost");
-    lines.push("- Port: 5432");
-    lines.push("- User: dev");
-    lines.push("- Password: dev");
-    lines.push("- Database: BaseCompose_db");
+    lines.push("- Port: 27017");
+    lines.push("- Database: basecompose_db");
   }
 
   lines.push("\n## Environment Variables");

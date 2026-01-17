@@ -1,7 +1,6 @@
 // Import icons by category
 import { NextjsIcon } from "./frontend";
-import { NodejsIcon, FastapiIcon } from "./backend";
-import { PostgresqlIcon, MongodbIcon } from "./database";
+import { MongodbIcon } from "./database";
 import { NextAuthIcon } from "./auth";
 
 // Re-export icon metadata utilities for AI discovery
@@ -17,7 +16,6 @@ export {
 
 // Re-export category indexes
 export * from "./frontend";
-export * from "./backend";
 export * from "./database";
 export * from "./auth";
 
@@ -25,10 +23,9 @@ export * from "./auth";
  * Icon component registry
  * Maps icon keys to their React components
  * 
- * Available icons organized by category:
+ * Supported tech stack:
  * - Frontend: nextjs
- * - Backend: nodejs, fastapi
- * - Database: postgresql, mongodb
+ * - Database: mongodb
  * - Auth: nextauth
  */
 export const iconRegistry: Record<
@@ -37,11 +34,7 @@ export const iconRegistry: Record<
 > = {
   // Frontend
   nextjs: NextjsIcon,
-  // Backend
-  nodejs: NodejsIcon,
-  fastapi: FastapiIcon,
   // Database
-  postgresql: PostgresqlIcon,
   mongodb: MongodbIcon,
   // Auth
   nextauth: NextAuthIcon,

@@ -44,11 +44,11 @@ const WhyBaseCompose = () => {
           {reasons.map((reason, idx) => (
             <div
               key={idx}
-              className="group relative overflow-hidden rounded border border-gray-800/50 hover:border-gray-700/80 transition-all duration-300 p-6 bg-gradient-to-br from-gray-900/30 to-black/50 hover:from-gray-900/50 hover:to-black/70"
+              className="group relative overflow-hidden rounded border border-gray-800/50 hover:border-gray-700/80 transition-all duration-300 p-6 bg-linear-to-br from-gray-900/30 to-black/50 hover:from-gray-900/50 hover:to-black/70"
             >
               {/* Background accent */}
               <div
-                className={`absolute inset-0 opacity-0 group-hover:opacity-5 transition-opacity bg-gradient-to-br ${reason.accent}`}
+                className={`absolute inset-0 opacity-0 group-hover:opacity-5 transition-opacity bg-linear-to-br ${reason.accent}`}
               ></div>
 
               {/* Content */}
@@ -69,7 +69,7 @@ const WhyBaseCompose = () => {
                 </p>
               </div>
               {/* Bottom accent line */}
-              <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-emerald-500/0 via-emerald-500/30 to-emerald-500/0 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              <div className="absolute bottom-0 left-0 right-0 h-px bg-linear-to-r from-emerald-500/0 via-emerald-500/30 to-emerald-500/0 opacity-0 group-hover:opacity-100 transition-opacity"></div>
             </div>
           ))}
         </div>

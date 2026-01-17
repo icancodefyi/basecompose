@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useSession, signIn } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import Orb from "@/components/Orb";
-import { NextjsIcon, NodejsIcon, MongodbIcon, NextAuthIcon, RedisIcon } from "@/lib/icons";
+import { NextjsIcon, MongodbIcon, NextAuthIcon } from "@/lib/icons";
 
 
 export function HeroSection() {
@@ -101,10 +101,6 @@ export function HeroSection() {
               <span className="hidden sm:inline">Next.js</span>
             </div>
             <div className="flex items-center gap-1.5 text-gray-400 text-xs sm:text-sm font-semibold tracking-wide hover:text-gray-300 transition-colors">
-              <NodejsIcon className="w-4 sm:w-5 h-4 sm:h-5" />
-              <span className="hidden sm:inline">Node.js</span>
-            </div>
-            <div className="flex items-center gap-1.5 text-gray-400 text-xs sm:text-sm font-semibold tracking-wide hover:text-gray-300 transition-colors">
               <NextAuthIcon className="w-4 sm:w-5 h-4 sm:h-5" />
               <span className="hidden sm:inline">NextAuth</span>
             </div>
@@ -112,14 +108,9 @@ export function HeroSection() {
               <MongodbIcon className="w-4 sm:w-5 h-4 sm:h-5" />
               <span className="hidden sm:inline">MongoDB</span>
             </div>
-            <div className="flex items-center gap-1.5 text-gray-400 text-xs sm:text-sm font-semibold tracking-wide hover:text-gray-300 transition-colors">
-              {/* Redis Icon */}
-            <RedisIcon className="w-5 h-5" />
-              Redis
-            </div>
           </div>
           <p className="text-center text-sm text-gray-600 font-light">
-            Supports wide range of frameworks, databases, and addons.
+            Built with modern, production-ready technologies.
           </p>
         </div>
       </div>

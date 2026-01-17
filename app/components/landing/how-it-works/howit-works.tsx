@@ -109,7 +109,7 @@ const HowItWorks = () => {
               activeStep === 1 ? "text-gray-300" : "text-gray-600"
             }`}>
               <div>&gt; ask-BaseCompose</div>
-              <div className="break-words">Add authentication to my application</div>
+              <div className="wrap-break-word">Add authentication to my application</div>
             </div>
           </div>
 

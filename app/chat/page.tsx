@@ -385,9 +385,9 @@ export default function Home() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 md:gap-3">
                   {[
                     { title: "SaaS App", subtitle: "with authentication" },
-                    { title: "Full-Stack", subtitle: "Next.js + Node.js" },
-                    { title: "API Service", subtitle: "Backend only" },
-                    { title: "Add Database", subtitle: "MongoDB/PostgreSQL" },
+                    { title: "Full-Stack", subtitle: "Next.js + MongoDB" },
+                    { title: "Authentication Setup", subtitle: "NextAuth.js" },
+                    { title: "Database Setup", subtitle: "MongoDB" },
                   ].map((item) => (
                     <button
                       key={item.title}
@@ -542,15 +542,6 @@ export default function Home() {
               value={resolvedStack.frontend}
               iconKey={getIconKey("frontend", resolvedStack.frontend)}
               onRemove={() => setStack((prev) => ({ ...prev, frontend: undefined }))}
-            />
-          )}
-
-          {resolvedStack.backend && (
-            <StackItem
-              label="backend"
-              value={resolvedStack.backend}
-              iconKey={getIconKey("backend", resolvedStack.backend)}
-              onRemove={() => setStack((prev) => ({ ...prev, backend: undefined }))}
             />
           )}
 

@@ -11,7 +11,6 @@ interface StackArtifactProps {
 export function StackArtifact({ stack }: StackArtifactProps) {
   const items = [
     { key: "frontend", label: "Frontend", value: stack.frontend },
-    { key: "backend", label: "Backend", value: stack.backend },
     { key: "database", label: "Database", value: stack.database },
     { key: "auth", label: "Auth", value: stack.auth },
   ].filter((item) => item.value);

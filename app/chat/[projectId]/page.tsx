@@ -506,15 +506,6 @@ export default function ProjectChatPage() {
             />
           )}
 
-          {resolvedStack.backend && (
-            <StackItem
-              label="backend"
-              value={resolvedStack.backend}
-              iconKey={getIconKey("backend", resolvedStack.backend)}
-              onRemove={() => setStack((prev) => ({ ...prev, backend: undefined }))}
-            />
-          )}
-
           {resolvedStack.database && (
             <StackItem
               label="database"

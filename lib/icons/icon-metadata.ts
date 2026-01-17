@@ -5,9 +5,6 @@
 
 export type IconKey = 
   | "nextjs"
-  | "nodejs"
-  | "fastapi"
-  | "postgresql"
   | "mongodb"
   | "nextauth";
 
@@ -32,24 +29,6 @@ export const iconMetadataRegistry: Record<IconKey, IconMetadata> = {
     name: "Next.js",
     description: "Next.js - React framework for production",
     category: "frontend",
-  },
-  nodejs: {
-    key: "nodejs",
-    name: "Node.js",
-    description: "Node.js - JavaScript runtime for server-side development",
-    category: "backend",
-  },
-  fastapi: {
-    key: "fastapi",
-    name: "FastAPI",
-    description: "FastAPI - Modern Python web framework for building APIs",
-    category: "backend",
-  },
-  postgresql: {
-    key: "postgresql",
-    name: "PostgreSQL",
-    description: "PostgreSQL - Advanced open-source relational database",
-    category: "database",
   },
   mongodb: {
     key: "mongodb",

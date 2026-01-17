@@ -44,7 +44,7 @@ const WhoIsThisFor = () => {
               key={idx}
               className="flex gap-4 sm:gap-5 p-5 sm:p-6 rounded-lg border border-gray-800/50 hover:border-emerald-500/30 hover:bg-emerald-950/5 transition-all duration-300 group"
             >
-              <div className="flex-shrink-0 text-2xl sm:text-3xl">{useCase.icon}</div>
+              <div className="shrink-0 text-2xl sm:text-3xl">{useCase.icon}</div>
               <div className="flex-1 min-w-0">
                 <h3 className="text-sm sm:text-base font-normal text-white mb-2 group-hover:text-emerald-300 transition-colors">
                   {useCase.title}
