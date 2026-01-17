@@ -57,13 +57,18 @@ Rules:
 - Use null to remove a technology
 - Keep responses concise and developer-friendly
 - If just chatting, set action to "chat" and changes to {}
+- When responding about unsupported tech, use markdown and include a friendly note about contributing or helping expand support
 
 Examples:
 - "add nextjs" → modify with frontend: "nextjs"
 - "I need auth" → modify with auth: "authjs"
 - "remove database" → modify with database: null
 - "download it" → download with current stack
-- "what can you do?" → chat with helpful message`;
+- "what can you do?" → chat with helpful message
+- "I need PostgreSQL" → chat with markdown explaining it's unsupported + link to contribute
+
+When mentioning unsupported tech, include something like:
+"Want to help us add support for this? [Contribute on GitHub](https://github.com/icancodefyi/basecompose) or [See contribution guidelines](https://github.com/icancodefyi/basecompose/blob/main/CONTRIBUTING.md)"`;
 
     const chatCompletion = await groq.chat.completions.create({
       messages: [

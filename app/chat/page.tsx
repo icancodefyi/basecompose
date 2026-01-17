@@ -6,6 +6,7 @@ import { STACK_CONFIG } from "@/packages/types";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import ReactMarkdown from "react-markdown";
 import { StackArtifact } from "../components/stack-artifact";
 import { StackItem } from "../components/stack-item";
 import { ProjectModal } from "../components/project-modal";
@@ -413,7 +414,44 @@ export default function Home() {
                           : "bg-[#1a1a1a] text-[#d0d0d0] border border-[#2a2a2a]"
                       }`}
                     >
-                      <p className="leading-relaxed">{msg.content}</p>
+                      {msg.role === "user" ? (
+                        <p className="text-sm leading-relaxed whitespace-pre-wrap break-words">{msg.content}</p>
+                      ) : (
+                        <div className="text-sm leading-relaxed space-y-1">
+                          <ReactMarkdown
+                            components={{
+                              p: ({ children }) => <p className="text-[#d0d0d0] text-sm">{children}</p>,
+                              h1: ({ children }) => <h1 className="text-base font-bold text-emerald-300 pt-1">{children}</h1>,
+                              h2: ({ children }) => <h2 className="text-sm font-bold text-emerald-300 pt-0.5">{children}</h2>,
+                              h3: ({ children }) => <h3 className="text-xs font-bold text-emerald-300">{children}</h3>,
+                              ul: ({ children }) => <ul className="list-disc list-inside text-[#d0d0d0] space-y-0.5">{children}</ul>,
+                              ol: ({ children }) => <ol className="list-decimal list-inside text-[#d0d0d0] space-y-0.5">{children}</ol>,
+                              li: ({ children }) => <li className="text-sm text-[#d0d0d0]">{children}</li>,
+                              strong: ({ children }) => <strong className="text-emerald-300 font-semibold">{children}</strong>,
+                              em: ({ children }) => <em className="text-gray-400 italic">{children}</em>,
+                              a: ({ href, children }) => (
+                                <a href={href} target="_blank" rel="noopener noreferrer" className="text-emerald-400 hover:text-emerald-300 underline">
+                                  {children}
+                                </a>
+                              ),
+                              code: ({ children }) => <code className="bg-black/50 px-1.5 py-0.5 rounded text-emerald-300 text-xs font-mono">{children}</code>,
+                              blockquote: ({ children }) => (
+                                <blockquote className="border-l-2 border-emerald-500/40 pl-2.5 italic text-gray-400 text-sm py-0.5">
+                                  {children}
+                                </blockquote>
+                              ),
+                              pre: ({ children }) => (
+                                <pre className="bg-black/50 p-2 rounded overflow-x-auto text-xs my-0.5">
+                                  {children}
+                                </pre>
+                              ),
+                              hr: () => <hr className="my-1 border-t border-[#2a2a2a]" />,
+                            }}
+                          >
+                            {msg.content}
+                          </ReactMarkdown>
+                        </div>
+                      )}
                     </div>
                   </div>
 

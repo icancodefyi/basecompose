@@ -65,7 +65,7 @@ export function HeroSection() {
 
         {/* Subheading - Concrete Benefit */}
         <p className="text-center text-xs sm:text-sm lg:text-base text-gray-300 max-w-2xl mx-auto px-2 leading-relaxed mb-8 font-light">
-          BaseCompose configures databases, authentication, and essential add-ons so you can start building right away.
+          BaseCompose configures databases, authentication, and essential <br />add-ons so you can start building right away.
         </p>
 
         {/* CTA Buttons - Compact */}
