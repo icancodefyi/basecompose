@@ -19,7 +19,7 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="relative w-full px-4 sm:px-6 lg:px-8 border-t border-gray-800/50">
+    <footer className="relative w-full px-4 sm:px-6 lg:px-8 border-t border-gray-800/50 bg-black">
       <div className="w-full max-w-7xl mx-auto py-12 sm:py-16">
         <div className="flex flex-col gap-6 sm:gap-8">
           {/* Main footer content */}
@@ -36,11 +36,11 @@ const Footer = () => {
             <div className="flex flex-wrap items-center gap-4 sm:gap-6">
               {links.map((link) => (
                 <a
-                  key={link.label}
+                  key={link.label} 
                   href={link.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-xs text-gray-600 hover:text-emerald-400 transition-colors"
+                  className="text-xs text-gray-600 hover:text-emerald-400 transition-colors underline"
                 >
                   {link.label}
                 </a>
@@ -50,9 +50,27 @@ const Footer = () => {
 
           <div className="border-t border-gray-800/30"></div>
 
-          <p className="text-xs text-gray-700 text-center">
-            © 2025 BaseCompose. Built by developers, for developers.
-          </p>
+                <p className="text-xs text-gray-700 text-center">
+                © 2025{" "}
+                <a
+                  href="https://bc.impiclabs.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline hover:text-emerald-400 transition-colors"
+                >
+                  BaseCompose
+                </a>
+                . Initialized by{" "}
+                <a
+                  href="https://zaid.impiclabs.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline hover:text-emerald-400 transition-colors"
+                >
+                  Zaid Rakhange
+                </a>
+                , proudly open source for developers.
+                </p>
         </div>
       </div>
     </footer>

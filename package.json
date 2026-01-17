@@ -21,6 +21,7 @@
     "@types/tar": "^6.1.13",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "gray-matter": "^4.0.3",
     "groq-sdk": "^0.37.0",
     "js-yaml": "^4.1.1",
     "jszip": "^3.10.1",
@@ -32,6 +33,7 @@
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-markdown": "^10.1.0",
+    "remark-gfm": "^4.0.1",
     "tailwind-merge": "^3.4.0",
     "tar": "^6.2.1"
   },

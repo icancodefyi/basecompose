@@ -1,0 +1,23 @@
+Minimalist abstract tech background image for a developer blog post. 
+Style: Clean, modern, professional developer aesthetic with lots of negative space.
+Color palette: Deep black or near-black (#0a0a0a) background with emerald green (#10b981) accent elements.
+Design elements: 
+- Subtle geometric shapes or lines (avoid cluttering)
+- Minimal glowing effects or gradient accents in emerald green
+- Tech-inspired but not literal (no obvious code/terminal screenshots)
+- Modern sans-serif typography friendly (room for text overlay)
+- Aspect ratio: 1200x630px (web banner size)
+Resolution: High quality, 4K ready
+Mood: Forward-thinking, clean, professional, accessible to developers
+
+
+for basecompose v0.1 release blog post.
+...add: Abstract upward momentum with subtle emerald particles or ascending lines suggesting growth and launch. Feel of breaking through or starting something new.
+
+
+for understanding architecture blueprints blog post.
+...add: Geometric layering concept - stacked abstract rectangles or architectural blueprint-inspired lines in emerald green on black, showing complexity made simple.
+
+
+for why we chose a chat-first interface blog post.
+...add: Subtle conversation or dialogue visual - perhaps minimalist chat bubbles, connection lines, or circular patterns suggesting communication and connection, all in emerald accents.

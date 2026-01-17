@@ -2,7 +2,7 @@
 
 const FinalCTA = () => {
   return (
-    <section className="relative w-full px-4 sm:px-6 lg:px-8 border-t border-gray-800/50">
+    <section className="relative w-full px-4 sm:px-6 lg:px-8 border-t border-gray-800/50 bg-black">
       <div className="w-full max-w-7xl mx-auto py-24">
         <div className="flex flex-col items-center text-center max-w-3xl mx-auto px-4 sm:px-2">
           <p className="text-xs uppercase tracking-wider text-gray-600 mb-6">Ready to ship</p>
