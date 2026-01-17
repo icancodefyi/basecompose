@@ -3,13 +3,12 @@
 import { useState, useEffect, useRef } from "react";
 import type { StackBlueprint, Project, ChatMessage } from "@/packages/types";
 import { STACK_CONFIG } from "@/packages/types";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import { StackArtifact } from "../components/stack-artifact";
-import { StackItem } from "../components/stack-item";
-import { ProjectModal } from "../components/project-modal";
-import { ProjectsSidebar } from "../components/projects-sidebar";
+import { StackArtifact } from "../../components/stack-artifact";
+import { StackItem } from "../../components/stack-item";
+import { ProjectModal } from "../../components/project-modal";
+import { ProjectsSidebar } from "../../components/projects-sidebar";
 import { useAuth } from "@/app/hooks/useAuth";
 import { getUserIdFromSession } from "@/lib/auth-utils";
 
@@ -22,8 +21,11 @@ interface Message {
   content: string;
 }
 
-export default function Home() {
+export default function ProjectChatPage() {
   const router = useRouter();
+  const params = useParams();
+  const projectId = params.projectId as string;
+  
   const { session, isAuthenticated, loading: authLoading, signIn, signOut } = useAuth();
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
@@ -34,8 +36,8 @@ export default function Home() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [showProjectModal, setShowProjectModal] = useState(false);
   const [projects, setProjects] = useState<Project[]>([]);
-  const [currentProjectId, setCurrentProjectId] = useState<string | null>(null);
   const [projectLoading, setProjectLoading] = useState(false);
+  const [currentProject, setCurrentProject] = useState<Project | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const resolvedStack = resolveStack(stack);
@@ -49,12 +51,13 @@ export default function Home() {
     }
   }, [isAuthenticated, session]);
 
-  // Load chat history when project changes
+  // Load chat history when component mounts or projectId changes
   useEffect(() => {
-    if (currentProjectId) {
-      loadChatHistory(currentProjectId);
+    if (projectId && isAuthenticated) {
+      loadChatHistory(projectId);
+      loadProjectDetails(projectId);
     }
-  }, [currentProjectId]);
+  }, [projectId, isAuthenticated]);
 
   const loadProjects = async () => {
     try {
@@ -69,6 +72,25 @@ export default function Home() {
       }
     } catch (error) {
       console.error("Failed to load projects:", error);
+    }
+  };
+
+  const loadProjectDetails = async (projectId: string) => {
+    try {
+      const userId = await getUserIdFromSession(session);
+      if (!userId) return;
+
+      const response = await fetch(`/api/projects?userId=${userId}&projectId=${projectId}`);
+      const data = await response.json();
+      
+      if (data.project) {
+        setCurrentProject(data.project);
+        if (data.project.blueprint) {
+          setStack(data.project.blueprint);
+        }
+      }
+    } catch (error) {
+      console.error("Failed to load project details:", error);
     }
   };
 
@@ -100,14 +122,14 @@ export default function Home() {
   };
 
   const saveMessage = async (role: "user" | "assistant", content: string, blueprint?: StackBlueprint) => {
-    if (!currentProjectId) return;
+    if (!projectId) return;
 
     try {
       await fetch("/api/chat/history", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          projectId: currentProjectId,
+          projectId,
           role,
           content,
           blueprint
@@ -140,10 +162,8 @@ export default function Home() {
       
       if (data.project) {
         setProjects([data.project, ...projects]);
-        setCurrentProjectId(data.project._id);
-        setMessages([]);
-        setStack({ intent: "saas" });
         setShowProjectModal(false);
+        router.push(`/chat/${data.project._id}`);
       }
     } catch (error) {
       console.error("Failed to create project:", error);
@@ -156,15 +176,12 @@ export default function Home() {
     setShowProjectModal(true);
   };
 
-  // Redirect to signin if not authenticated (after checking initial load)
+  // Redirect to signin if not authenticated
   useEffect(() => {
     if (!authLoading && !isAuthenticated) {
-      // Allow 5 messages before redirecting
-      if (messageCount >= 5) {
-        router.push("/auth/signin?callbackUrl=/chat");
-      }
+      router.push("/auth/signin?callbackUrl=/chat");
     }
-  }, [authLoading, isAuthenticated, messageCount, router]);
+  }, [authLoading, isAuthenticated, router]);
 
   const getIconKey = (category: keyof typeof STACK_CONFIG, value?: string) => {
     if (!value) return undefined;
@@ -180,34 +197,9 @@ export default function Home() {
     scrollToBottom();
   }, [messages]);
 
-  useEffect(() => {
-    // Load message count from localStorage or API
-    const saved = localStorage.getItem("BaseCompose_message_count");
-    if (saved) setMessageCount(parseInt(saved));
-  }, []);
-
-  useEffect(() => {
-    // Auto-open modal when free tier is exhausted
-    if (!isAuthenticated && messageCount >= 5 && messages.length > 0) {
-      setShowSignupModal(true);
-    }
-  }, [messageCount, isAuthenticated, messages.length]);
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!input.trim() || loading) return;
-
-    // Check limits
-    if (!canSendMessage) {
-      setShowSignupModal(true);
-      return;
-    }
-
-    // If authenticated but no project, prompt for project creation
-    if (isAuthenticated && !currentProjectId) {
-      setShowProjectModal(true);
-      return;
-    }
 
     const userMessage = input.trim();
     setInput("");
@@ -215,16 +207,7 @@ export default function Home() {
     setLoading(true);
 
     // Save user message
-    if (currentProjectId) {
-      await saveMessage("user", userMessage);
-    }
-
-    // Increment message count immediately when user sends message (for non-authenticated users)
-    if (!isAuthenticated) {
-      const newCount = messageCount + 1;
-      setMessageCount(newCount);
-      localStorage.setItem("BaseCompose_message_count", newCount.toString());
-    }
+    await saveMessage("user", userMessage);
 
     try {
       const response = await fetch("/api/chat", {
@@ -241,9 +224,7 @@ export default function Home() {
       ]);
 
       // Save assistant message
-      if (currentProjectId) {
-        await saveMessage("assistant", data.message);
-      }
+      await saveMessage("assistant", data.message);
 
       if (data.action === "modify" && data.changes) {
         const updatedStack = { ...stack };
@@ -257,16 +238,8 @@ export default function Home() {
         setStack(updatedStack);
 
         // Save updated stack to project
-        if (currentProjectId) {
-          await saveMessage("assistant", data.message, updatedStack);
-        }
+        await saveMessage("assistant", data.message, updatedStack);
       } else if (data.action === "download") {
-        // Check if user needs to sign up
-        if (!isAuthenticated && messageCount >= 5) {
-          setShowSignupModal(true);
-          return;
-        }
-
         const genResponse = await fetch("/api/generate", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -294,18 +267,16 @@ export default function Home() {
           ]);
 
           // Save download confirmation and update project status
-          if (currentProjectId) {
-            await saveMessage("assistant", successMsg, resolvedStack);
-            await fetch("/api/projects", {
-              method: "PUT",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                projectId: currentProjectId,
-                status: "generated",
-                blueprint: resolvedStack
-              })
-            });
-          }
+          await saveMessage("assistant", successMsg, resolvedStack);
+          await fetch("/api/projects", {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              projectId,
+              status: "generated",
+              blueprint: resolvedStack
+            })
+          });
         }
       }
     } catch (error) {
@@ -318,16 +289,6 @@ export default function Home() {
       ]);
     } finally {
       setLoading(false);
-    }
-  };
-
-  const handleNewChat = () => {
-    if (isAuthenticated) {
-      setShowProjectModal(true);
-    } else {
-      setMessages([]);
-      setStack({ intent: "saas" });
-      setCurrentProjectId(null);
     }
   };
 
@@ -354,7 +315,7 @@ export default function Home() {
       {/* Projects Sidebar */}
       <ProjectsSidebar
         projects={projects}
-        currentProjectId={currentProjectId || undefined}
+        currentProjectId={projectId}
         onNewProject={handleNewProject}
         isAuthenticated={isAuthenticated}
         session={session}
@@ -369,6 +330,21 @@ export default function Home() {
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col w-full md:w-auto pt-14 md:pt-0">
+        {/* Project Header */}
+        {currentProject && (
+          <div className="border-b border-[#2a2a2a] px-4 py-3 bg-[#0a0a0a]">
+            <div className="max-w-3xl mx-auto flex items-center gap-2">
+              <span className="text-lg">📁</span>
+              <h2 className="text-sm font-medium text-white">{currentProject.name}</h2>
+              {currentProject.status === "generated" && (
+                <span className="text-xs px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                  Generated
+                </span>
+              )}
+            </div>
+          </div>
+        )}
+
         {/* Messages Area */}
         <div className="flex-1 overflow-y-auto">
           {messages.length === 0 ? (
@@ -445,16 +421,6 @@ export default function Home() {
                 </div>
               )}
 
-              {isAtLimit && (
-                <div className="flex justify-center">
-                  <div className="bg-amber-900/20 border border-amber-700/50 rounded-lg px-4 py-3 max-w-md">
-                    <p className="text-xs md:text-sm text-amber-300">
-                      You've used all 5 free messages. Sign in to continue building!
-                    </p>
-                  </div>
-                </div>
-              )}
-
               <div ref={messagesEndRef} />
             </div>
           )}
@@ -463,11 +429,6 @@ export default function Home() {
         {/* Input Area */}
         <div className="border-t border-[#2a2a2a] bg-background px-3 md:px-4 py-4 md:py-6">
           <div className="max-w-full md:max-w-3xl mx-auto">
-            {!canSendMessage && (
-              <div className="mb-3 p-2 md:p-3 bg-amber-900/20 border border-amber-700/50 rounded-lg text-xs md:text-sm text-amber-300">
-                Free message limit reached. Sign in to continue! →
-              </div>
-            )}
             <form onSubmit={handleSubmit} className="relative">
               <div className="flex items-center gap-2 md:gap-3 bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl px-3 md:px-4 py-3 md:py-4 hover:border-[#3a3a3a] focus-within:border-[#3a3a3a] focus-within:ring-1 focus-within:ring-[#3a3a3a] transition-all">
                 {/* Plus Button */}
@@ -486,9 +447,9 @@ export default function Home() {
                   type="text"
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
-                  placeholder={canSendMessage ? "Ask BaseCompose to build..." : "Sign in to continue..."}
+                  placeholder="Ask BaseCompose to build..."
                   className="flex-1 bg-transparent text-sm md:text-base text-[#d0d0d0] placeholder:text-[#666666] focus:outline-none"
-                  disabled={loading || !canSendMessage}
+                  disabled={loading}
                 />
 
                 {/* Model Selector */}
@@ -503,7 +464,7 @@ export default function Home() {
                 {/* Send Button */}
                 <Button
                   type="submit"
-                  disabled={loading || !input.trim() || !canSendMessage}
+                  disabled={loading || !input.trim()}
                   size="icon"
                   className="shrink-0 bg-[#01AE74] hover:bg-[#018e58] text-white rounded-lg h-8 md:h-9 w-8 md:w-9"
                 >
@@ -573,7 +534,6 @@ export default function Home() {
             <Button
               onClick={() => setInput("download my stack")}
               className="w-full bg-[#01AE74] hover:bg-[#018e58] text-white text-sm"
-              disabled={!isAuthenticated && isAtLimit}
             >
               <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
@@ -583,49 +543,6 @@ export default function Home() {
           </div>
         )}
       </div>
-
-      {/* Signup Modal */}
-      {showSignupModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-[#1a1a1a] border border-[#3a3a3a] rounded-xl p-6 max-w-md w-full space-y-4">
-            <div className="space-y-2">
-              <h2 className="text-xl md:text-2xl font-semibold">Unlock More Features</h2>
-              <p className="text-sm text-[#999999]">
-                You've used your 5 free messages. Sign in with Google to get unlimited messages and downloads.
-              </p>
-            </div>
-
-            <div className="space-y-3">
-              <Button
-                onClick={async () => {
-                  await signIn("google", { callbackUrl: "/chat" });
-                }}
-                className="w-full bg-white text-black hover:bg-gray-100 justify-center"
-              >
-                <svg className="w-4 h-4 mr-2" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
-                  <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
-                  <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
-                  <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
-                </svg>
-                Sign in with Google
-              </Button>
-
-              <Button
-                onClick={() => setShowSignupModal(false)}
-                variant="outline"
-                className="w-full"
-              >
-                Maybe Later
-              </Button>
-            </div>
-
-            <div className="text-xs text-[#666666] text-center">
-              You'll get unlimited messages, downloads, and project history.
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Project Creation Modal */}
       <ProjectModal
