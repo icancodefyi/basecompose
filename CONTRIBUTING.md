@@ -1,7 +1,95 @@
 # Contributing to BaseCompose
 
-Thanks for your interest in contributing! This guide will help you add new stack options.
+Thanks for your interest in contributing! This guide will help you get started.
 
+## How to Contribute
+
+### Reporting Bugs
+- Check [existing issues](https://github.com/icancodefyi/basecompose/issues) first
+- Use the [bug report template](.github/ISSUE_TEMPLATE/bug_report.md)
+- Include reproduction steps and environment details
+
+### Suggesting Features
+- Check [existing issues](https://github.com/icancodefyi/basecompose/discussions) first
+- Use the [feature request template](.github/ISSUE_TEMPLATE/feature_request.md)
+- Explain the use case and why it would be useful
+
+### Submitting Code
+
+#### Step 1: Fork and Clone
+```bash
+git clone https://github.com/icancodefyi/basecompose.git
+cd basecompose
+```
+
+#### Step 2: Create a Branch
+```bash
+git checkout -b feature/your-feature-name
+# or
+git checkout -b fix/your-fix-name
+```
+
+#### Step 3: Set Up Development Environment
+```bash
+pnpm install
+# Or run the setup script:
+./scripts/setup.sh          # macOS/Linux
+./scripts/setup.bat         # Windows
+```
+
+#### Step 4: Make Your Changes
+- Write clean, well-commented code
+- Follow the existing code style
+- Add tests if applicable
+- Update documentation if needed
+
+#### Step 5: Run Tests & Linting
+```bash
+pnpm lint
+pnpm lint:fix
+```
+
+#### Step 6: Commit Your Changes
+```bash
+git add .
+git commit -m "feat: add your feature description"
+# or
+git commit -m "fix: describe what you fixed"
+```
+
+Use conventional commits:
+- `feat:` for new features
+- `fix:` for bug fixes
+- `docs:` for documentation
+- `refactor:` for code refactoring
+- `test:` for adding tests
+- `chore:` for maintenance
+
+#### Step 7: Push and Create PR
+```bash
+git push origin your-branch-name
+```
+
+Go to GitHub and create a Pull Request. Fill out the [PR template](.github/pull_request_template.md).
+
+## Development Guide
+
+### Project Structure
+```
+basecompose/
+├── app/                 # Next.js application
+├── packages/            # pnpm workspaces
+├── templates/           # Template files
+├── lib/                 # Utility functions
+├── components/          # Shared components
+└── public/              # Static assets
+```
+
+### Key Files
+- **Stack Configuration**: `packages/types/stack-config.ts` - Add new tech options here
+- **Type Definitions**: `packages/types/blueprint.ts` - Update types when adding options
+- **Generation Engine**: `packages/engine/` - Handles stack generation
+- **Chat Page**: `app/chat/` - Main chat interface
 
 ## Adding New Stack Options
 
