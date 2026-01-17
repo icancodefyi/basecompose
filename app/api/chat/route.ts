@@ -39,12 +39,11 @@ ${generateOptionsText()}
 
 Respond with a JSON object in this exact format:
 {
-  "action": "modify" | "download" | "chat",
+  "action": "modify" | "download" | "push-github" | "chat",
   "changes": {
     "intent": "saas" | "api" | null,
     "frontend": "nextjs" | null,
-    "backend": "node" | "fastapi" | null,
-    "database": "postgres" | null,
+    "database": "mongodb" | null,
     "auth": "authjs" | null
   },
   "message": "A brief, friendly response to the user"
@@ -52,6 +51,7 @@ Respond with a JSON object in this exact format:
 
 Rules:
 - If user mentions "download", "generate", "zip", set action to "download"
+- If user mentions "github", "push", "repository", "repo", "upload", set action to "push-github"
 - If user wants to add/remove tech, set action to "modify" and specify changes
 - Only include changed fields in "changes" object
 - Use null to remove a technology
@@ -64,6 +64,7 @@ Examples:
 - "I need auth" → modify with auth: "authjs"
 - "remove database" → modify with database: null
 - "download it" → download with current stack
+- "push to github" → push-github with message about needing repo details
 - "what can you do?" → chat with helpful message
 - "I need PostgreSQL" → chat with markdown explaining it's unsupported + link to contribute
 

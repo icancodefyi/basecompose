@@ -47,46 +47,13 @@ export const STACK_CONFIG = {
     label: "Backend",
     description: "Choose your backend runtime",
     options: {
-      node: {
-        label: "Node.js",
-        description: "JavaScript/TypeScript runtime",
-        dockerImage: "node:20-alpine",
-        port: 3001,
-        icon: "nodejs",
-      },
-      fastapi: {
-        label: "FastAPI",
-        description: "Python async framework",
-        dockerImage: "python:3.11-slim",
-        port: 8000,
-        icon: "fastapi",
-      },
-      // Add more backend options here:
-      // go: {
-      //   label: "Go",
-      //   description: "Go HTTP server",
-      //   dockerImage: "golang:1.21-alpine",
-      //   port: 8080,
-      //   icon: "go",
-      // },
+      // Add backend options here when templates are created
     },
   },
   database: {
     label: "Database",
     description: "Choose your database",
     options: {
-      postgres: {
-        label: "PostgreSQL",
-        description: "Relational database",
-        dockerImage: "postgres:16-alpine",
-        port: 5432,
-        icon: "postgresql",
-        envVars: {
-          POSTGRES_USER: "dev",
-          POSTGRES_PASSWORD: "dev",
-          POSTGRES_DB: "BaseCompose_db",
-        },
-      },
       mongodb: {
         label: "MongoDB",
         description: "NoSQL document database",
@@ -99,7 +66,19 @@ export const STACK_CONFIG = {
           MONGODB_ROOT_PASSWORD: "example",
         },
       },
-      // Add more database options here:
+      // Add more database options here when templates are created:
+      // postgres: {
+      //   label: "PostgreSQL",
+      //   description: "Relational database",
+      //   dockerImage: "postgres:16-alpine",
+      //   port: 5432,
+      //   icon: "postgresql",
+      //   envVars: {
+      //     POSTGRES_USER: "dev",
+      //     POSTGRES_PASSWORD: "dev",
+      //     POSTGRES_DB: "BaseCompose_db",
+      //   },
+      // },
       // mysql: {
       //   label: "MySQL",
       //   description: "Relational database",
@@ -149,33 +128,11 @@ export type StackOption<T extends StackCategory> = keyof typeof STACK_CONFIG[T][
  * Resolution rules - define how technologies interact
  * Add new rules here when technologies have dependencies
  */
-export const RESOLUTION_RULES = [
-  {
-    name: "Auth requires database",
-    condition: (stack: any) => stack.auth && !stack.database,
-    apply: (stack: any) => {
-      const authOption = STACK_CONFIG.auth.options[stack.auth as keyof typeof STACK_CONFIG.auth.options];
-      if (authOption.requiresDatabase) {
-        stack.database = "postgres";
-      }
-    },
-  },
-  {
-    name: "Next.js requires Node backend",
-    condition: (stack: any) => stack.frontend === "nextjs" && !stack.backend,
-    apply: (stack: any) => {
-      stack.backend = "node";
-    },
-  },
-  // Add more resolution rules here:
-  // {
-  //   name: "FastAPI requires Postgres",
-  //   condition: (stack: any) => stack.backend === "fastapi" && !stack.database,
-  //   apply: (stack: any) => {
-  //     stack.database = "postgres";
-  //   },
-  // },
-];
+export const RESOLUTION_RULES: Array<{
+  name: string;
+  condition: (stack: any) => boolean;
+  apply: (stack: any) => void;
+}> = [];
 
 /**
  * Helper to get all available options for a category
