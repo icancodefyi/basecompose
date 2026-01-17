@@ -7,7 +7,7 @@ export default function page() {
         <h1 className="text-6xl font-bold text-white mb-4">000</h1>
         <h2 className="text-2xl font-bold text-white mb-4">Page is under development</h2>
         <p className="text-neutral-400 mb-8">
-          Changelogs is under active development. to speed it up, please contribute on our <a
+          Documentation is under active development. to speed it up, please contribute on our <a
             className="text-emerald-400 hover:underline"
            href="https://github.com/icancodefyi/basecompose">GitHub</a>!
         </p>
