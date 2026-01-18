@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Lora, Geist_Mono, Space_Grotesk, Inter } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "./providers";
-
+import { Analytics } from "@vercel/analytics/next"
 
 const lora = Space_Grotesk({
   subsets: ["latin"],
@@ -36,6 +36,7 @@ export default function RootLayout({
         <AuthProvider>
           {children}
         </AuthProvider>
+        <Analytics />
       </body>
     </html>
   );
