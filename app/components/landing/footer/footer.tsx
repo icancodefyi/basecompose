@@ -10,7 +10,7 @@ const Footer = () => {
     },
     {
       label: "License",
-      href: "https://github.com/icancodefyi/BaseCompose/blob/main/LICENSE",
+      href: "https://github.com/icancodefyi/BaseCompose/blob/master/LICENSE",
     },
     {
       label: "Docs",

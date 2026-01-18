@@ -18,8 +18,20 @@ const nextConfig: NextConfig = {
         port: "",
         pathname: "/**",
       },
-
     ],
+  },
+
+  async rewrites() {
+    return [
+      {
+        source: "/docs",
+        destination: "https://basecompose-docs.vercel.app/docs",
+      },
+      {
+        source: "/docs/:path*",
+        destination: "https://basecompose-docs.vercel.app/docs/:path*",
+      },
+    ];
   },
 };
 

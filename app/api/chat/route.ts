@@ -69,7 +69,7 @@ Examples:
 - "I need PostgreSQL" → chat with markdown explaining it's unsupported + link to contribute
 
 When mentioning unsupported tech, include something like:
-"Want to help us add support for this? [Contribute on GitHub](https://github.com/icancodefyi/basecompose) or [See contribution guidelines](https://github.com/icancodefyi/basecompose/blob/main/CONTRIBUTING.md)"`;
+"Want to help us add support for this? [Contribute on GitHub](https://github.com/icancodefyi/basecompose) or [See contribution guidelines](https://github.com/icancodefyi/basecompose/blob/master/CONTRIBUTING.md)"`;
 
     const chatCompletion = await groq.chat.completions.create({
       messages: [
