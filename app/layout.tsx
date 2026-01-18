@@ -2,9 +2,7 @@ import type { Metadata } from "next";
 import { Lora, Geist_Mono, Space_Grotesk, Inter } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "./providers";
-import { NavHeader } from "./components/landing/nav-header";
-import FinalCTA from "./components/landing/final-cta/final-cta";
-import Footer from "./components/landing/footer/footer";
+
 
 const lora = Space_Grotesk({
   subsets: ["latin"],
@@ -36,10 +34,7 @@ export default function RootLayout({
     <html lang="en" style={{ colorScheme: "dark" }} className={`${lora.variable} ${geistMono.variable} ${inter.variable}`}>
       <body className={`${geistMono.className} antialiased`}>
         <AuthProvider>
-          <NavHeader />
           {children}
-          <FinalCTA/>
-          <Footer/>
         </AuthProvider>
       </body>
     </html>

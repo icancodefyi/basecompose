@@ -1,8 +1,13 @@
 import Link from "next/link";
+import FinalCTA from "../components/landing/final-cta/final-cta";
+import Footer from "../components/landing/footer/footer";
+import { NavHeader } from "../components/landing/nav-header";
 
 export default function page() {
   return (
+    <>
     <main className="min-h-screen bg-black flex items-center justify-center px-6">
+      <NavHeader/>
       <div className="text-center max-w-md">
         <h1 className="text-6xl font-bold text-white mb-4">000</h1>
         <h2 className="text-2xl font-bold text-white mb-4">Page is under development</h2>
@@ -27,5 +32,8 @@ export default function page() {
         </div>
       </div>
     </main>
+    <FinalCTA/>
+    <Footer/>
+    </>
   );
 }

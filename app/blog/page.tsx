@@ -3,7 +3,9 @@ import Image from "next/image";
 import { getAllBlogs } from "@/lib/blog";
 import { ArrowRight, Calendar, User } from "lucide-react";
 import { SubscribeCTA } from "./subscribe-cta";
-
+import { NavHeader } from "../components/landing/nav-header";
+import Footer from "../components/landing/footer/footer";
+import FinalCTA from "../components/landing/final-cta/final-cta";
 export const metadata = {
   title: "Blog | BaseCompose",
   description: "Latest articles about development, architecture, and tools",
@@ -15,6 +17,7 @@ export default function BlogPage() {
   return (
     <main className="min-h-screen bg-black" style={{ fontFamily: "var(--font-inter)" }}>
       {/* Header */}
+      <NavHeader/>
       <section className="pt-32 pb-16 px-6 relative overflow-hidden border-b border-neutral-800/20">
         <div className="max-w-7xl mx-auto relative z-10">
           <h1 className="text-5xl font-bold text-white mb-3 leading-tight">
@@ -118,7 +121,8 @@ export default function BlogPage() {
           </section>
         </div>
       </div>
-
+      <FinalCTA/>
+<Footer/>
 
     </main>
   );
