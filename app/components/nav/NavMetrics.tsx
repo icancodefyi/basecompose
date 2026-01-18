@@ -4,6 +4,7 @@ import { useGithubStars } from "@/app/hooks/useGithubStars";
 import { useDiscordPresence } from "@/app/hooks/useDiscordPresence";
 import { GITHUB_OWNER,GITHUB_REPO,DISCORD_INVITE,DISCORD_SERVER_ID } from "@/app/lib/constants";
 import Image from "next/image";
+import Counter from "@/components/Counter";
 
 // Add pulse animation keyframes
 const pulseStyle = `
@@ -45,7 +46,7 @@ export function NavMetrics() {
         >
           <StarIcon />
           <span className="text-sm font-medium text-neutral-200 tabular-nums">
-            {stars ?? "—"}
+           <Counter value={stars ?? 0} fontSize={12} padding={0} gap={2} />
           </span>
         </a>
 
@@ -69,7 +70,7 @@ export function NavMetrics() {
             <DiscordIcon />
           </div>
           <span className="text-sm font-medium text-neutral-200 tabular-nums">
-            {online ?? "—"}
+            <Counter value={online ?? 0} fontSize={12} padding={0} gap={2} />
           </span>
         </a>
       </div>
