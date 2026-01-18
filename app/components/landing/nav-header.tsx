@@ -8,7 +8,7 @@ import { UserMenu } from "../nav/UserMenu";
 import GooeyNav from "@/components/GooeyNav";
 
 const navItems = [
-  { label: "Docs", href: "/docs" },
+  { label: "Docs", href: "https://basecompose-docs.vercel.app" },
   { label: "Blog", href: "/blog" },
   { label: "Changelogs", href: "/changelogs" },
 ];
